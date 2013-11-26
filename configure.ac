@@ -6,14 +6,14 @@
 #
 
 AC_PREREQ(2.52)
-AC_INIT([nest], [2.2.0], [nest_user@nest-initiative.org])
+AC_INIT([nest], [2.2.1], [nest_user@nest-initiative.org])
 
 # These variables are exported to libnestutil/config.h
 # The patchlevel is updated automatically by the script
 # releasetools/buildnest
 SLI_MAJOR=2
 SLI_MINOR=2
-SLI_PATCHLEVEL=0
+SLI_PATCHLEVEL=1
 
 SLI_PRGNAME="nest-$SLI_MAJOR.$SLI_MINOR.$SLI_PATCHLEVEL"
 SLI_VERSION=$SLI_MAJOR.$SLI_MINOR.$SLI_PATCHLEVEL
@@ -958,7 +958,7 @@ AC_SUBST(PYNEST_PREFIX)
 AC_SUBST(PYNEST_SUBDIR)
 AC_SUBST(HAVE_PYTHON)
 
-AM_CONFIG_HEADER(libnestutil/config.h)
+AC_CONFIG_HEADER(libnestutil/config.h)
 AC_CONFIG_FILES(libnestutil/sliconfig.h)
 AC_CONFIG_FILES(Makefile)
 AC_CONFIG_FILES(doc/Makefile)
