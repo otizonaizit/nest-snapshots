@@ -6,14 +6,14 @@
 #
 
 AC_PREREQ(2.52)
-AC_INIT([nest], [2.2.1], [nest_user@nest-initiative.org])
+AC_INIT([nest], [2.2.2], [nest_user@nest-initiative.org])
 
 # These variables are exported to libnestutil/config.h
 # The patchlevel is updated automatically by the script
 # releasetools/buildnest
 SLI_MAJOR=2
 SLI_MINOR=2
-SLI_PATCHLEVEL=1
+SLI_PATCHLEVEL=2
 
 SLI_PRGNAME="nest-$SLI_MAJOR.$SLI_MINOR.$SLI_PATCHLEVEL"
 SLI_VERSION=$SLI_MAJOR.$SLI_MINOR.$SLI_PATCHLEVEL

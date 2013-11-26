@@ -81,6 +81,8 @@ am_libmodelsmodule_la_OBJECTS =  \
 	libmodelsmodule_la-music_message_in_proxy.lo \
 	libmodelsmodule_la-iaf_neuron.lo \
 	libmodelsmodule_la-iaf_psc_alpha.lo \
+	libmodelsmodule_la-iaf_psc_alpha_multisynapse.lo \
+	libmodelsmodule_la-iaf_psc_exp_multisynapse.lo \
 	libmodelsmodule_la-iaf_psc_delta.lo \
 	libmodelsmodule_la-iaf_psc_exp.lo \
 	libmodelsmodule_la-iaf_tum_2000.lo \
@@ -105,7 +107,9 @@ am_libmodelsmodule_la_OBJECTS =  \
 	libmodelsmodule_la-pulsepacket_generator.lo \
 	libmodelsmodule_la-ppd_sup_generator.lo \
 	libmodelsmodule_la-gamma_sup_generator.lo \
+	libmodelsmodule_la-sinusoidal_gamma_generator.lo \
 	libmodelsmodule_la-spike_detector.lo \
+	libmodelsmodule_la-spin_detector.lo \
 	libmodelsmodule_la-multimeter.lo \
 	libmodelsmodule_la-correlation_detector.lo \
 	libmodelsmodule_la-volume_transmitter.lo \
@@ -119,9 +123,10 @@ am_libmodelsmodule_la_OBJECTS =  \
 	libmodelsmodule_la-stdp_dopa_connection.lo \
 	libmodelsmodule_la-ht_neuron.lo \
 	libmodelsmodule_la-ht_connection.lo \
-	libmodelsmodule_la-smp_generator.lo \
+	libmodelsmodule_la-sinusoidal_poisson_generator.lo \
 	libmodelsmodule_la-sli_neuron.lo \
 	libmodelsmodule_la-ginzburg_neuron.lo \
+	libmodelsmodule_la-mcculloch_pitts_neuron.lo \
 	libmodelsmodule_la-izhikevich.lo \
 	libmodelsmodule_la-modelsmodule.lo
 libmodelsmodule_la_OBJECTS = $(am_libmodelsmodule_la_OBJECTS)
@@ -436,6 +441,8 @@ libmodelsmodule_la_SOURCES = \
 		music_message_in_proxy.cpp music_message_in_proxy.h\
 		iaf_neuron.h iaf_neuron.cpp\
 		iaf_psc_alpha.h iaf_psc_alpha.cpp\
+		iaf_psc_alpha_multisynapse.h iaf_psc_alpha_multisynapse.cpp\
+		iaf_psc_exp_multisynapse.h iaf_psc_exp_multisynapse.cpp\
 		iaf_psc_delta.h iaf_psc_delta.cpp\
 		iaf_psc_exp.h iaf_psc_exp.cpp\
 		iaf_tum_2000.h iaf_tum_2000.cpp\
@@ -460,7 +467,9 @@ libmodelsmodule_la_SOURCES = \
 		pulsepacket_generator.h pulsepacket_generator.cpp\
 		ppd_sup_generator.cpp ppd_sup_generator.h\
 		gamma_sup_generator.cpp gamma_sup_generator.h\
+		sinusoidal_gamma_generator.h sinusoidal_gamma_generator.cpp \
 		spike_detector.h spike_detector.cpp\
+		spin_detector.h spin_detector.cpp\
 		multimeter.cpp multimeter.h\
 		correlation_detector.h correlation_detector.cpp\
 		volume_transmitter.h volume_transmitter.cpp\
@@ -476,9 +485,11 @@ libmodelsmodule_la_SOURCES = \
 		stdp_dopa_connection.h stdp_dopa_connection.cpp\
 		ht_neuron.cpp ht_neuron.h \
 		ht_connection.cpp ht_connection.h \
-		smp_generator.cpp smp_generator.h \
+		sinusoidal_poisson_generator.h sinusoidal_poisson_generator.cpp \
 		sli_neuron.cpp sli_neuron.h\
+		binary_neuron.h binary_neuron_impl.h\
 		ginzburg_neuron.cpp ginzburg_neuron.h\
+		mcculloch_pitts_neuron.cpp mcculloch_pitts_neuron.h\
 		izhikevich.cpp izhikevich.h\
 	 	modelsmodule.h modelsmodule.cpp
 
@@ -563,11 +574,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_cond_exp_sfa_rr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_neuron.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_psc_alpha.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_psc_alpha_multisynapse.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_psc_delta.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_psc_exp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_psc_exp_multisynapse.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-iaf_tum_2000.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-izhikevich.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-mat2_psc_exp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-mip_generator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-modelsmodule.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-multimeter.Plo@am__quote@
@@ -581,10 +595,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-pp_psc_delta.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-ppd_sup_generator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-pulsepacket_generator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-sinusoidal_gamma_generator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-sli_neuron.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-smp_generator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-spike_detector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-spike_generator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-spin_detector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-stdp_connection.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-stdp_connection_facetshw_hom.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-stdp_connection_hom.Plo@am__quote@
@@ -657,6 +673,20 @@ libmodelsmodule_la-iaf_psc_alpha.lo: iaf_psc_alpha.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_psc_alpha.cpp' object='libmodelsmodule_la-iaf_psc_alpha.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_psc_alpha.lo `test -f 'iaf_psc_alpha.cpp' || echo '$(srcdir)/'`iaf_psc_alpha.cpp
+
+libmodelsmodule_la-iaf_psc_alpha_multisynapse.lo: iaf_psc_alpha_multisynapse.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_psc_alpha_multisynapse.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_psc_alpha_multisynapse.Tpo -c -o libmodelsmodule_la-iaf_psc_alpha_multisynapse.lo `test -f 'iaf_psc_alpha_multisynapse.cpp' || echo '$(srcdir)/'`iaf_psc_alpha_multisynapse.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_psc_alpha_multisynapse.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_psc_alpha_multisynapse.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_psc_alpha_multisynapse.cpp' object='libmodelsmodule_la-iaf_psc_alpha_multisynapse.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_psc_alpha_multisynapse.lo `test -f 'iaf_psc_alpha_multisynapse.cpp' || echo '$(srcdir)/'`iaf_psc_alpha_multisynapse.cpp
+
+libmodelsmodule_la-iaf_psc_exp_multisynapse.lo: iaf_psc_exp_multisynapse.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_psc_exp_multisynapse.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_psc_exp_multisynapse.Tpo -c -o libmodelsmodule_la-iaf_psc_exp_multisynapse.lo `test -f 'iaf_psc_exp_multisynapse.cpp' || echo '$(srcdir)/'`iaf_psc_exp_multisynapse.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_psc_exp_multisynapse.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_psc_exp_multisynapse.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_psc_exp_multisynapse.cpp' object='libmodelsmodule_la-iaf_psc_exp_multisynapse.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_psc_exp_multisynapse.lo `test -f 'iaf_psc_exp_multisynapse.cpp' || echo '$(srcdir)/'`iaf_psc_exp_multisynapse.cpp
 
 libmodelsmodule_la-iaf_psc_delta.lo: iaf_psc_delta.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_psc_delta.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_psc_delta.Tpo -c -o libmodelsmodule_la-iaf_psc_delta.lo `test -f 'iaf_psc_delta.cpp' || echo '$(srcdir)/'`iaf_psc_delta.cpp
@@ -826,12 +856,26 @@ libmodelsmodule_la-gamma_sup_generator.lo: gamma_sup_generator.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-gamma_sup_generator.lo `test -f 'gamma_sup_generator.cpp' || echo '$(srcdir)/'`gamma_sup_generator.cpp
 
+libmodelsmodule_la-sinusoidal_gamma_generator.lo: sinusoidal_gamma_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sinusoidal_gamma_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sinusoidal_gamma_generator.Tpo -c -o libmodelsmodule_la-sinusoidal_gamma_generator.lo `test -f 'sinusoidal_gamma_generator.cpp' || echo '$(srcdir)/'`sinusoidal_gamma_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-sinusoidal_gamma_generator.Tpo $(DEPDIR)/libmodelsmodule_la-sinusoidal_gamma_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='sinusoidal_gamma_generator.cpp' object='libmodelsmodule_la-sinusoidal_gamma_generator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-sinusoidal_gamma_generator.lo `test -f 'sinusoidal_gamma_generator.cpp' || echo '$(srcdir)/'`sinusoidal_gamma_generator.cpp
+
 libmodelsmodule_la-spike_detector.lo: spike_detector.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-spike_detector.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-spike_detector.Tpo -c -o libmodelsmodule_la-spike_detector.lo `test -f 'spike_detector.cpp' || echo '$(srcdir)/'`spike_detector.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-spike_detector.Tpo $(DEPDIR)/libmodelsmodule_la-spike_detector.Plo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='spike_detector.cpp' object='libmodelsmodule_la-spike_detector.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-spike_detector.lo `test -f 'spike_detector.cpp' || echo '$(srcdir)/'`spike_detector.cpp
+
+libmodelsmodule_la-spin_detector.lo: spin_detector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-spin_detector.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-spin_detector.Tpo -c -o libmodelsmodule_la-spin_detector.lo `test -f 'spin_detector.cpp' || echo '$(srcdir)/'`spin_detector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-spin_detector.Tpo $(DEPDIR)/libmodelsmodule_la-spin_detector.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='spin_detector.cpp' object='libmodelsmodule_la-spin_detector.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-spin_detector.lo `test -f 'spin_detector.cpp' || echo '$(srcdir)/'`spin_detector.cpp
 
 libmodelsmodule_la-multimeter.lo: multimeter.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-multimeter.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-multimeter.Tpo -c -o libmodelsmodule_la-multimeter.lo `test -f 'multimeter.cpp' || echo '$(srcdir)/'`multimeter.cpp
@@ -924,12 +968,12 @@ libmodelsmodule_la-ht_connection.lo: ht_connection.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ht_connection.lo `test -f 'ht_connection.cpp' || echo '$(srcdir)/'`ht_connection.cpp
 
-libmodelsmodule_la-smp_generator.lo: smp_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-smp_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-smp_generator.Tpo -c -o libmodelsmodule_la-smp_generator.lo `test -f 'smp_generator.cpp' || echo '$(srcdir)/'`smp_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-smp_generator.Tpo $(DEPDIR)/libmodelsmodule_la-smp_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='smp_generator.cpp' object='libmodelsmodule_la-smp_generator.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-sinusoidal_poisson_generator.lo: sinusoidal_poisson_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sinusoidal_poisson_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Tpo -c -o libmodelsmodule_la-sinusoidal_poisson_generator.lo `test -f 'sinusoidal_poisson_generator.cpp' || echo '$(srcdir)/'`sinusoidal_poisson_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Tpo $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='sinusoidal_poisson_generator.cpp' object='libmodelsmodule_la-sinusoidal_poisson_generator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-smp_generator.lo `test -f 'smp_generator.cpp' || echo '$(srcdir)/'`smp_generator.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-sinusoidal_poisson_generator.lo `test -f 'sinusoidal_poisson_generator.cpp' || echo '$(srcdir)/'`sinusoidal_poisson_generator.cpp
 
 libmodelsmodule_la-sli_neuron.lo: sli_neuron.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sli_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sli_neuron.Tpo -c -o libmodelsmodule_la-sli_neuron.lo `test -f 'sli_neuron.cpp' || echo '$(srcdir)/'`sli_neuron.cpp
@@ -944,6 +988,13 @@ libmodelsmodule_la-ginzburg_neuron.lo: ginzburg_neuron.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ginzburg_neuron.cpp' object='libmodelsmodule_la-ginzburg_neuron.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ginzburg_neuron.lo `test -f 'ginzburg_neuron.cpp' || echo '$(srcdir)/'`ginzburg_neuron.cpp
+
+libmodelsmodule_la-mcculloch_pitts_neuron.lo: mcculloch_pitts_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-mcculloch_pitts_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Tpo -c -o libmodelsmodule_la-mcculloch_pitts_neuron.lo `test -f 'mcculloch_pitts_neuron.cpp' || echo '$(srcdir)/'`mcculloch_pitts_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='mcculloch_pitts_neuron.cpp' object='libmodelsmodule_la-mcculloch_pitts_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-mcculloch_pitts_neuron.lo `test -f 'mcculloch_pitts_neuron.cpp' || echo '$(srcdir)/'`mcculloch_pitts_neuron.cpp
 
 libmodelsmodule_la-izhikevich.lo: izhikevich.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-izhikevich.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-izhikevich.Tpo -c -o libmodelsmodule_la-izhikevich.lo `test -f 'izhikevich.cpp' || echo '$(srcdir)/'`izhikevich.cpp

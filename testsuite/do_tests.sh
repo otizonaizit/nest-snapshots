@@ -51,7 +51,7 @@ while test $# -gt 0 ; do
             TEST_PYNEST=true
             ;;
         --output-dir=*)
-            TEST_OUTDIR="$( echo "$1" | sed 's/^[^=]\+=//' )"
+            TEST_OUTDIR="$( echo "$1" | sed 's/^--output-dir=//' )"
             ;;
         *)
             usage 1 "$1"
@@ -369,7 +369,7 @@ TEST_FAILED=0
 TIME_TOTAL=0
 TIME_ELAPSED=0
 
-echo >  "${TEST_LOGFILE}" "NEST v. 2.2.1 testsuite log"
+echo >  "${TEST_LOGFILE}" "NEST v. 2.2.2 testsuite log"
 echo >> "${TEST_LOGFILE}" "======================"
 echo >> "${TEST_LOGFILE}" "Running tests from ${TEST_BASEDIR}"
 

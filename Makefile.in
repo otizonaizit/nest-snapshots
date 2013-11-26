@@ -939,10 +939,8 @@ fulldoc:
 @IS_BLUEGENE_FALSE@install-slidoc-recursive:
 @IS_BLUEGENE_FALSE@	rm -rf $(DESTDIR)@PKGDOCDIR@/help/*
 @IS_BLUEGENE_FALSE@	mkdir -p $(DESTDIR)@PKGDOCDIR@/help
-
 @IS_BLUEGENE_FALSE@	SLIDOCDIR=$(DESTDIR)@PKGDOCDIR@ SLIDATADIR=$(DESTDIR)@PKGDATADIR@ NESTRCFILENAME=/dev/null \
 @IS_BLUEGENE_FALSE@	  $(DESTDIR)$(exec_prefix)/bin/sli --userargs="@HELPDIRS@" $(top_srcdir)/lib/sli/install-help.sli 2>&1 > @INSTALL_HELP_LOG@
-
 @IS_BLUEGENE_FALSE@	$(MAKE) SLIDOCDIR=$(DESTDIR)@PKGDOCDIR@ SLIDATADIR=$(DESTDIR)@PKGDATADIR@ NESTRCFILENAME=/dev/null \
 @IS_BLUEGENE_FALSE@	  -k -C @PKGBUILDDIR@/testsuite install-slidoc 2> /dev/null
 
