@@ -135,14 +135,17 @@
 /* Vampir support enabled? */
 #undef HAVE_VAMPIR
 
-/* Configuring for BlueGene architecture */
-#undef IS_BLUEGENE
-
-/* Configuring for BlueGene/L architecture */
+/* Configuring for Blue Gene/L */
 #undef IS_BLUEGENE_L
 
-/* Configuring for BlueGene/P architecture */
+/* Configuring for Blue Gene/P */
 #undef IS_BLUEGENE_P
+
+/* Configuring for Blue Gene/Q */
+#undef IS_BLUEGENE_Q
+
+/* Configuring for K */
+#undef IS_K
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */

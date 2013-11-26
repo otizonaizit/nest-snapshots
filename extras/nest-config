@@ -1,9 +1,9 @@
 #! /bin/sh
 
-prefix=/usr/local
+prefix=/home/zaytsev/opt/nest
 exec_prefix=${prefix}
-srcdir=/home/zaytsev/src/nest/nest-2.0.0/__NEST_SOURCE
-builddir=/home/zaytsev/src/nest/nest-2.0.0/__NEST_BUILD
+srcdir=/home/zaytsev/temp/2.2.0/releasetools/__NEST_SOURCE
+builddir=/home/zaytsev/temp/2.2.0/releasetools/__NEST_BUILD
 
 usage()
 {
@@ -52,7 +52,7 @@ while test $# -gt 0; do
         ;;
 
     --version)
-        echo 2.0.0
+        echo 2.2.0
         exit 0
         ;;
 
@@ -61,7 +61,7 @@ while test $# -gt 0; do
         ;;
 
     --cflags)
-        NEST_CFLAGS="-I${srcdir}/{libnestutil,librandom,sli,nestkernel,nest}  "
+        NEST_CFLAGS="-I${srcdir}/{libnestutil,librandom,sli,nestkernel,nest,topology}   "
         if [ "${builddir}" != "${srcdir}" ]; then
             NEST_CFLAGS="-I${builddir}/libnestutil ${NEST_CFLAGS}"
         fi
@@ -69,7 +69,7 @@ while test $# -gt 0; do
         ;;
 
     --libs)
-        NEST_LDFLAGS="-l{model,precise}module -l{nest,random,sli}   -lcurses -lreadline -lpthread -L/usr/lib -lgsl -lgslcblas -lm  -lpthread -export-dynamic"
+        NEST_LDFLAGS="-l{model,precise}module -l{nest,random,sli}   -lcurses -lreadline -lgsl -lgslcblas -lm   -lpthread -export-dynamic"
         if [ "${builddir}" != "${srcdir}" ]; then
             NEST_LDFLAGS="-L${builddir}/{nestkernel,models,precise,librandom,sli}/.libs ${NEST_LDFLAGS}"
         else

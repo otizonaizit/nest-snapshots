@@ -80,7 +80,7 @@ ask_results ()
     echo "***     - '${TEST_OUTDIR}'"
     echo "***     - '${TEST_TMPDIR}'"
     echo "***"
-    echo "*** to bugs@nest-initiative.org ."
+    echo "*** to the nest_user@nest-initiative.org mailing list."
     echo "***"
     echo
 }
@@ -298,7 +298,7 @@ INFO_OS="$(uname -s)"
 INFO_USER="$(whoami)"
 INFO_VER="$(uname -r)"
 
-TEST_BASEDIR="/usr/local/share/doc/nest"
+TEST_BASEDIR="/home/zaytsev/opt/nest/share/doc/nest"
 TEST_OUTDIR=${TEST_OUTDIR:-"$( pwd )/reports"}
 TEST_LOGFILE="${TEST_OUTDIR}/installcheck.log"
 TEST_OUTFILE="${TEST_OUTDIR}/output.log"
@@ -311,8 +311,8 @@ fi
 mkdir "${TEST_OUTDIR}"
 
 PYTHON="/usr/bin/python"
-PYTHON_HARNESS="/usr/local/share/nest/extras/do_tests.py"
-PYTHON_PREFIX="/usr/local/lib/python2.6"
+PYTHON_HARNESS="/home/zaytsev/opt/nest/share/nest/extras/do_tests.py"
+PYTHON_PREFIX="/home/zaytsev/opt/nest/lib/python2.7"
 
 PYTHONPATH="${PYTHON_PREFIX}/site-packages:${PYTHON_PREFIX}/dist-packages:${PYTHONPATH}"
 export PYTHONPATH
@@ -339,7 +339,7 @@ TEST_FAILED=0
 TIME_TOTAL=0
 TIME_ELAPSED=0
 
-echo >  "${TEST_LOGFILE}" "NEST v. 2.0.0 testsuite log"
+echo >  "${TEST_LOGFILE}" "NEST v. 2.2.0 testsuite log"
 echo >> "${TEST_LOGFILE}" "======================"
 echo >> "${TEST_LOGFILE}" "Running tests from ${TEST_BASEDIR}"
 
@@ -464,6 +464,21 @@ if test "x$(sli -c 'statusdict/have_mpi :: =')" = xtrue ; then
     junit_open 'core.phase_5'
 
     NEST_BINARY=nest_indirect
+    for test_name in $(ls "${TEST_BASEDIR}/mpi_selftests/pass" | grep '.*\.sli$') ; do
+        run_test "mpi_selftests/pass/${test_name}" "${CODES_SUCCESS}" "${CODES_FAILURE}"
+    done
+
+    # tests meant to fail
+    SAVE_CODES_SUCCESS=${CODES_SUCCESS}
+    SAVE_CODES_FAILURE=${CODES_FAILURE}
+    CODES_SUCCESS=' 1 Success (expected failure)'
+    CODES_FAILURE=' 0 Failed: Unittest failed to detect error.'
+    for test_name in $(ls "${TEST_BASEDIR}/mpi_selftests/fail" | grep '.*\.sli$') ; do
+        run_test "mpi_selftests/fail/${test_name}" "${CODES_SUCCESS}" "${CODES_FAILURE}"
+    done
+    CODES_SUCCESS=${SAVE_CODES_SUCCESS}
+    CODES_FAILURE=${SAVE_CODES_FAILURE}
+
     for test_name in $(ls "${TEST_BASEDIR}/mpitests/" | grep '.*\.sli$') ; do
         run_test "mpitests/${test_name}" "${CODES_SUCCESS}" "${CODES_FAILURE}"
     done
