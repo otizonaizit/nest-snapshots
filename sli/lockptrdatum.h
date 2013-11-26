@@ -26,8 +26,6 @@
 #include "datum.h"
 #include "lockptr.h"
 
-class DatumConverter;
-
 // prefixed all references to members of lockPTR, TypedDatum with this->,
 // since HP's aCC otherwise complains about them not being declared
 // according to ISO Standard Sec. 14.6.2(3) [temp.dep]
@@ -62,24 +60,9 @@ class lockPTRDatum: public lockPTR<D>, public TypedDatum<slt>
 
   bool equals(const Datum *) const;
 
-   /**
-   * Accept a DatumConverter as a visitor to the datum (visitor pattern).
-   * This member has to be overridden in the derived classes
-   * to call visit and passing themselves as an argument.
-   */
-  void use_converter(DatumConverter &);
-
 };
 
 
 /******************************************/
 
 #endif
-
-
-
-
-
-
-
-

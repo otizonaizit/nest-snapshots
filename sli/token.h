@@ -95,7 +95,7 @@ public:
     }                       
   
     
-  Token(Datum *p_s = NULL) //!< use existing pointer to datum, token takes responsibulity of the pointer.
+  Token(Datum *p_s = NULL) //!< use existing pointer to datum, token takes responsibility of the pointer.
     :p(p_s)
        {}
     

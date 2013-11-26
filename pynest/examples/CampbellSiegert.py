@@ -154,6 +154,6 @@ nest.Simulate(simtime)
 # free membrane potential (first 100 steps are omitted)
 v_free = nest.GetStatus(vm,'events')[0]['V_m'][100:-1]
 
-print 'mean membrane potential  (actual/calculated):', numpy.mean(v_free), mu*1000
-print 'variance  (actual/calculated):               ', numpy.var(v_free), sigma2*1e6
-print 'firing rate (actual/calculated):             ', nest.GetStatus(sd,'n_events')[0] / (n_neurons*simtime*ms), r
+print('mean membrane potential (actual / calculated): {0} / {1}'.format(numpy.mean(v_free), mu * 1000))
+print('variance (actual / calculated): {0} / {1}'.format(numpy.var(v_free), sigma2 * 1e6))
+print('firing rate (actual / calculated): {0} / {1}'.format(nest.GetStatus(sd, 'n_events')[0] / (n_neurons * simtime * ms), r))

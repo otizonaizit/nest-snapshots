@@ -1,6 +1,3 @@
-#ifndef NTREE_H
-#define NTREE_H
-
 /*
  *  ntree.h
  *
@@ -22,6 +19,9 @@
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef NTREE_H
+#define NTREE_H
 
 #include <vector>
 #include <utility>

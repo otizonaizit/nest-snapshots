@@ -1,4 +1,3 @@
-
 /*
  *  stdp_connection_hom.cpp
  *

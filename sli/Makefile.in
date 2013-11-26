@@ -14,14 +14,6 @@
 
 @SET_MAKE@
 
-#
-# Jochen Martin Eppler, February 2004 
-#
-# Since most of libsli is for internal use, it is built as
-# convenience library. Headers are listed under SOURCES.
-# Headers needed in installed API libraries should be moved
-# elsewhere.
-
 
 VPATH = @srcdir@
 am__make_dryrun = \
@@ -64,8 +56,13 @@ subdir = sli
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/depcomp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -73,27 +70,8 @@ CONFIG_HEADER = $(top_builddir)/libnestutil/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libpuresli_la_LIBADD =
-am_libpuresli_la_OBJECTS = arraydatum.lo booldatum.lo charcode.lo \
-	datum.lo dict.lo dictdatum.lo dictstack.lo dictutils.lo \
-	doubledatum.lo dynmodule.lo fdstream.lo filesystem.lo \
-	functiondatum.lo gnureadline.lo integerdatum.lo interpret.lo \
-	iostreamdatum.lo iteratordatum.lo literaldatum.lo name.lo \
-	slinames.lo namedatum.lo oosupport.lo parser.lo processes.lo \
-	psignal.lo scanner.lo sli_io.lo sliactions.lo sliarray.lo \
-	slibuiltins.lo slicontrol.lo slidata.lo slidict.lo \
-	sliexceptions.lo sligraphics.lo slimath.lo slimodule.lo \
-	sliregexp.lo slistack.lo slistartup.lo slitype.lo \
-	slitypecheck.lo specialfunctionsmodule.lo stringdatum.lo \
-	symboldatum.lo tarrayobj.lo token.lo tokenarray.lo \
-	tokenstack.lo tokenutils.lo triedatum.lo typechk.lo utils.lo
-libpuresli_la_OBJECTS = $(am_libpuresli_la_OBJECTS)
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-am__v_lt_1 = 
-libsli_la_DEPENDENCIES = $(top_builddir)/libnestutil/libnestutil.la
-am__objects_1 = arraydatum.lo booldatum.lo charcode.lo datum.lo \
+libsli_la_LIBADD =
+am_libsli_la_OBJECTS = arraydatum.lo booldatum.lo charcode.lo datum.lo \
 	dict.lo dictdatum.lo dictstack.lo dictutils.lo doubledatum.lo \
 	dynmodule.lo fdstream.lo filesystem.lo functiondatum.lo \
 	gnureadline.lo integerdatum.lo interpret.lo iostreamdatum.lo \
@@ -106,13 +84,16 @@ am__objects_1 = arraydatum.lo booldatum.lo charcode.lo datum.lo \
 	specialfunctionsmodule.lo stringdatum.lo symboldatum.lo \
 	tarrayobj.lo token.lo tokenarray.lo tokenstack.lo \
 	tokenutils.lo triedatum.lo typechk.lo utils.lo
-am_libsli_la_OBJECTS = $(am__objects_1)
 libsli_la_OBJECTS = $(am_libsli_la_OBJECTS)
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_sli_OBJECTS = puresli.$(OBJEXT)
 sli_OBJECTS = $(am_sli_OBJECTS)
-sli_DEPENDENCIES = libpuresli.la \
+sli_DEPENDENCIES = libsli.la \
 	$(top_builddir)/libnestutil/libnestutil.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -166,9 +147,8 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(libpuresli_la_SOURCES) $(libsli_la_SOURCES) $(sli_SOURCES)
-DIST_SOURCES = $(libpuresli_la_SOURCES) $(libsli_la_SOURCES) \
-	$(sli_SOURCES)
+SOURCES = $(libsli_la_SOURCES) $(sli_SOURCES)
+DIST_SOURCES = $(libsli_la_SOURCES) $(sli_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -256,6 +236,9 @@ LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBADD_DL = @LIBADD_DL@
 LIBLTDL = @LIBLTDL@
+LIBNEUROSIM_INCLUDE = @LIBNEUROSIM_INCLUDE@
+LIBNEUROSIM_LIBS = @LIBNEUROSIM_LIBS@
+LIBNEUROSIM_PY_LIBS = @LIBNEUROSIM_PY_LIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -296,10 +279,13 @@ PKGDATADIR_AS_CONFIGURED = @PKGDATADIR_AS_CONFIGURED@
 PKGDOCDIR = @PKGDOCDIR@
 PKGDOCDIR_AS_CONFIGURED = @PKGDOCDIR_AS_CONFIGURED@
 PKGSRCDIR = @PKGSRCDIR@
+PYNEST_CPPFLAGS = @PYNEST_CPPFLAGS@
 PYNEST_CXXFLAGS = @PYNEST_CXXFLAGS@
-PYNEST_PREFIX = @PYNEST_PREFIX@
 PYNEST_SUBDIR = @PYNEST_SUBDIR@
-PYTHON_EXEC = @PYTHON_EXEC@
+PYTHON = @PYTHON@
+PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+PYTHON_PLATFORM = @PYTHON_PLATFORM@
+PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -365,9 +351,13 @@ mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
 pdfdir = @pdfdir@
+pkgpyexecdir = @pkgpyexecdir@
+pkgpythondir = @pkgpythondir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+pyexecdir = @pyexecdir@
+pythondir = @pythondir@
 rp = @rp@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
@@ -378,7 +368,6 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libsli.la libpuresli.la
 AM_CPPFLAGS = -I$(top_srcdir)/libnestutil\
 	-I$(top_srcdir)/librandom\
 	-I$(top_srcdir)/nestkernel\
@@ -387,149 +376,78 @@ AM_CPPFLAGS = -I$(top_srcdir)/libnestutil\
 	-DPKGDOCDIR=\"@PKGDOCDIR@\"\
 	-DPKGSOURCEDIR=\"@PKGSRCDIR@\"
 
-libsli_la_LIBADD = $(top_builddir)/libnestutil/libnestutil.la \
-	    	  @SLI_LIBS@
-
-libsli_base_sources = \
-		aggregatedatum.h aggregatedatum_impl.h\
-		array.h\
-		arraydatum.cc arraydatum.h\
-		booldatum.cc booldatum.h\
-		callbackdatum.h\
-		charcode.cc charcode.h\
-		datum.cc datum.h\
-		datumconverter.h\
-		dict.cc dict.h\
-		dictdatum.cc dictdatum.h\
-		dictstack.cc dictstack.h\
-		dictutils.cc dictutils.h\
-		doubledatum.cc doubledatum.h\
-		dynmodule.cpp dynmodule.h\
-		fdstream.cc fdstream.h\
-		filesystem.cc filesystem.h\
-		functional.h\
-		functiondatum.cc functiondatum.h\
-		genericdatum.h\
-		gnureadline.cc gnureadline.h\
-		integerdatum.cc integerdatum.h\
-		interpret.cc interpret.h\
-		iostreamdatum.cc iostreamdatum.h\
-		iteratordatum.h iteratordatum.cc\
-		literaldatum.cc\
-		lockptrdatum.h lockptrdatum_impl.h\
-		name.cc name.h\
-		slinames.h slinames.cpp\
-		namedatum.cc namedatum.h\
-		numericdatum.h numericdatum_impl.h\
-		oosupport.cc oosupport.h\
-		parser.cc parser.h\
-		parserdatum.h\
-		processes.cc processes.h\
-		psignal.c psignal.h\
-		scanner.cc scanner.h\
-		sli_io.cc sli_io.h\
-		sliactions.cc sliactions.h\
-		sliarray.cc sliarray.h\
-		slibuiltins.cc slibuiltins.h\
-		slicontrol.cc slicontrol.h\
-		slidata.cc slidata.h\
-		slidict.cc slidict.h\
-		sliexceptions.cc sliexceptions.h\
-		slifunction.h\
-		sligraphics.cc sligraphics.h\
-		slimath.cc slimath.h\
-		slimodule.cc slimodule.h\
-		sliregexp.cc sliregexp.h\
-		slistack.cc slistack.h\
-		slistartup.cc slistartup.h\
-		slitype.cc slitype.h\
-		slitypecheck.cc slitypecheck.h\
-		specialfunctionsmodule.cc specialfunctionsmodule.h\
-		stringdatum.cc stringdatum.h\
-		symboldatum.cc symboldatum.h\
-		tarrayobj.cc tarrayobj.h\
-		token.cc token.h\
-		tokenarray.cc tokenarray.h\
-		tokenstack.cc tokenstack.h\
-		tokenutils.cc tokenutils.h\
-		triedatum.cc triedatum.h\
-		typearray.h\
-		typechk.cc typechk.h\
-		utils.cc utils.h
-
-libpuresli_la_SOURCES = \
-		aggregatedatum.h aggregatedatum_impl.h\
-		array.h\
-		arraydatum.cc arraydatum.h\
-		booldatum.cc booldatum.h\
-		callbackdatum.h\
-		charcode.cc charcode.h\
-		datum.cc datum.h\
-		datumconverter.h\
-		dict.cc dict.h\
-		dictdatum.cc dictdatum.h\
-		dictstack.cc dictstack.h\
-		dictutils.cc dictutils.h\
-		doubledatum.cc doubledatum.h\
-		dynmodule.cpp dynmodule.h\
-		fdstream.cc fdstream.h\
-		filesystem.cc filesystem.h\
-		functional.h\
-		functiondatum.cc functiondatum.h\
-		genericdatum.h\
-		gnureadline.cc gnureadline.h\
-		integerdatum.cc integerdatum.h\
-		interpret.cc interpret.h\
-		iostreamdatum.cc iostreamdatum.h\
-		iteratordatum.h iteratordatum.cc\
-		literaldatum.cc\
-		lockptrdatum.h lockptrdatum_impl.h\
-		name.cc name.h\
-		slinames.h slinames.cpp\
-		namedatum.cc namedatum.h\
-		numericdatum.h numericdatum_impl.h\
-		oosupport.cc oosupport.h\
-		parser.cc parser.h\
-		parserdatum.h\
-		processes.cc processes.h\
-		psignal.c psignal.h\
-		scanner.cc scanner.h\
-		sli_io.cc sli_io.h\
-		sliactions.cc sliactions.h\
-		sliarray.cc sliarray.h\
-		slibuiltins.cc slibuiltins.h\
-		slicontrol.cc slicontrol.h\
-		slidata.cc slidata.h\
-		slidict.cc slidict.h\
-		sliexceptions.cc sliexceptions.h\
-		slifunction.h\
-		sligraphics.cc sligraphics.h\
-		slimath.cc slimath.h\
-		slimodule.cc slimodule.h\
-		sliregexp.cc sliregexp.h\
-		slistack.cc slistack.h\
-		slistartup.cc slistartup.h\
-		slitype.cc slitype.h\
-		slitypecheck.cc slitypecheck.h\
-		specialfunctionsmodule.cc specialfunctionsmodule.h\
-		stringdatum.cc stringdatum.h\
-		symboldatum.cc symboldatum.h\
-		tarrayobj.cc tarrayobj.h\
-		token.cc token.h\
-		tokenarray.cc tokenarray.h\
-		tokenstack.cc tokenstack.h\
-		tokenutils.cc tokenutils.h\
-		triedatum.cc triedatum.h\
-		typearray.h\
-		typechk.cc typechk.h\
-		utils.cc utils.h
-
 sli_SOURCES = puresli.cc
-sli_LDADD = libpuresli.la \
+sli_LDADD = libsli.la \
 	$(top_builddir)/libnestutil/libnestutil.la \
 	@SLI_LIBS@
 
-libsli_la_SOURCES = $(libsli_base_sources)
+noinst_LTLIBRARIES = libsli.la
+libsli_la_SOURCES = \
+		aggregatedatum.h\
+		array.h\
+		arraydatum.cc arraydatum.h\
+		booldatum.cc booldatum.h\
+		callbackdatum.h\
+		charcode.cc charcode.h\
+		datum.cc datum.h\
+		dict.cc dict.h\
+		dictdatum.cc dictdatum.h\
+		dictstack.cc dictstack.h\
+		dictutils.cc dictutils.h\
+		doubledatum.cc doubledatum.h\
+		dynmodule.cpp dynmodule.h\
+		fdstream.cc fdstream.h\
+		filesystem.cc filesystem.h\
+		functional.h\
+		functiondatum.cc functiondatum.h\
+		genericdatum.h\
+		gnureadline.cc gnureadline.h\
+		integerdatum.cc integerdatum.h\
+		interpret.cc interpret.h\
+		iostreamdatum.cc iostreamdatum.h\
+		iteratordatum.h iteratordatum.cc\
+		literaldatum.cc\
+		lockptrdatum.h lockptrdatum_impl.h\
+		name.cc name.h\
+		slinames.h slinames.cpp\
+		namedatum.cc namedatum.h\
+		numericdatum.h numericdatum_impl.h\
+		oosupport.cc oosupport.h\
+		parser.cc parser.h\
+		parserdatum.h\
+		processes.cc processes.h\
+		psignal.c psignal.h\
+		scanner.cc scanner.h\
+		sli_io.cc sli_io.h\
+		sliactions.cc sliactions.h\
+		sliarray.cc sliarray.h\
+		slibuiltins.cc slibuiltins.h\
+		slicontrol.cc slicontrol.h\
+		slidata.cc slidata.h\
+		slidict.cc slidict.h\
+		sliexceptions.cc sliexceptions.h\
+		slifunction.h\
+		sligraphics.cc sligraphics.h\
+		slimath.cc slimath.h\
+		slimodule.cc slimodule.h\
+		sliregexp.cc sliregexp.h\
+		slistack.cc slistack.h\
+		slistartup.cc slistartup.h\
+		slitype.cc slitype.h\
+		slitypecheck.cc slitypecheck.h\
+		specialfunctionsmodule.cc specialfunctionsmodule.h\
+		stringdatum.cc stringdatum.h\
+		symboldatum.cc symboldatum.h\
+		tarrayobj.cc tarrayobj.h\
+		token.cc token.h\
+		tokenarray.cc tokenarray.h\
+		tokenstack.cc tokenstack.h\
+		tokenutils.cc tokenutils.h\
+		triedatum.cc triedatum.h\
+		typearray.h\
+		typechk.cc typechk.h\
+		utils.cc utils.h
+
 all: all-am
 
 .SUFFIXES:
@@ -575,8 +493,6 @@ clean-noinstLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
-libpuresli.la: $(libpuresli_la_OBJECTS) $(libpuresli_la_DEPENDENCIES) $(EXTRA_libpuresli_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(CXXLINK)  $(libpuresli_la_OBJECTS) $(libpuresli_la_LIBADD) $(LIBS)
 libsli.la: $(libsli_la_OBJECTS) $(libsli_la_DEPENDENCIES) $(EXTRA_libsli_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(CXXLINK)  $(libsli_la_OBJECTS) $(libsli_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)

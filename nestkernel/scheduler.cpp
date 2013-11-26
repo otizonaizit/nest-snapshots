@@ -54,6 +54,7 @@
 #include "arraydatum.h"
 #include "randomgen.h"
 #include "random_datums.h"
+#include "gslrandomgen.h"
 
 #include "nest_timemodifier.h"
 #include "nest_timeconverter.h"
@@ -89,6 +90,7 @@ nest::Scheduler::Scheduler(Network &net)
           to_step_(0L),    // consistent with to_do_ == 0
           update_ref_(true),
           terminate_(false),
+	  is_prepared_(false),
           off_grid_spiking_(false),
           print_time_(false),
           rng_()
@@ -112,7 +114,6 @@ void nest::Scheduler::reset()
   slice_ = 0;
   from_step_ = 0;
   to_step_ = 0;   // consistent with to_do_ = 0
-
   finalize_();
   init_();
 }
@@ -127,6 +128,7 @@ void nest::Scheduler::init_()
   assert(initialized_ == false);
 
   simulated_ = false;
+  is_prepared_=false;
   min_delay_ = max_delay_ = 0;
   update_ref_ = true;
 
@@ -168,6 +170,8 @@ void nest::Scheduler::init_()
 
 void nest::Scheduler::finalize_()
 {
+  //  finalize_nodes();
+
 #ifdef HAVE_PTHREADS
   int status = pthread_cond_destroy(&done_);
   if(status != 0)
@@ -313,6 +317,7 @@ void nest::Scheduler::clear_nodes_vec_()
     nodes_vec_[t].clear();
 }
 
+
 void nest::Scheduler::simulate(Time const & t)
 {
   assert(initialized_);
@@ -330,62 +335,43 @@ void nest::Scheduler::simulate(Time const & t)
 		 String::compose("Simulation time must be >= %1 ms (one time step).",
 				 Time::get_resolution().get_ms()));
     throw KernelException();
+
+
   }
 
-  // Check for synchronicity of global rngs over processes
-  if(Communicator::get_num_processes() > 1)
-    if (!Communicator::grng_synchrony(grng_->ulrand(100000)))
-      {
-        net_.message(SLIInterpreter::M_ERROR, "Scheduler::simulate",
-	  	     "Global Random Number Generators are not synchronized prior to simulation.");
-        throw KernelException();
-      }
-
-  // As default, we have to place the iterator at the
-  // leftmost node of the tree.
-  // If the iteration process was suspended, we leave the
-  // iterator where it was and continue the iteration
-  // process by calling "resume()"
-
-  // Note that the time argument accumulates.
-  // This is needed so that the following two
-  // calling sequences yield the same results:
-  // a: net.simulate(t1); // suspend is called here
-  //    net.simulate(t2);
-  //    assert(net.t == t1+t2);
-  // b: net.simulate(t1); // NO suspend  called
-  //    net.simulate(t2);
-  //    assert(net.t == t1+t2);
-  // The philosophy behind this behaviour is that the user
-  // can in principle not know whether an element will suspend
-  // the cycle.
-
-  // check whether the simulation clock
-  // will overflow during the simulation.
   if ( t.is_finite() )
   {
     Time time1 = clock_ + t;
     if( !time1.is_finite() )
+      {
+	std::string msg = String::compose("A clock overflow will occur after %1 of %2 ms. Please reset network "
+					  "clock first!", (Time::max()-clock_).get_ms(), t.get_ms());
+	net_.message(SLIInterpreter::M_ERROR, "Scheduler::simulate", msg);
+	throw KernelException();
+      }
+  }
+  else
     {
-      std::string msg = String::compose("A clock overflow will occur after %1 of %2 ms. Please reset network "
-                                        "clock first!", (Time::max()-clock_).get_ms(), t.get_ms());
+      std::string msg = String::compose("The requested simulation time exceeds the largest time NEST can handle "
+					"(T_max = %1 ms). Please use a shorter time!", Time::max().get_ms());
       net_.message(SLIInterpreter::M_ERROR, "Scheduler::simulate", msg);
       throw KernelException();
     }
-  }
-  else
-  {
-    std::string msg = String::compose("The requested simulation time exceeds the largest time NEST can handle "
-                                      "(T_max = %1 ms). Please use a shorter time!", Time::max().get_ms());
-    net_.message(SLIInterpreter::M_ERROR, "Scheduler::simulate", msg);
-    throw KernelException();
-  }
   to_do_ += t.get_steps();
   to_do_total_ = to_do_;
+  
+  prepare_simulation();
 
-  // find shortest and longest delay across all MPI processes
-  // this call sets the member variables
-  compute_delay_extrema_(min_delay_, max_delay_);
+  // from_step_ is not touched here.  If we are at the beginning
+  // of a simulation, it has been reset properly elsewhere.  If
+  // a simulation was ended and is now continued, from_step_ will
+  // have the proper value.  to_step_ is set as in advance_time().
+
+  ulong_t end_sim = from_step_ + to_do_;
+  if (min_delay_ < end_sim)
+    to_step_ = min_delay_;    // update to end of time slice
+  else
+    to_step_ = end_sim;       // update to end of simulation time
 
   // Warn about possible inconsistencies, see #504.
   // This test cannot come any earlier, because we first need to compute min_delay_
@@ -397,38 +383,31 @@ void nest::Scheduler::simulate(Time const & t)
                    "more than one source of randomness, e.g., two different poisson_generators, and (ii) Simulate "
                    "is called repeatedly with simulation times that are not multiples of the minimal delay.");
 
-  // from_step_ is not touched here.  If we are at the beginning
-  // of a simulation, it has been reset properly elsewhere.  If
-  // a simulation was ended and is now continued, from_step_ will
-  // have the proper value.  to_step_ is set as in advance_time().
-  ulong_t end_sim = from_step_ + to_do_;
-  if (min_delay_ < end_sim)
-    to_step_ = min_delay_;    // update to end of time slice
-  else
-    to_step_ = end_sim;       // update to end of simulation time
-
+  // We must recalibrate, since time constants and other neuronal parameters may
+  // have changed.
 
   resume();
-  simulated_ = true;
+}
+
+void nest::Scheduler::prepare_simulation()
+{
+  if(is_prepared_)
+    return;
+
+  //  std::cerr << "Preparing simulation\n";
+
+  // find shortest and longest delay across all MPI processes
+  // this call sets the member variables
+  compute_delay_extrema_(min_delay_, max_delay_);
 
   // Check for synchronicity of global rngs over processes
   if(Communicator::get_num_processes() > 1)
     if (!Communicator::grng_synchrony(grng_->ulrand(100000)))
-    {
-      net_.message(SLIInterpreter::M_ERROR, "Scheduler::simulate",
-                   "Global Random Number Generators are not synchronized after simulation.");
-      throw KernelException();
-    }
-}
-
-void nest::Scheduler::resume()
-{
-  assert(initialized_);
-
-  terminate_ = false;
-
-  if(to_do_ == 0)
-    return;
+      {
+        net_.message(SLIInterpreter::M_ERROR, "Scheduler::simulate",
+	  	     "Global Random Number Generators are not synchronized prior to simulation.");
+        throw KernelException();
+      }
 
 #ifdef HAVE_PTHREAD_SETCONCURRENCY
   // The following is needed on Solaris 7 and higher
@@ -464,14 +443,46 @@ void nest::Scheduler::resume()
     Communicator::enter_runtime(tick);
   }
 #endif
+  is_prepared_= true;
+}
 
-  simulating_ = true;
+void nest::Scheduler::finalize_simulation()
+{
+  if(not simulated_)
+    return;
+
+  //  std::cerr << "Finalizing simulation\n";
+
+  // Check for synchronicity of global rngs over processes
+  if(Communicator::get_num_processes() > 1)
+    if (!Communicator::grng_synchrony(grng_->ulrand(100000)))
+    {
+      net_.message(SLIInterpreter::M_ERROR, "Scheduler::simulate",
+                   "Global Random Number Generators are not synchronized after simulation.");
+      throw KernelException();
+    }
+
+  finalize_nodes();
+
+}
+
+void nest::Scheduler::resume()
+{
+  assert(initialized_);
+  assert(is_prepared_);
+
+  terminate_ = false;
+
+  if(to_do_ == 0)
+    return;
 
   if (print_time_)
   {
     std::cout << std::endl;
     print_progress_();
   }
+
+  simulating_ = true;
 
   if (n_threads_ == 1)
     serial_update();
@@ -504,6 +515,7 @@ void nest::Scheduler::resume()
     std::cout << std::endl;
 
   Communicator::synchronize();
+  simulated_ = true;
 
   if(terminate_)
   {
@@ -575,6 +587,7 @@ void nest::Scheduler::serial_update()
   } while((to_do_ != 0) && (! terminate_));
 }
 
+
 void nest::Scheduler::threaded_update_openmp()
 {
 #ifdef _OPENMP
@@ -601,10 +614,20 @@ void nest::Scheduler::threaded_update_openmp()
 	  // be done after deliver_events_() since it calls
 	  // music_event_out_proxy::handle(), which hands the spikes over to
 	  // MUSIC *before* MUSIC time is advanced
-	  if (slice_ > 0)
-	    Communicator::advance_music_time(1);
 
-	  net_.update_music_event_handlers_(clock_, from_step_, to_step_);
+	  // wait until all threads are done -> synchronize
+#pragma omp barrier
+
+	  // the following block is executed by a single thread
+	  // the other threads wait at the end of the block
+#pragma omp single
+	  {
+	    if (slice_ > 0)
+	      Communicator::advance_music_time(1);
+	    
+	    // the following could be made thread-safe
+	    net_.update_music_event_handlers_(clock_, from_step_, to_step_);
+	  }
 #endif
 	}
 
@@ -858,28 +881,34 @@ void nest::Scheduler::prepare_nodes()
     n_nodes_ += nodes_vec_[t].size();
   }
 
-  std::string msg = String::compose("Simulating %1 nodes.", n_nodes_);
+  std::string msg, node_str("nodes");
+  if (n_nodes_ == 1) node_str = "node";  
+  msg = String::compose("Simulating %1 local %2.", n_nodes_, node_str);
   net_.message(SLIInterpreter::M_INFO, "Scheduler::prepare_nodes", msg);
 }
 
+//!< This function is called only if the threead data structures are properly set up.
 void nest::Scheduler::finalize_nodes()
 {
-  for (index t = 0; t < n_threads_; ++t)
-     for(index n = 0; n < net_.size(); ++n)
-     {
-       if ( net_.is_local_gid(n) && net_.nodes_[n]!=0 )
-       {
-         if ((*net_.nodes_[n]).num_thread_siblings_() > 0)
-           (*net_.nodes_[n]).get_thread_sibling_(t)->finalize();
-         else
-         {
-           Node* node = net_.get_node(n, t);
-           if (static_cast<uint_t>(node->get_thread()) == t)
-             node->finalize();
-         }
-       }
-     }
-}
+  assert(is_prepared_);
+#ifdef _OPENMP
+  net_.message(SLIInterpreter::M_INFO, "Scheduler::finalize_nodes()", " using OpenMP.");
+// parallel section begins
+#pragma omp parallel
+  {
+    index t = omp_get_thread_num(); // which thread am I
+#else
+  for(index t=0; t< n_threads_; ++t)
+   {
+#endif
+
+     for (std::vector<Node*>::iterator i = nodes_vec_[t].begin(); i != nodes_vec_[t].end(); ++i)
+       (*i)->finalize(); // we assume that the right sibling is stored in nodes_vec_
+
+      // parallel section ends, wait until all threads are done -> synchronize
+    }
+  }
+
 
 void nest::Scheduler::set_status(DictionaryDatum const &d)
 {
@@ -1047,11 +1076,7 @@ void nest::Scheduler::set_status(DictionaryDatum const &d)
     }
   }
 
-
-  bool off_grid_spiking;
-  bool grid_spiking_updated = updateValue<bool>(d, "off_grid_spiking", off_grid_spiking);
-  if (grid_spiking_updated)
-      off_grid_spiking_ = off_grid_spiking;
+  updateValue<bool>(d, "off_grid_spiking", off_grid_spiking_);
 
   bool comm_allgather;
   bool commstyle_updated = updateValue<bool>(d, "communicate_allgather", comm_allgather);
@@ -1144,12 +1169,12 @@ void nest::Scheduler::set_status(DictionaryDatum const &d)
 
   if ( d->known("grng_seed") )
   {
-    long s = getValue<long>(d, "grng_seed");
+    const long gseed = getValue<long>(d, "grng_seed");
 
     // check if grng seed is unique with respect to rng seeds
     // if grng_seed and rng_seeds given in one SetStatus call
     std::set<ulong_t> seedset;
-    seedset.insert(s);
+    seedset.insert(gseed);
     if (d->known("rng_seeds"))
     {
       ArrayDatum *ad_rngseeds =
@@ -1158,8 +1183,8 @@ void nest::Scheduler::set_status(DictionaryDatum const &d)
 	throw BadProperty();
       for ( index i = 0 ; i < ad_rngseeds->size() ; ++i )
       {
-	s = (*ad_rngseeds)[i];  // SLI has no ulong tokens
-	if ( !seedset.insert(s).second )
+	const long vpseed = (*ad_rngseeds)[i];  // SLI has no ulong tokens
+	if ( !seedset.insert(vpseed).second )
 	{
 	  net_.message(SLIInterpreter::M_WARNING, "Scheduler::set_status",
 		       "Seeds are not unique across threads!");
@@ -1168,8 +1193,8 @@ void nest::Scheduler::set_status(DictionaryDatum const &d)
       }
     }
     // now apply seed, resets generator automatically
-    grng_seed_ = s;
-    grng_->seed(s);
+    grng_seed_ = gseed;
+    grng_->seed(gseed);
 
   } // if grng_seed
 
@@ -1234,7 +1259,7 @@ void nest::Scheduler::create_rngs_(const bool ctor_call)
 
   // if old generators exist, remove them; since rng_ contains
   // lockPTRs, we don't have to worry about deletion
-  if ( rng_.size() > 0 )
+  if ( !rng_.empty() )
   {
     if ( !ctor_call )
       net_.message(SLIInterpreter::M_INFO, "Scheduler::create_rngs_", "Deleting existing random number generators");
@@ -1263,7 +1288,11 @@ void nest::Scheduler::create_rngs_(const bool ctor_call)
         seeds here would run the risk of using the same seed twice.
         For simplicity, we use 1 .. n_vps.
       */
+#ifdef HAVE_GSL
+      librandom::RngPtr rng(new librandom::GslRandomGen(gsl_rng_knuthran2002, s));
+#else
       librandom::RngPtr rng = librandom::RandomGen::create_knuthlfg_rng(s);
+#endif
 
       if ( !rng )
       {
@@ -1290,17 +1319,18 @@ void nest::Scheduler::create_grng_(const bool ctor_call)
     net_.message(SLIInterpreter::M_INFO, "Scheduler::create_grng_", "Creating new default global RNG");
 
   // create default RNG with default seed
+#ifdef HAVE_GSL
+  grng_ = librandom::RngPtr(new librandom::GslRandomGen(gsl_rng_knuthran2002, librandom::RandomGen::DefaultSeed));
+#else
   grng_ = librandom::RandomGen::create_knuthlfg_rng(librandom::RandomGen::DefaultSeed);
+#endif
 
   if ( !grng_ )
     {
       if ( !ctor_call )
-	net_.message(SLIInterpreter::M_ERROR, "Scheduler::create_grng_",
-		   "Error initializing knuthlfg");
+	net_.message(SLIInterpreter::M_ERROR, "Scheduler::create_grng_", "Error initializing knuthlfg");
       else
-	std::cerr << "\nScheduler::create_grng_\n"
-		  << "Error initializing knuthlfg"
-		  << std::endl;
+	std::cerr << "\nScheduler::create_grng_\n" << "Error initializing knuthlfg" << std::endl;
 
       throw KernelException();
     }

@@ -55,8 +55,13 @@ host_triplet = @host@
 subdir = extras/ConnPlotter
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -109,8 +114,9 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(datadir)"
-DATA = $(data_DATA)
+am__installdirs = "$(DESTDIR)$(examplesdir)" \
+	"$(DESTDIR)$(tutorialdir)"
+DATA = $(examples_DATA) $(tutorial_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -191,6 +197,9 @@ LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBADD_DL = @LIBADD_DL@
 LIBLTDL = @LIBLTDL@
+LIBNEUROSIM_INCLUDE = @LIBNEUROSIM_INCLUDE@
+LIBNEUROSIM_LIBS = @LIBNEUROSIM_LIBS@
+LIBNEUROSIM_PY_LIBS = @LIBNEUROSIM_PY_LIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -231,10 +240,13 @@ PKGDATADIR_AS_CONFIGURED = @PKGDATADIR_AS_CONFIGURED@
 PKGDOCDIR = @PKGDOCDIR@
 PKGDOCDIR_AS_CONFIGURED = @PKGDOCDIR_AS_CONFIGURED@
 PKGSRCDIR = @PKGSRCDIR@
+PYNEST_CPPFLAGS = @PYNEST_CPPFLAGS@
 PYNEST_CXXFLAGS = @PYNEST_CXXFLAGS@
-PYNEST_PREFIX = @PYNEST_PREFIX@
 PYNEST_SUBDIR = @PYNEST_SUBDIR@
-PYTHON_EXEC = @PYTHON_EXEC@
+PYTHON = @PYTHON@
+PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+PYTHON_PLATFORM = @PYTHON_PLATFORM@
+PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -278,7 +290,7 @@ build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
 builddir = @builddir@
-datadir = @PKGDOCDIR@/examples/ConnPlotter
+datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
@@ -300,9 +312,13 @@ mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
 pdfdir = @pdfdir@
+pkgpyexecdir = @pkgpyexecdir@
+pkgpythondir = @pkgpythondir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+pyexecdir = @pyexecdir@
+pythondir = @pythondir@
 rp = @rp@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
@@ -313,19 +329,21 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-defs = @SLI_THREAD_DEFS@ $defs
-MAKEFLAGS = @MAKE_FLAGS@
 EXTRA_DIST = setup.py \
 	doc examples \
 	colormaps.py \
 	ConnPlotter.py \
 	__init__.py \
-	LICENSE.ConnPlotter \
 	MANIFEST \
 	tcd_nest.py
 
-data_DATA = \
-	examples/connplotter_tutorial.py
+@HAVE_PYTHON_TRUE@examplesdir = @PKGDOCDIR@/examples/ConnPlotter
+@HAVE_PYTHON_TRUE@examples_DATA = \
+@HAVE_PYTHON_TRUE@	examples/connplotter_tutorial.py
+
+@HAVE_PYTHON_TRUE@tutorialdir = @PKGDOCDIR@/ConnPlotter
+@HAVE_PYTHON_TRUE@tutorial_DATA = \
+@HAVE_PYTHON_TRUE@	doc/connplotter_tutorial.pdf
 
 all: all-am
 
@@ -366,27 +384,48 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-dataDATA: $(data_DATA)
+install-examplesDATA: $(examples_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(data_DATA)'; test -n "$(datadir)" || list=; \
+	@list='$(examples_DATA)'; test -n "$(examplesdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(datadir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(datadir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(examplesdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(examplesdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(datadir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(datadir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(examplesdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(examplesdir)" || exit $$?; \
 	done
 
-uninstall-dataDATA:
+uninstall-examplesDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(data_DATA)'; test -n "$(datadir)" || list=; \
+	@list='$(examples_DATA)'; test -n "$(examplesdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(datadir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(examplesdir)'; $(am__uninstall_files_from_dir)
+install-tutorialDATA: $(tutorial_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(tutorial_DATA)'; test -n "$(tutorialdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(tutorialdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(tutorialdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(tutorialdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(tutorialdir)" || exit $$?; \
+	done
+
+uninstall-tutorialDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(tutorial_DATA)'; test -n "$(tutorialdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(tutorialdir)'; $(am__uninstall_files_from_dir)
 tags: TAGS
 TAGS:
 
@@ -430,7 +469,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(datadir)"; do \
+	for dir in "$(DESTDIR)$(examplesdir)" "$(DESTDIR)$(tutorialdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -463,7 +502,10 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean-am: clean-generic clean-libtool mostlyclean-am
+@HAVE_PYTHON_FALSE@install-exec-hook:
+clean: clean-am
+
+clean-am: clean-generic clean-libtool clean-local mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
@@ -481,9 +523,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dataDATA
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+install-data-am: install-examplesDATA install-tutorialDATA
+
 install-dvi: install-dvi-am
 
 install-dvi-am:
@@ -527,45 +568,30 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-dataDATA
+uninstall-am: uninstall-examplesDATA uninstall-tutorialDATA
 
-.MAKE: install-am install-data-am install-exec-am install-strip
+.MAKE: install-am install-exec-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
-	distclean distclean-generic distclean-libtool distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-data-hook \
-	install-dataDATA install-dvi install-dvi-am install-exec \
+	clean-local distclean distclean-generic distclean-libtool \
+	distdir dvi dvi-am html html-am info info-am install \
+	install-am install-data install-data-am install-dvi \
+	install-dvi-am install-examplesDATA install-exec \
 	install-exec-am install-exec-hook install-html install-html-am \
 	install-info install-info-am install-man install-pdf \
 	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am \
-	uninstall-dataDATA
+	install-tutorialDATA installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	uninstall uninstall-am uninstall-examplesDATA \
+	uninstall-tutorialDATA
 
 
-# 'all' does sometimes miss changes, therefore we 'clean' first
-all:	clean
-	cd @PKGSRCDIR@/$(subdir); @PYTHON_EXEC@ setup.py build
+@HAVE_PYTHON_TRUE@install-exec-hook:
+@HAVE_PYTHON_TRUE@	cd $(srcdir); $(PYTHON) setup.py build --build-base=$(abs_builddir)/build install --prefix=$(DESTDIR)$(prefix) --install-lib=$(DESTDIR)$(pythondir) --install-scripts=$(DESTDIR)$(bindir) --install-data=$(DESTDIR)$(pkgdatadir)
 
-install-exec-hook:
-	cd @PKGSRCDIR@/$(subdir); @PYTHON_EXEC@ setup.py install --prefix=$(DESTDIR)@PYNEST_PREFIX@
-	if test `echo @PYTHON_VERSION@ | cut -d. -f2` -ge 6; then \
-	  mkdir -p $(DESTDIR)@PYNEST_PREFIX@/lib/python@PYTHON_VERSION@/dist-packages; \
-	  cd $(DESTDIR)@PYNEST_PREFIX@/lib/python@PYTHON_VERSION@/dist-packages; \
-	     ln -f -s ../site-packages/ConnPlotter; \
-	  cd $(DESTDIR)@PYNEST_PREFIX@/lib/python@PYTHON_VERSION@/dist-packages; \
-	     ln -f -s ../site-packages/ConnPlotter*.egg-info; \
-	fi
-
-install-data-hook: install-exec
-	@INSTALL_PROGRAM@ -m 644 @PKGSRCDIR@/$(subdir)/LICENSE.ConnPlotter $(DESTDIR)@PKGDOCDIR@/
-	@INSTALL_PROGRAM@ -m 755 -d $(DESTDIR)@PKGDOCDIR@/ConnPlotter
-	@INSTALL_PROGRAM@ -m 644 @PKGSRCDIR@/$(subdir)/doc/connplotter_tutorial.pdf $(DESTDIR)@PKGDOCDIR@/ConnPlotter
-
-clean:
-	rm -rf build
+clean-local:
+	-rm -rf $(abs_builddir)/build
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

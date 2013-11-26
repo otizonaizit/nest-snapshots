@@ -195,7 +195,6 @@ namespace nest {
     virtual 
       void register_connector(nest::Connector&) {}
      
-
     /**
      * Return global Network ID.
      * Returns the global network ID of the Node.
@@ -425,7 +424,6 @@ namespace nest {
      *
      * @see Event
      */
-
 
     /**
      * This function checks if the receiver accepts the connection by creating an

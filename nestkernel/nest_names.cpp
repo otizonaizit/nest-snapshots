@@ -62,6 +62,8 @@ namespace nest
     const Name E_K("E_K");
     const Name in_spikes("in_spikes");
     const Name ex_spikes("ex_spikes");
+    const Name weighted_spikes_in("weighted_spikes_in");
+    const Name weighted_spikes_ex("weighted_spikes_ex");
     const Name error("error");
 
     // Related to ArchivingNode
@@ -100,6 +102,8 @@ namespace nest
     const Name w("w");
     const Name Delta_T("Delta_T");
     const Name tau_w("tau_w");
+    const Name HMIN("HMIN");   //!< Smallest integration step for adaptive stepsize
+    const Name MAXERR("MAXERR"); //!< Largest permissible error for adaptive stepsize
 
     // Additional parameters for Izhikevich 2003
     const Name c("c");
@@ -213,14 +217,22 @@ namespace nest
     const Name mother_rng("mother_rng");
     const Name p_copy("p_copy");
 
-    // Specific to correlation detector
+    // Specific to correlation and correlomatrix detector
     const Name delta_tau("delta_tau");
     const Name tau_max("tau_max");
-    const Name histogram("histogram");
-    const Name count_histogram("count_histogram");
     const Name Tstart("Tstart");
     const Name Tstop("Tstop");
 
+    // Specific to correlation detector
+    const Name histogram("histogram");
+    const Name histogram_correction("histogram_correction");
+    const Name count_histogram("count_histogram");
+
+    // Specific to correlomatrix detector
+    const Name N_channels("N_channels");
+    const Name covariance("covariance");
+    const Name count_covariance("count_covariance");
+    
     const Name origin("origin");
     const Name start("start");
     const Name stop("stop");
@@ -299,6 +311,9 @@ namespace nest
     const Name dead_time("dead_time");
     const Name gamma_shape("gamma_shape");
 
+    // Specific to iaf_psc_exp_multisynapse and iaf_psc_alpha_multisynapse
+    const Name has_connections("has_connections");
+
     // Miscellaneous parameters
     const Name label("label");
     const Name mean("mean");
@@ -330,7 +345,7 @@ namespace nest
     const Name theta("theta");
 
     // Node types
-    const Name type("type");
+    const Name type("node_type");
     const Name structure("structure");
     const Name neuron("neuron");
     const Name stimulator("stimulator");

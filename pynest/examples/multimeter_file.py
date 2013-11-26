@@ -1,6 +1,6 @@
-#!/usr/bin/env python
-
-# multimeter-file.py
+# -*- coding: utf-8 -*-
+#
+# multimeter_file.py
 #
 # This file is part of NEST.
 #
@@ -35,7 +35,7 @@ nest.SetKernelStatus({'overwrite_files': True,  # set to True to permit overwrit
                       'data_prefix': ''})       # prefix for all data files
 
 # display recordables for illustration
-print 'iaf_cond_alpha recordables: ', nest.GetDefaults('iaf_cond_alpha')['recordables']
+print('iaf_cond_alpha recordables: {0}'.format(nest.GetDefaults('iaf_cond_alpha')['recordables']))
 
 # create neuron and multimeter
 n = nest.Create('iaf_cond_alpha', 

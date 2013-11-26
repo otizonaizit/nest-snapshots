@@ -43,6 +43,7 @@
 
 // Neuron models
 #include "aeif_cond_alpha.h"
+#include "aeif_cond_alpha_RK5.h"
 #include "aeif_cond_exp.h"
 #include "hh_cond_exp_traub.h"
 #include "hh_psc_alpha.h"
@@ -85,8 +86,8 @@
 #include "spin_detector.h"
 #include "multimeter.h"
 #include "correlation_detector.h"
+#include "correlomatrix_detector.h"
 
-//
 #include "volume_transmitter.h"
 
 
@@ -134,8 +135,7 @@ namespace nest
 
   const std::string ModelsModule::commandstring(void) const
   {
-    return std::string("/models-init /C++ ($Revision: 9031 $) provide-component "
-                       "/models-init /SLI ($Revision: 9031 $) require-component");
+    return std::string("(models-init) run");
   }
 
   //-------------------------------------------------------------------------------------
@@ -173,6 +173,7 @@ namespace nest
     register_model<spin_detector>(net_,       "spin_detector");
     register_model<Multimeter>(net_,           "multimeter");
     register_model<correlation_detector>(net_, "correlation_detector");
+    register_model<correlomatrix_detector>(net_, "correlomatrix_detector");
     register_model<volume_transmitter>(net_, "volume_transmitter");
 
     // Create voltmeter as a multimeter pre-configured to record V_m.
@@ -197,6 +198,8 @@ namespace nest
     register_model<aeif_cond_exp>(net_, "aeif_cond_exp");
     register_model<ht_neuron>(net_,       "ht_neuron");
 #endif
+    // This version of the AdEx model does not depend on GSL.
+    register_model<aeif_cond_alpha_RK5>(net_, "aeif_cond_alpha_RK5");
 
 #ifdef HAVE_MUSIC 
     //// proxies for inter-application communication using MUSIC

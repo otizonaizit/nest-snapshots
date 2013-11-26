@@ -83,11 +83,6 @@ std::string nest::UnknownNode::message()
   return out.str();
 }
 
-std::string nest::MalformedAddress::message()
-{
-  return msg_;
-}
-
 std::string nest::NoThreadSiblingsAvailable::message()
 {
   std::ostringstream out;
@@ -333,7 +328,7 @@ std::string nest::GSLSolverFailure::message()
 std::string nest::NumericalInstability::message()
 {
   std::ostringstream msg;
-  msg << "NEST detected a numercial instability while "
+  msg << "NEST detected a numerical instability while "
       << "updating " << model_ << ". Try to reduce "
       << "gsl_error_tol for the model.";
   return msg.str();

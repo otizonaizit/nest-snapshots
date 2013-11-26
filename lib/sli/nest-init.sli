@@ -33,15 +33,6 @@
 M_DEBUG (nest-init.sli) (Initializing SLI support for NEST Kernel.) message
 % see nestmodule.cpp
 
-/nest-init /SLI ($Revision: 10474 $) provide-component
-/nest-init /C++ (1.157) require-component
-
-statusdict begin
-/kernellibrevision
-  ($Revision: 10474 $) % SVN/CVS revision number (unique)
-def
-end
-
 % Add NEST example directory to search-path
 statusdict /prgdocdir get (/examples)                  join addpath
 statusdict /prgdocdir get (/examples/FacetsBenchmarks) join addpath
@@ -97,9 +88,13 @@ def
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/cvdict trie
-[/connectiontype] /cvdict_C load addtotrie
+
+% oosupport.sli already defines conversions for dict
+/cvdict [/connectiontype] 
+ /cvdict_C load
 def
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -236,7 +231,7 @@ def
       synapse model. The model can be given in the call to Connect. The
       default model can be set as an Option.
 
-   SeeAlso: ConvergentConnect, DivergentConnect, synapsedict
+   SeeAlso: ConvergentConnect, DivergentConnect, CGConnect, synapsedict, GetOptions
 */
 
 /Connect <<
@@ -316,7 +311,6 @@ def
       if
     } if    
   } forall
-  pstack
   GetConnections_D 
   Flatten 
 } def
@@ -428,11 +422,18 @@ def
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/DivergentConnect_i_ia_l [/integertype /arraytype /literaltype]
+/DivergentConnect_i_ia_l
 {
   [] [] % put empty arrays for weights and delays on the stack
   3 2 roll
   DivergentConnect_i_ia_a_a_l
+} def
+
+/DivergentConnect_i_i_i_l
+{
+  [] [] % put empty arrays for weights and delays on the stack
+  3 2 roll
+  DivergentConnect_i_i_i_a_a_l
 } def
 
 /DivergentConnect_main trie
@@ -440,6 +441,10 @@ def
     /DivergentConnect_i_ia_l load addtotrie
 [/integertype /arraytype /arraytype /arraytype /literaltype]
     /DivergentConnect_i_ia_a_a_l load addtotrie
+[/integertype /integertype /integertype /arraytype /arraytype /literaltype]
+    /DivergentConnect_i_i_i_a_a_l load addtotrie
+[/integertype /integertype /integertype /literaltype]
+    /DivergentConnect_i_i_i_l load addtotrie
 def
 
 /DivergentConnect [/literaltype]
@@ -690,18 +695,22 @@ Synopsis:
 [sources] target n [weights] [delays] /synmodel RandomConvergentConnect -> -
 [sources] [targets] [ns] [weightss] [delayss] /synmodel RandomConvergentConnect -> -
 [sources] [targets] n /synmodel RandomConvergentConnect -> -
+source_from source_to target_from target_to [ns] [weightss] [delayss] /synmodel RandomConvergentConnect -> -
+source_from source_to target_from target_to n /synmodel RandomConvergentConnect -> -
 
 Parameters:
-[sources] - array of (global IDs of) potential source nodes
-target    - GID of target node
-[targets] - array of (global IDs of) target nodes
-n         - number of connections to be established
-init_dict - dictionary used to initialize each of the established connections
-weights   - A list of weights of size n
-delays    - A list of delays of size n
-weightss  - A list of lists of weights of size length(targets) x size n
-delayss   - A list of lists delays of size length(targets) x size n 
-/synmodel - The synapse model for the connection (see Options below)
+[sources]   - array of (global IDs of) potential source nodes
+target      - GID of target node
+[targets]   - array of (global IDs of) target nodes
+source_from - first index in range 
+source_to   - last index in range
+n           - number of connections to be established
+init_dict   - dictionary used to initialize each of the established connections
+weights     - A list of weights of size n
+delays      - A list of delays of size n
+weightss    - A list of lists of weights of size length(targets) x size n
+delayss     - A list of lists delays of size length(targets) x size n 
+/synmodel   - The synapse model for the connection (see Options below)
 
 Options:
 allow_autapses  - controls, whether self connections can be produced.
@@ -874,6 +883,14 @@ bind def
   RandomConvergentConnect_ia_ia_ia_daa_daa_b_b_l
 } bind def
 
+/RandomConvergentConnect_i_i_i_i_ia_daa_daa_l
+{
+  /RandomConvergentConnect /allow_multapses GetOption
+  /RandomConvergentConnect /allow_autapses GetOption
+  3 2 roll
+  RandomConvergentConnect_i_i_i_i_ia_daa_daa_b_b_l
+} bind def
+
 /RandomConvergentConnect_ia_ia_i_l
 {
   % construct an array of size(targets) entries all of which have value given by third argument
@@ -882,7 +899,8 @@ bind def
   4 -1 roll
   LayoutArray
   3 2 roll
-  
+
+  % put empty arrays for weights before synapse type
   [ ] % weights empty
   [ ] % delays empty
   3 2 roll
@@ -893,6 +911,24 @@ bind def
 
   RandomConvergentConnect_ia_ia_ia_daa_daa_b_b_l
 } bind def
+
+/RandomConvergentConnect_i_i_i_i_i_l
+{
+  % construct an array of a single entry, if there is only an int given
+  exch [1] exch LayoutArray exch
+
+  % put empty arrays for weights before synapse type
+  [ ] % weights empty
+  [ ] % delays empty
+  3 2 roll
+  
+  /RandomConvergentConnect /allow_multapses GetOption
+  /RandomConvergentConnect /allow_autapses GetOption
+  3 2 roll
+
+  RandomConvergentConnect_i_i_i_i_ia_daa_daa_b_b_l
+} bind def
+
 
 % all calls without init_dict are forwarded to C++
 /RandomConvergentConnect_main trie
@@ -910,6 +946,10 @@ bind def
   /RandomConvergentConnect_ia_ia_ia_daa_daa_l load addtotrie
 [/arraytype /arraytype /integertype /literaltype]
   /RandomConvergentConnect_ia_ia_i_l load addtotrie
+[/integertype /integertype /integertype /integertype /integertype /literaltype]
+    /RandomConvergentConnect_i_i_i_i_i_l load addtotrie
+[/integertype /integertype /integertype /integertype /arraytype /arraytype /arraytype /literaltype]
+    /RandomConvergentConnect_i_i_i_i_ia_daa_daa_l load addtotrie
 def
 
 /RandomConvergentConnect trie 
@@ -1007,6 +1047,72 @@ def
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+/*
+BeginDocumentation
+
+   Name: RandomPopulationConnectD - Randomly connect source to target population
+
+   Synopsis:
+   source_array target_array N param_dict synapse_model RandomPopulationConnectD
+
+   Parameters:
+   source_array       - array containing the gids of the presynaptic populations
+   target_array       - array containing the gids of the postsynaptic populations
+   N                  - number of connections to be established
+   param_dict         - dictionary with the following entries (see Note)
+                        weight_m - mean synaptic weight
+                        weight_s - std.dev of synaptic weight
+                        delay_m  - mean delay
+                        delay_s  - std.dev of delay
+   synapse_model      - synapse model of the connection
+
+   Options:
+
+   Description:
+   This connection routine randomly connects the pre- and
+   postsynaptic populations by randomly drawing N connections
+   from the given populations by repeating the following N times:
+
+   1. Select a source neuron at random from the source_array
+   2. Select a target neuron at random from the target_array
+   3. Choose weight and delay from a clipped normal distribution
+   4. Connect source to target with selected weight and delay
+
+   Note: 
+   - Multapses may occur; they cannot be suppressed
+   - If source and target population are identical, autapses can occur;
+     they cannot be suppressed
+   - Delays and weights are chosen from clipped normal distributions:
+     - Delays are always >= time resolution
+     - Excitatory weights (weight_m >= 0) are always >= 0
+     - Inhibitory weights (weight_m < 0) are always < 0
+   - Means and standard deviations given in param_dict are for the unclipped
+     normal distributions. Thus, if the mean is close to 0 (relative to the
+     std.deviation), actual mean and std.dev will differ from the given
+     parameters.
+
+  Author: Tobias Potjans, Markus Diesmann, Hans Ekkehard Plesser
+  SeeAlso: RandomDivergentConnect, Connect
+*/
+
+statusdict/have_gsl :: {
+
+  /RandomPopulationConnect_ia_ia_i_d {
+    /Connect /synapse_model GetOption
+    RandomPopulationConnect_ia_ia_i_d_l
+  } def
+  
+  /RandomPopulationConnectD trie
+  [/arraytype /arraytype /integertype /dictionarytype /literaltype] 
+    /RandomPopulationConnect_ia_ia_i_d_l load addtotrie
+  [/arraytype /arraytype /integertype /dictionarytype] 
+    /RandomPopulationConnect_ia_ia_i_d load addtotrie
+  def
+
+} if
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 /*BeginDocumentation
  Name: FindConnections - Find connections that fulfill the given criteria
 
@@ -1026,7 +1132,7 @@ def
  parameters of the connections. If no connections were found, the
  returned array is empty.
 
- This function is deprecated and will disappear in future version. 
+ This function is deprecated and will disappear in a future version. 
  Please use GetConnections instead. 
 
  Remarks:
@@ -1037,10 +1143,6 @@ def
 
  SeeAlso: GetConnections, GetStatus, SetStatus
 */
-
-%/FindConnections trie
-% [/dictionarytype ] /FindConnections_D load addtotrie
-%def
 
 /FindConnections
 [/dictionarytype]
@@ -1055,6 +1157,7 @@ def
   end
   GetConnections Flatten
 } def
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 /* BeginDocumentation
@@ -1634,6 +1737,10 @@ def
 /TimeCommunication trie
 [/integertype /integertype /booltype] /TimeCommunication_i_i_b load addtotrie
 [/integertype /integertype] { false TimeCommunication_i_i_b } bind addtotrie
+def
+
+/TimeCommunicationv trie
+[/integertype /integertype] /TimeCommunicationv_i_i load addtotrie
 def
 
   /* BeginDocumentation

@@ -2,8 +2,8 @@
 
 prefix=/home/zaytsev/opt/nest
 exec_prefix=${prefix}
-srcdir=/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE
-builddir=/home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD
+srcdir=/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE
+builddir=/home/zaytsev/src/10kproject/releasetools/__NEST_BUILD
 
 usage()
 {
@@ -52,7 +52,7 @@ while test $# -gt 0; do
         ;;
 
     --version)
-        echo 2.2.2
+        echo 2.3.10739
         exit 0
         ;;
 

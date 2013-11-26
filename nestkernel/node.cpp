@@ -171,10 +171,12 @@ namespace nest {
       else
 	unset(frozen);
     }
+    if(net_)
+      net_->force_preparation(); // re-prepeare simulation
   }
 
   /**
-   * Default implementation of just throws UnexpectedEvent
+   * Default implementation of check_connection just throws UnexpectedEvent
    */
   port Node::check_connection(Connection&, port)
   {

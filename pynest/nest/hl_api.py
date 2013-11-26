@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # hl_api.py
 #
@@ -20,7 +20,7 @@
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-High-level API of PyNEST.
+High-level API of PyNEST
 
 This file defines the user-level functions of NEST's Python interface
 by mapping NEST/SLI commands to Python. Please try to follow these
@@ -28,8 +28,8 @@ rules:
 
 1. SLI commands have the same name in Python. This means that most
    function names are written in camel case, although the Python
-   guidelines suggest to use lower case for funtcion names. However,
-   this way, it is easier for users to migrate from SLI to Python and.
+   guidelines suggest to use lower case for function names. However,
+   this way, it is easier for users to migrate from SLI to Python.
 
 2. Nodes are identified by their global IDs (GID) by default.
 
@@ -43,110 +43,145 @@ rules:
    Python. 
         
 6. If you have a *very* good reason, you may deviate from these guidelines.
-
-Authors: Jochen Eppler, Marc-Oliver Gewaltig, Moritz Helias, Eilif Mueller
 """
 
-import string
-import types
+import functools
+import inspect
+import warnings
+
+from .pynestkernel import SLIDatum, SLILiteral, NESTError, CONN_LEN
 
 # These variables MUST be set by __init__.py right after importing.
 # There is no safety net, whatsoever.
-nest = sps = spp = sr = None
+sps = spp = sr = pcd = None
 
-class NESTError(Exception):
-    def __init__(self, msg) :
-        Exception.__init__(self, msg)
-
+__debug = False
 
 # -------------------- Helper functions
 
-def is_ndarray(seq):
-        try:
-                import numpy
-                return type(seq) == numpy.ndarray
-        except:
-                return False
-        
-def is_sequencetype(seq) :
+def set_debug(dbg=True):
     """
-    Return True if the given object is a sequence type, False else
+    Set the debug flag of the high-level API.
     """
-    import sys
-    
-    return (type(seq) in (types.TupleType, types.ListType)) or is_ndarray(seq)
+
+    global __debug
+    __debug = dbg
 
 
-def is_iterabletype(seq) :
+def get_debug():
     """
-    Return True if the given object is iterable, False else
+    Return the current value of the debug flag of the high-level API.
+    """
+    return __debug
+
+
+def stack_checker(f):
+    """
+    Decorator to add stack checks to functions using PyNEST's
+    low-level API. This decorator works only on functions. See
+    check_stack() for the generic version for functions and
+    classes.
+    """
+
+    @functools.wraps(f)
+    def stack_checker_func(*args, **kwargs):
+        if not get_debug():
+            return f(*args, **kwargs)
+        else:
+            sr('count')
+            stackload_before = spp()
+            result = f(*args, **kwargs)
+            sr('count')
+            num_leftover_elements = spp() - stackload_before
+            if num_leftover_elements != 0:
+                eargs = (f.__name__, num_leftover_elements)
+                etext = "Function '%s' left %i elements on the stack."
+                raise NESTError(etext % eargs)
+            return result
+
+    return stack_checker_func
+
+
+def check_stack(thing):
+    """
+    Convenience wrapper for applying the stack_checker decorator to
+    all class methods of the given class, or to a given function. If
+    the object cannot be decorated, it is returned unchanged.
+    """
+
+    if inspect.isfunction(thing):
+        return stack_checker(thing)
+    elif inspect.isclass(thing):
+        for name, mtd in inspect.getmembers(thing, predicate=inspect.ismethod):
+            if name.startswith("test_"):
+                setattr(thing, name, stack_checker(mtd))
+        return thing
+    else:
+        raise ValueError("unable to decorate {0}".format(thing))
+
+
+def is_iterable(seq):
+    """
+    Return True if the given object is an iterable, False otherwise
     """
 
     try:
-        i = iter(seq)
+        iter(seq)
     except TypeError:
         return False
 
     return True
 
 
-def is_sequence_of_nonneg_ints(seq):
+def is_coercible_to_sli_array(seq):
     """
-    Return True if the given object is a list or tuple of ints, False else
-    """
-
-    return is_sequencetype(seq) and all([isinstance(n,int) and n >= 0 for n in seq])
-
-
-def raise_if_not_list_of_gids(seq, argname):
-    """
-    Raise a NestError if seq is not a sequence of ints, otherwise, do nothing.
-    The main purpose of this function is to perform a simple check that an
-    argument is a potentially valid list of GIDs (ints >= 0).
+    Checks whether `seq` is coercible to a SLI array
     """
 
-    if not is_sequence_of_nonneg_ints(seq):
-        raise NESTError(argname + " must be a list or tuple of GIDs")
- 
+    import sys
 
-def broadcast(val, l, allowedtypes, name="val"):
-
-    if type(val) in allowedtypes:
-        return l*(val,)
-    elif len(val)==1:
-        return l*val
-    elif len(val)!=l:
-        raise NESTError("'%s' must be a single value, a list with one element or a list with %i elements." % (name, l))
-
-    return val
+    if sys.version_info[0] >= 3:
+        return isinstance(seq, (tuple, list, range))
+    else:
+        return isinstance(seq, (tuple, list, xrange))
 
 
-def flatten(x):
+def is_sequence_of_connections(seq):
     """
-    flatten(sequence) -> list
-
-    Returns a flat list with all elements from the sequence and all
-    contained sub-sequences (iterables).
-
-    Examples:
-    >>> [1, 2, [3,4], (5,6)]
-    [1, 2, [3, 4], (5, 6)]
-    >>> flatten([[[1,2,3], (42,None)], [4,5], [6], 7, MyVector(8,9,10)])
-    [1, 2, 3, 42, None, 4, 5, 6, 7, 8, 9, 10]
+    Low-level API accepts an iterable of dictionaries or subscriptables of CONN_LEN
     """
 
-    result = []
-    for el in x:
-        if hasattr(el, "__iter__") and not isinstance(el, basestring) and not type(el) == types.DictType:
-            result.extend(flatten(el))
-        else:
-            result.append(el)
+    try:
+        cnn = next(iter(seq))
+        return isinstance(cnn, dict) or len(cnn) == CONN_LEN
+    except TypeError:
+        pass
 
-    return result
+    return False
 
+
+def is_sequence_of_gids(seq):
+    """
+    Checks whether the argument is a potentially valid sequence of GIDs (non-negative integers)
+    """
+
+    return all(isinstance(n, int) and n >= 0 for n in seq)
+
+
+def broadcast(item, length, allowed_types, name="item"):
+
+    if isinstance(item, allowed_types):
+        return length * (item,)
+    elif len(item) == 1:
+        return length * item
+    elif len(item) != length:
+        raise TypeError("'%s' must be a single value, a list with one element or a list with %i elements." % (name, length))
+
+    return item
 
 # -------------------- Functions to get information on NEST
 
+@check_stack
 def sysinfo():
     """
     Print information on the platform on which NEST was compiled.
@@ -155,15 +190,17 @@ def sysinfo():
     sr("sysinfo")
 
 
+@check_stack
 def version():
     """
     Return the NEST version.
     """
 
     sr("statusdict [[ /kernelname /version ]] get")
-    return string.join(spp())
+    return " ".join(spp())
     
 
+@check_stack
 def authors():
     """
     Print the authors of NEST.
@@ -172,6 +209,7 @@ def authors():
     sr("authors")
 
 
+@check_stack
 def helpdesk(browser="firefox"):
     """
     Open the NEST helpdesk in the given browser. The default browser is firefox.
@@ -181,28 +219,30 @@ def helpdesk(browser="firefox"):
     sr("helpdesk")
 
 
+@check_stack
 def help(obj=None, pager="less"):
     """
     Show the help page for the given object using the given pager. The
     default pager is less.
     """
 
-    if obj:
+    if obj is not None:
         sr("/page << /command (%s) >> SetOptions" % pager)
         sr("/%s help" % obj)
     else:
-	print "Type 'nest.helpdesk()' to access the online documentation in a browser."
-	print "Type 'nest.help(object)' to get help on a NEST object or command."
-        print 
-        print "Type 'nest.Models()' to see a list of available models in NEST."
-        print 
-	print "Type 'nest.authors()' for information about the makers of NEST."
-	print "Type 'nest.sysinfo()' to see details on the system configuration."
-	print "Type 'nest.version()' for information about the NEST version."
-        print
-	print "For more information visit http://www.nest-initiative.org."
+        print("Type 'nest.helpdesk()' to access the online documentation in a browser.")
+        print("Type 'nest.help(object)' to get help on a NEST object or command.")
+        print()
+        print("Type 'nest.Models()' to see a list of available models in NEST.")
+        print()
+        print("Type 'nest.authors()' for information about the makers of NEST.")
+        print("Type 'nest.sysinfo()' to see details on the system configuration.")
+        print("Type 'nest.version()' for information about the NEST version.")
+        print()
+        print("For more information visit http://www.nest-initiative.org.")
 
 
+@check_stack
 def get_verbosity():
     """
     Return verbosity level of NEST's messages.
@@ -212,6 +252,7 @@ def get_verbosity():
     return spp()
 
 
+@check_stack
 def set_verbosity(level):
     """
     Change verbosity level for NEST's messages. level is a string and
@@ -221,6 +262,18 @@ def set_verbosity(level):
     sr("%s setverbosity" % level)
 
 
+@check_stack
+def get_argv ():
+    """
+    Return argv as seen by NEST. This is similar to Python sys.argv
+    but might have changed after MPI initialization.
+    """
+    sr ('statusdict')
+    statusdict = spp ()
+    return statusdict['argv']
+
+
+@check_stack
 def message(level,sender,text):
     """
     Print a message using NEST's message system.
@@ -234,6 +287,7 @@ def message(level,sender,text):
 
 # -------------------- Functions for simulation control
 
+@check_stack
 def Simulate(t):
     """
     Simulate the network for t milliseconds.
@@ -243,6 +297,7 @@ def Simulate(t):
     sr('ms Simulate')
 
 
+@check_stack
 def ResumeSimulation():
     """
     Resume an interrupted simulation.
@@ -251,6 +306,7 @@ def ResumeSimulation():
     sr("ResumeSimulation")
 
 
+@check_stack
 def ResetKernel():
     """
     Reset the simulation kernel. This will destroy the network as
@@ -261,6 +317,7 @@ def ResetKernel():
     sr('ResetKernel')
 
 
+@check_stack
 def ResetNetwork():
     """
     Reset all nodes and connections to their original state.
@@ -269,6 +326,7 @@ def ResetNetwork():
     sr('ResetNetwork')
 
 
+@check_stack
 def SetKernelStatus(params):
     """
     Set parameters for the simulation kernel.
@@ -279,7 +337,8 @@ def SetKernelStatus(params):
     sr('SetStatus')
 
 
-def GetKernelStatus(keys = None):
+@check_stack
+def GetKernelStatus(keys=None):
     """
     Obtain parameters of the simulation kernel.
 
@@ -288,35 +347,26 @@ def GetKernelStatus(keys = None):
     - Single parameter value if called with single parameter name
     - List of parameter values if called with list of parameter names
     """
-    
+
     sr('0 GetStatus')
-    rootstatus = spp()
+    status_root = spp()
 
     sr('/subnet GetDefaults')
-    subnetdefaults = spp()
+    status_subnet = spp()
 
-    subnetdefaults["frozen"] = None
-    subnetdefaults["global_id"] = None
-    subnetdefaults["local"] = None
-    subnetdefaults["local_id"] = None
-    subnetdefaults["parent"] = None
-    subnetdefaults["state"] = None
-    subnetdefaults["thread"] = None
-    subnetdefaults["vp"] = None
+    d = dict((k, v) for k, v in status_root.items() if k not in status_subnet)
 
-    d = dict()
-
-    for k in rootstatus :
-        if k not in subnetdefaults :
-            d[k] = rootstatus[k]
-
-    if not keys:
+    if keys is None:
         return d
-    elif is_sequencetype(keys):
-        return [d[k] for k in keys]
-    else:
+    elif isinstance(keys, (str, SLILiteral)):
         return d[keys]
+    elif is_iterable(keys):
+        return tuple(d[k] for k in keys)
+    else:
+        raise TypeError("keys should be either a string or an iterable")
 
+
+@check_stack
 def Install(module_name):
     """
     Load a dynamically linked NEST module.
@@ -336,6 +386,7 @@ def Install(module_name):
 
 # -------------------- Functions for parallel computing
 
+@check_stack
 def Rank():
     """
     Return the MPI rank of the local process.
@@ -344,6 +395,7 @@ def Rank():
     sr("Rank")
     return spp()
 
+@check_stack
 def NumProcesses():
     """
     Return the overall number of MPI processes.
@@ -352,6 +404,7 @@ def NumProcesses():
     sr("NumProcesses")
     return spp()
 
+@check_stack
 def SetAcceptableLatency(port, latency):
     """
     Set the acceptable latency (in ms) for a MUSIC port.
@@ -363,7 +416,8 @@ def SetAcceptableLatency(port, latency):
 
 # -------------------- Functions for model handling
 
-def Models(mtype = "all", sel=None):
+@check_stack
+def Models(mtype="all", sel=None):
     """
     Return a list of all available models (neurons, devices and
     synapses). Use mtype='nodes' to only see neuron and device models,
@@ -373,26 +427,28 @@ def Models(mtype = "all", sel=None):
     """
 
     if mtype not in ("all", "nodes", "synapses"):
-        raise NESTError("type has to be one of 'all', 'nodes' or 'synapses'.")
+        raise ValueError("type has to be one of 'all', 'nodes' or 'synapses'")
 
-    models = list()
+    models = []
 
     if mtype in ("all", "nodes"):
-       sr("modeldict")
-       models += spp().keys()
+        sr("modeldict")
+        models += spp().keys()
 
     if mtype in ("all", "synapses"):
-       sr("synapsedict")
-       models += spp().keys()
-    
-    if sel != None:
-        models = filter(lambda x: x.find(sel) >= 0, models)
+        sr("synapsedict")
+        models += spp().keys()
+
+    if sel is not None:
+        models = [x for x in models if x.find(sel) >= 0]
 
     models.sort()
-    return models
+
+    return tuple(models)
 
 
-def SetDefaults(model, params, val=None) :
+@check_stack
+def SetDefaults(model, params, val=None):
     """
     Set the default parameters of the given model to the values
     specified in the params dictionary.
@@ -401,15 +457,16 @@ def SetDefaults(model, params, val=None) :
     of the model.
     """
 
-    if type(params) == types.StringType :
-            params = {params : val}
+    if val is not None:
+        if isinstance(params, (str, SLILiteral)):
+            params = {params: val}
 
-    sr('/'+model)
     sps(params)
-    sr('SetDefaults')
+    sr('/{0} exch SetDefaults'.format(model))
 
 
-def GetDefaults(model, keys=None) :
+@check_stack
+def GetDefaults(model, keys=None):
     """
     Return a dictionary with the default parameters of the given
     model, specified by a string.
@@ -419,25 +476,29 @@ def GetDefaults(model, keys=None) :
     GetDefaults('iaf_neuron','V_m') -> -70.0
     GetDefaults('iaf_neuron',['V_m', 'model') -> [-70.0, 'iaf_neuron']
     """
-    cmd = "/%s GetDefaults" % model
-    if keys:
-        if is_sequencetype(keys):
-            keyss = string.join(["/%s" % x for x in keys])
-            cmd='/'+model+' GetDefaults  [ %s ] { 1 index exch get} Map' % keyss
-        else:
-            cmd= '/'+model+' GetDefaults '+'/'+keys+' get'
-        
+
+    if keys is None:
+        cmd = "/{0} GetDefaults".format(model)
+    elif isinstance(keys, (str, SLILiteral)):
+        cmd = '/{0} GetDefaults /{1} get'.format(model, keys)
+    elif is_iterable(keys):
+        keys_str = " ".join("/{0}".format(x) for x in keys)
+        cmd = '/{0} GetDefaults  [ {1} ] {{ 1 index exch get }} Map exch pop'.format(model, keys_str)
+    else:
+        raise TypeError("keys should be either a string or an iterable")
+
     sr(cmd)
     return spp()
 
 
+@check_stack
 def CopyModel(existing, new, params=None):
     """
     Create a new model by copying an existing one. Default parameters
     can be given as params, or else are taken from existing.
     """
     
-    if params:
+    if params is not None:
         sps(params)
         sr("/%s /%s 3 2 roll CopyModel" % (existing, new))
     else:
@@ -446,6 +507,7 @@ def CopyModel(existing, new, params=None):
 
 # -------------------- Functions for node handling
 
+@check_stack
 def Create(model, n=1, params=None):
     """
     Create n instances of type model. Parameters for the new nodes can
@@ -453,36 +515,31 @@ def Create(model, n=1, params=None):
     with size n). If omitted, the model's defaults are used.
     """
 
-    broadcast_params = False
+    if isinstance(params, dict):
+        cmd = "/%s 3 1 roll exch Create" % model
+        sps(params)
+    else:
+        cmd = "/%s exch Create" % model
 
     sps(n)
-    cmd = "/%s exch Create" % model
-
-    if params:
-        if type(params) == types.DictType:
-            sps(params)
-            cmd = "/%s 3 1 roll Create" % model
-        elif is_sequencetype(params) and (len(params) == 1 or len(params) == n):
-            broadcast_params = True
-        else:
-            sr(";") # pop n from the stack
-            raise NESTError("params has to be a single dictionary or a list of dictionaries with size n.")
-        
     sr(cmd)
 
-    lastgid = spp()
-    ids = range(lastgid - n + 1, lastgid + 1)
+    last_gid = spp()
+    gids = tuple(range(last_gid - n + 1, last_gid + 1))
 
-    if broadcast_params:
+    if params is not None and not isinstance(params, dict):
         try:
-            SetStatus(ids, broadcast(params, n, (dict,)))
+            SetStatus(gids, params)
         except:
-            raise NESTError("SetStatus failed, but nodes already have been created. The ids of the new nodes are: %s" % ids)
+            warnings.warn("SetStatus() call failed, but nodes have already been created! "
+                          "The GIDs of the new nodes are: {0}.".format(gids))
+            raise
 
-    return ids
+    return gids
 
-        
-def SetStatus(nodes, params, val=None) :
+
+@check_stack
+def SetStatus(nodes, params, val=None):
     """
     Set the parameters of nodes (identified by global ids) or
     connections (identified by handles as returned by
@@ -492,33 +549,40 @@ def SetStatus(nodes, params, val=None) :
     can be a single value or a list of the same size as nodes.
     """
 
-    if not is_sequencetype(nodes):
-        raise NESTError("nodes must be a list of nodes or synapses.")
+    if not is_coercible_to_sli_array(nodes):
+        raise TypeError("nodes must be a list of nodes or synapses")
 
+    # This was added to ensure that the function is a nop (instead of,
+    # for instance, raising an exception) when applied to an empty list,
+    # which is an artifact of the API operating on lists, rather than
+    # relying on language idioms, such as comprehensions
+    #
     if len(nodes) == 0:
         return
 
-    if type(params) == types.StringType :
-        if is_iterabletype(val) and not type(val) in (types.StringType, types.DictType):
-            params = [{params : x} for x in val]
-        else :
-            params = {params : val}
+    if val is not None:
+        if isinstance(params, (str, SLILiteral)):
+            if is_iterable(val) and not isinstance(val, (str, dict)):
+                params = [{params: x} for x in val]
+            else:
+                params = {params: val}
 
     params = broadcast(params, len(nodes), (dict,), "params")
-    if len(nodes) != len(params) :
-        raise NESTError("Status dict must be a dict, or list of dicts of length 1 or len(nodes).")
-        
-    if  (type(nodes[0]) == types.DictType) or is_sequencetype(nodes[0]):
-        nest.push_connection_datums(nodes)
+    if len(nodes) != len(params):
+        raise TypeError("status dict must be a dict, or list of dicts of length 1 or len(nodes)")
+
+    if is_sequence_of_connections(nodes):
+        pcd(nodes)
     else:
         sps(nodes)
 
     sps(params)
     sr('2 arraystore')
-    sr('Transpose { arrayload ; SetStatus } forall')
+    sr('Transpose { arrayload pop SetStatus } forall')
 
 
-def GetStatus(nodes, keys=None) :
+@check_stack
+def GetStatus(nodes, keys=None):
     """
     Return the parameter dictionaries of the given list of nodes
     (identified by global ids) or connections (identified
@@ -527,31 +591,33 @@ def GetStatus(nodes, keys=None) :
     which case the returned list contains lists of values.
     """
 
-    if not is_sequencetype(nodes):
-        raise NESTError("nodes must be a list of nodes or synapses.")
+    if not is_coercible_to_sli_array(nodes):
+        raise TypeError("nodes must be a list of nodes or synapses")
 
     if len(nodes) == 0:
         return nodes
 
-    cmd='{ GetStatus } Map'
+    if keys is None:
+        cmd = '{ GetStatus } Map'
+    elif isinstance(keys, (str, SLILiteral)):
+        cmd = '{{ GetStatus /{0} get }} Map'.format(keys)
+    elif is_iterable(keys):
+        keys_str = " ".join("/{0}".format(x) for x in keys)
+        cmd = '{{ GetStatus }} Map {{ [ [ {0} ] ] get }} Map'.format(keys_str)
+    else:
+        raise TypeError("keys should be either a string or an iterable")
 
-    if keys:
-        if is_sequencetype(keys):
-            keyss = string.join(["/%s" % x for x in keys])
-            cmd='{ GetStatus } Map { [ [ %s ] ] get } Map' % keyss
-        else:
-            cmd='{ GetStatus /%s get} Map' % keys
-
-    if (type(nodes[0]) == types.DictType) or is_sequencetype(nodes[0]):
-        nest.push_connection_datums(nodes)
+    if is_sequence_of_connections(nodes):
+        pcd(nodes)
     else:
         sps(nodes)
-   
+
     sr(cmd)
 
     return spp()
 
 
+@check_stack
 def GetLID(gid) :
     """
     Return the local id of a node with gid.
@@ -569,7 +635,7 @@ def GetLID(gid) :
 
 # -------------------- Functions for connection handling
 
-	
+@check_stack
 def FindConnections(source, target=None, synapse_model=None, synapse_type=None):
     """
     Return an array of identifiers for connections that match the
@@ -585,24 +651,22 @@ def FindConnections(source, target=None, synapse_model=None, synapse_type=None):
     Note: synapse_type is alias for synapse_model for backward compatibility
     """
 
-    if synapse_model and synapse_type:
+    if synapse_model is not None and synapse_type is not None:
         raise NESTError("synapse_type is alias for synapse_model, cannot be used together.")
-    if synapse_type:
+
+    if synapse_type is not None:
         synapse_model = synapse_type
 
-    if not target and not synapse_model:
+    if target is None and synapse_model is None:
         params = [{"source": s} for s in source]
-
-    if not target and synapse_model:
+    elif target is None and synapse_model is not None:
         synapse_model = broadcast(synapse_model, len(source), (str,), "synapse_model")
         params = [{"source": s, "synapse_model": syn}
                   for s, syn in zip(source, synapse_model)]
-
-    if target and not synapse_model:
+    elif target is not None and synapse_model is None:
         target = broadcast(target, len(source), (int,), "target")
         params = [{"source": s, "target": t} for s, t in zip(source, target)]
-
-    if target and synapse_model:
+    else:  # target is not None and synapse_model is not None
         target = broadcast(target, len(source), (int,), "target")
         synapse_model = broadcast(synapse_model, len(source), (str,), "synapse_model")
         params = [{"source": s, "target": t, "synapse_model": syn}
@@ -610,13 +674,19 @@ def FindConnections(source, target=None, synapse_model=None, synapse_type=None):
 
     sps(params)
     sr("{FindConnections} Map Flatten")
-    
-    result=spp()
-    return [ { 'source':int(r[0]), 'target_thread': int(r[2]),
-               'synapse_modelid': int(r[3]), 'port': int(r[4])} for r in result ]
+
+    result = ({
+        'source': int(src),
+        'target_thread': int(tt),
+        'synapse_modelid': int(sm),
+        'port': int(prt)
+    } for src, _, tt, sm, prt in spp())
+
+    return tuple(result)
 
 
-def GetConnections(source=None, target=None, synapse_model=None) :
+@check_stack
+def GetConnections(source=None, target=None, synapse_model=None):
     """
     Return an array of connection identifiers.
     
@@ -641,33 +711,35 @@ def GetConnections(source=None, target=None, synapse_model=None) :
     is permitted.
 
     Each connection id is a 5-tuple or, if available, a NumPy
-    array with the following fived entries:
+    array with the following five entries:
     source-gid, target-gid, target-thread, synapse-id, port
     
     Note: Only connections with targets on the MPI process executing
           the command are returned.
     """
-    
-    params={}
-    if source:
-        if not is_sequencetype(source):
-            raise NESTError("source must be a list of gids.")
+
+    params = {}
+
+    if source is not None:
+        if not is_coercible_to_sli_array(source):
+            raise TypeError("source must be a list of GIDs")
         params['source'] = source
-    if target:
-        if not is_sequencetype(target):
-            raise NESTError("target must be a list of gids.")
+
+    if target is not None:
+        if not is_coercible_to_sli_array(target):
+            raise TypeError("target must be a list of GIDs")
         params['target'] = target
 
-    sps(params)
-    if synapse_model:
-        # add model to params dict as literal
-        sr('dup /synapse_model /{0} put_d'.format(synapse_model))
+    if synapse_model is not None:
+        params['synapse_model'] = SLILiteral(synapse_model)
 
+    sps(params)
     sr("GetConnections")
-    
+
     return spp()
 
 
+@check_stack
 def Connect(pre, post, params=None, delay=None, model="static_synapse"):
     """
     Make one-to-one connections of type model between the nodes in
@@ -683,14 +755,14 @@ def Connect(pre, post, params=None, delay=None, model="static_synapse"):
         raise NESTError("pre and post have to be the same length")
 
     # pre post Connect
-    if params == None and delay == None:
+    if params is None and delay is None:
         for s,d in zip(pre, post):
             sps(s)
             sps(d)
             sr('/%s Connect' % model)
 
     # pre post params Connect
-    elif params != None and delay == None:
+    elif params is not None and delay is None:
         params = broadcast(params, len(pre), (dict,), "params")
         if len(params) != len(pre):
             raise NESTError("params must be a dict, or list of dicts of length 1 or len(pre).")
@@ -702,7 +774,7 @@ def Connect(pre, post, params=None, delay=None, model="static_synapse"):
             sr('/%s Connect' % model)
 
     # pre post w d Connect
-    elif params != None and delay != None:
+    elif params is not None and delay is not None:
         params = broadcast(params, len(pre), (float,), "params")
         if len(params) != len(pre):
             raise NESTError("params must be a float, or list of floats of length 1 or len(pre) and will be used as weight(s).")
@@ -721,6 +793,7 @@ def Connect(pre, post, params=None, delay=None, model="static_synapse"):
         raise NESTError("Both 'params' and 'delay' have to be given.")
 
 
+@check_stack
 def ConvergentConnect(pre, post, weight=None, delay=None, model="static_synapse"):
     """
     Connect all neurons in pre to each neuron in post. pre and post
@@ -729,13 +802,13 @@ def ConvergentConnect(pre, post, weight=None, delay=None, model="static_synapse"
     floats.
     """
 
-    if weight == None and delay == None:
+    if weight is None and delay is None:
         for d in post :
             sps(pre)
             sps(d)
             sr('/%s ConvergentConnect' % model)
 
-    elif weight != None and delay != None:
+    elif weight is not None and delay is not None:
         weight = broadcast(weight, len(pre), (float,), "weight")
         if len(weight) != len(pre):
             raise NESTError("weight must be a float, or sequence of floats of length 1 or len(pre)")
@@ -754,6 +827,7 @@ def ConvergentConnect(pre, post, weight=None, delay=None, model="static_synapse"
         raise NESTError("Both 'weight' and 'delay' have to be given.")
 
 
+@check_stack
 def RandomConvergentConnect(pre, post, n, weight=None, delay=None, model="static_synapse", options=None):
     """
     Connect n randomly selected neurons from pre to each neuron in
@@ -764,22 +838,25 @@ def RandomConvergentConnect(pre, post, n, weight=None, delay=None, model="static
     allow_multapses.
     """
 
+    if not isinstance(n, int):
+        raise TypeError("number of neurons n should be an integer")
+
     # store current options, set desired options
     old_options = None
     error = False
-    if options:
+    if options is not None:
         old_options = sli_func('GetOptions', '/RandomConvergentConnect',
                                litconv=True)
         del old_options['DefaultOptions'] # in the way when restoring
         sli_func('SetOptions', '/RandomConvergentConnect', options,
                  litconv=True)
 
-    if weight == None and delay == None:
+    if weight is None and delay is None:
         sli_func(
             '/m Set /n Set /pre Set { pre exch n m RandomConvergentConnect } forall',
             post, pre, n, '/'+model, litconv=True)
     
-    elif weight != None and delay != None:
+    elif weight is not None and delay is not None:
         weight = broadcast(weight, n, (float,), "weight")
         if len(weight) != n:
             raise NESTError("weight must be a float, or sequence of floats of length 1 or n")
@@ -795,7 +872,7 @@ def RandomConvergentConnect(pre, post, n, weight=None, delay=None, model="static
         error = True
 
     # restore old options
-    if old_options:
+    if old_options is not None:
         sli_func('SetOptions', '/RandomConvergentConnect', old_options,
                  litconv=True)
 
@@ -803,6 +880,7 @@ def RandomConvergentConnect(pre, post, n, weight=None, delay=None, model="static
         raise NESTError("Both 'weight' and 'delay' have to be given.")
 
 
+@check_stack
 def DivergentConnect(pre, post, weight=None, delay=None, model="static_synapse"):
     """
     Connect each neuron in pre to all neurons in post. pre and post
@@ -811,13 +889,13 @@ def DivergentConnect(pre, post, weight=None, delay=None, model="static_synapse")
     floats.
     """
 
-    if weight == None and delay == None:
+    if weight is None and delay is None:
         for s in pre :
             sps(s)
             sps(post)
             sr('/%s DivergentConnect' % model)
 
-    elif weight != None and delay != None:
+    elif weight is not None and delay is not None:
         weight = broadcast(weight, len(post), (float,), "weight")
         if len(weight) != len(post):
             raise NESTError("weight must be a float, or sequence of floats of length 1 or len(post)")
@@ -836,7 +914,8 @@ def DivergentConnect(pre, post, weight=None, delay=None, model="static_synapse")
         raise NESTError("Both 'weight' and 'delay' have to be given.")
 
 
-def DataConnect(pre, params=None, model=None):
+@check_stack
+def DataConnect(pre, params=None, model="static_synapse"):
     """
     Connect neurons from lists of connection data.
 
@@ -864,32 +943,34 @@ def DataConnect(pre, params=None, model=None):
     the kernel property 'dict_miss_is_error' is True.
     """
 
-    if not is_sequencetype(pre):
-        raise NESTError("'pre' must be a list of nodes or connection dictionaries.")
-    if params and not is_sequencetype(params):
-        raise NESTError("'params' must be a list of dictionaries.")
+    if not is_coercible_to_sli_array(pre):
+        raise TypeError("pre must be a list of nodes or connection dictionaries")
 
-    if params:
-	if not model:
-		model="static_synapse"
-	cmd='(%s) DataConnect_i_D_s ' % model
-    
-	for s,p in zip(pre,params):
-		sps(s)
-		sps(p)
-		sr(cmd)
+    if params is not None:
+
+        if not is_coercible_to_sli_array(params):
+            raise TypeError("params must be a list of dictionaries")
+
+        cmd = '({0}) DataConnect_i_D_s '.format(model)
+
+        for s, p in zip(pre, params):
+            sps(s)
+            sps(p)
+            sr(cmd)
     else:
-	    # Call the variant where all connections are
-	    # given explicitly
-            dictmiss=GetKernelStatus('dict_miss_is_error')
-            # We disable dictionary checking now because most models
-            # cannot re-use their own status dictionary
-            SetKernelStatus({'dict_miss_is_error': False})
-	    sps(pre)
-	    sr('DataConnect_a')
-            SetKernelStatus({'dict_miss_is_error': dictmiss})
-            
-    
+        # Call the variant where all connections are given explicitly
+
+        # Disable dict checking, because most models can't re-use their own status dict
+        dict_miss = GetKernelStatus('dict_miss_is_error')
+        SetKernelStatus({'dict_miss_is_error': False})
+
+        sps(pre)
+        sr('DataConnect_a')
+
+        SetKernelStatus({'dict_miss_is_error': dict_miss})
+
+
+@check_stack
 def RandomDivergentConnect(pre, post, n, weight=None, delay=None, model="static_synapse", options=None):
     """
     Connect each neuron in pre to n randomly selected neurons from
@@ -899,23 +980,26 @@ def RandomDivergentConnect(pre, post, n, weight=None, delay=None, model="static_
     options to the RandomDivergentConnect function: allow_autapses,
     allow_multapses.
     """
-    
+
+    if not isinstance(n, int):
+        raise TypeError("number of neurons n should be an integer")
+
     # store current options, set desired options
     old_options = None
     error = False
-    if options:
+    if options is not None:
         old_options = sli_func('GetOptions', '/RandomDivergentConnect',
                                litconv=True)
         del old_options['DefaultOptions'] # in the way when restoring
         sli_func('SetOptions', '/RandomDivergentConnect', options,
                  litconv=True)
 
-    if weight == None and delay == None:
+    if weight is None and delay is None:
         sli_func(
             '/m Set /n Set /post Set { n post m RandomDivergentConnect } forall',
             pre, post, n, '/'+model, litconv=True)
 
-    elif weight != None and delay != None:
+    elif weight is not None and delay is not None:
         weight = broadcast(weight, n, (float,), "weight")
         if len(weight) != n:
             raise NESTError("weight must be a float, or sequence of floats of length 1 or n")
@@ -931,25 +1015,42 @@ def RandomDivergentConnect(pre, post, n, weight=None, delay=None, model="static_
         error = True
 
     # restore old options
-    if old_options:
+    if old_options is not None:
         sli_func('SetOptions', '/RandomDivergentConnect', old_options,
                  litconv=True)
 
     if error:
         raise NESTError("Both 'weight' and 'delay' have to be given.")
 
+def _is_subnet_instance(gids):
+    "Returns true if all gids point to subnet or derived type."
 
-def CGConnect(pre, post, cg, parameter_map={}, model="static_synapse"):
+    try:
+        GetChildren(gids)
+        return True
+    except NESTError:
+        return False
+
+@check_stack
+def CGConnect(pre, post, cg, parameter_map=None, model="static_synapse"):
     """
     Connect neurons from pre to neurons from post using connectivity
     specified by the connection generator cg. pre and post are either
     both lists containing 1 subnet, or lists of gids. parameter_map is
     a dictionary mapping names of values such as weight and delay to
-    value set positions.
+    value set positions. This function is only available if NEST was
+    compiled with support for libneurosim.
     """
 
-    if GetStatus(pre[:1], "model")[0] == "subnet":
-        if GetStatus(post[:1], "model")[0] != "subnet":
+    sr("statusdict/have_libneurosim ::")
+    if not spp():
+        raise NESTError("NEST was not compiled with support for libneurosim: CGConnect is not available.")
+
+    if parameter_map is None:
+        parameter_map = {}
+
+    if _is_subnet_instance(pre[:1]):
+        if not _is_subnet_instance(post[:1]):
             raise NESTError("if pre is a subnet, post also has to be a subnet")
         if len(pre) > 1 or len(post) > 1:
             raise NESTError("the length of pre and post has to be 1 if subnets are given")
@@ -958,16 +1059,47 @@ def CGConnect(pre, post, cg, parameter_map={}, model="static_synapse"):
     else:
         sli_func('CGConnect', cg, pre, post, parameter_map, '/'+model, litconv=True)
 
+@check_stack
+def CGParse(xml_filename):
+    """
+    Parse an XML file and return the correcponding connection
+    generator cg. The library to provide the parsing can be selected
+    by CGSelectImplementation().
+    """
+
+    sr("statusdict/have_libneurosim ::")
+    if not spp():
+        raise NESTError("NEST was not compiled with support for libneurosim: CGParse is not available.")
+
+    sps(xml_filename)
+    sr("CGParse")
+    return spp()
+
+@check_stack
+def CGSelectImplementation(tag, library):
+    """
+    Select a library to provide a parser for XML files and associate
+    an XML tag with the library. XML files can be read by CGParse().
+    """
+
+    sr("statusdict/have_libneurosim ::")
+    if not spp():
+        raise NESTError("NEST was not compiled with support for libneurosim: CGSelectImplementation is not available.")
+
+    sps(tag)
+    sps(library)
+    sr("CGSelectImplementation")
 
 # -------------------- Functions for hierarchical networks
 
+@check_stack
 def PrintNetwork(depth=1, subnet=None) :
     """
     Print the network tree up to depth, starting at subnet. if
     subnet is omitted, the current subnet is used instead.
     """
     
-    if subnet == None:
+    if subnet is None:
         subnet = CurrentSubnet()
     elif len(subnet) > 1:
         raise NESTError("PrintNetwork() expects exactly one GID.")
@@ -976,15 +1108,17 @@ def PrintNetwork(depth=1, subnet=None) :
     sr("%i PrintNetwork" % depth)
 
 
+@check_stack
 def CurrentSubnet() :
     """
     Returns the global id of the current subnet.
     """
 
     sr("CurrentSubnet")
-    return [spp()]
+    return (spp(), )
 
 
+@check_stack
 def ChangeSubnet(subnet) :
     """
     Make subnet the current subnet.
@@ -997,6 +1131,7 @@ def ChangeSubnet(subnet) :
     sr("ChangeSubnet")
 
 
+@check_stack
 def GetLeaves(subnets, properties=None, local_only=False) :
     """
     Return the global ids of the leaf nodes of the given subnets.
@@ -1023,6 +1158,7 @@ def GetLeaves(subnets, properties=None, local_only=False) :
                     litconv=True)    
 
 
+@check_stack
 def GetNodes(subnets, properties=None, local_only=False):
     """
     Return the global ids of the all nodes of the given subnets.
@@ -1047,6 +1183,7 @@ def GetNodes(subnets, properties=None, local_only=False):
                     litconv=True)    
 
 
+@check_stack
 def GetChildren(subnets, properties=None, local_only=False):
     """
     Return the global ids of the immediate children of the given subnets.
@@ -1071,6 +1208,7 @@ def GetChildren(subnets, properties=None, local_only=False):
                     litconv=True)    
 
         
+@check_stack
 def GetNetwork(gid, depth):
     """
     Return a nested list with the children of subnet id at level
@@ -1087,6 +1225,7 @@ def GetNetwork(gid, depth):
     return spp()
 
 
+@check_stack
 def BeginSubnet(label=None, params=None):
     """
     Create a new subnet and change into it. A string argument can be
@@ -1095,13 +1234,14 @@ def BeginSubnet(label=None, params=None):
     """
 
     sn=Create("subnet")
-    if label:
+    if label is not None:
         SetStatus(sn, "label", label)
-    if params:
+    if params is not None:
         SetStatus(sn, "customdict", params)
     ChangeSubnet(sn)
 
 
+@check_stack
 def EndSubnet():
     """
     Change to the parent subnet and return the gid of the current.
@@ -1117,38 +1257,32 @@ def EndSubnet():
         raise NESTError("Unexpected EndSubnet(). Cannot go higher than the root node.")
 
 
-def LayoutNetwork(model, dim, label=None, params=None) :
+@check_stack
+def LayoutNetwork(model, dim, label=None, params=None):
     """
     Create a subnetwork of dimension dim with nodes of type model and
-    return a list of ids.
+    return a list of ids. params is a dictionary, which will be set as
+    customdict of the newly created subnet. It is not the parameters
+    for the neurons in the subnetwork.
     """
 
-    if type(model) == types.StringType:
+    if isinstance(model, (str, SLILiteral)):
         sps(dim)
         sr('/%s exch LayoutNetwork' % model)
-        if label:
-            sr("dup << /label (%s) >> SetStatus"%label)
-        if params:
+        if label is not None:
+            sr("dup << /label (%s) >> SetStatus" % label)
+        if params is not None:
             sr("dup << /customdict")
             sps(params)
             sr(">> SetStatus")
-        return [spp()]
-
-    # If model is a function.
-    elif type(model) == types.FunctionType:
-        # The following code uses a model constructor function
-        # model() instead of a model name string.
+        return (spp(), )
+    elif inspect.isfunction(model):
         BeginSubnet(label, params)
-
-        if len(dim)==1:
-            for i in xrange(dim[0]):
-                model()
+        if len(dim) == 1:
+            [model() for _ in range(dim[0])]
         else:
-            for i in xrange(dim[0]):
-                LayoutNetwork(model,dim[1:])
-
+            [LayoutNetwork(model, dim[1:]) for _ in range(dim[0])]
         gid = EndSubnet()
         return gid
-
     else:
-        raise NESTError("model must be a string or a function.")
+        raise ValueError("model must be a string or a function")

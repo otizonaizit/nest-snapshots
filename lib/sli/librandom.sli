@@ -20,10 +20,7 @@
  *
  */
 
-
-/librandom ($Revision: 10100 $) provide
-/oosupport (5774) require
-
+(oosupport) run
 
 %  added function Random, MD 2006-03-16
 %

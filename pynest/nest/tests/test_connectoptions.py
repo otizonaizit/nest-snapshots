@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # test_connectoptions.py
 #
@@ -18,6 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
+
 """
 ConnectOptions
 """
@@ -25,11 +26,12 @@ ConnectOptions
 import unittest
 import nest
 
+
+@nest.check_stack
 class ConnectOptionsTestCase(unittest.TestCase):
     """Call Random{Con,Di}vergentConnect with non-standard options and
        ensure that the option settings are properly restored before
        returning."""
-
 
     def test_ConnectOptions(self):
         """ConnectOptions"""
@@ -37,29 +39,28 @@ class ConnectOptionsTestCase(unittest.TestCase):
         nest.ResetKernel()
 
         copts = nest.sli_func('GetOptions', '/RandomConvergentConnect', litconv=True)
-        dopts = nest.sli_func('GetOptions', '/RandomDivergentConnect',  litconv=True)
+        dopts = nest.sli_func('GetOptions', '/RandomDivergentConnect', litconv=True)
 
-        ncopts = dict([(k, not v) for k,v in copts.iteritems() if k != 'DefaultOptions'])
-        ndopts = dict([(k, not v) for k,v in dopts.iteritems() if k != 'DefaultOptions'])
-        
+        ncopts = dict((k, not v) for k, v in copts.items() if k != 'DefaultOptions')
+        ndopts = dict((k, not v) for k, v in dopts.items() if k != 'DefaultOptions')
+
         n = nest.Create('iaf_neuron', 3)
 
         nest.RandomConvergentConnect(n, n, 1, options=ncopts)
-        nest.RandomDivergentConnect (n, n, 1, options=ndopts)
+        nest.RandomDivergentConnect(n, n, 1, options=ndopts)
 
-        self.assertEqual(copts,
-                         nest.sli_func('GetOptions', '/RandomConvergentConnect', litconv=True))
-        self.assertEqual(dopts,
-                         nest.sli_func('GetOptions', '/RandomDivergentConnect',  litconv=True))
+        opts = nest.sli_func('GetOptions', '/RandomConvergentConnect', litconv=True)
+        self.assertEqual(copts, opts)
+
+        opts = nest.sli_func('GetOptions', '/RandomDivergentConnect', litconv=True)
+        self.assertEqual(dopts, opts)
 
 
 def suite():
-
-    suite = unittest.makeSuite(ConnectOptionsTestCase,'test')
+    suite = unittest.makeSuite(ConnectOptionsTestCase, 'test')
     return suite
 
 
 if __name__ == "__main__":
-
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite())

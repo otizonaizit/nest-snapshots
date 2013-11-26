@@ -1,6 +1,3 @@
-#ifndef RANDOM_NUMBERS_H
-#define RANDOM_NUMBERS_H
-
 /*
  *  random_numbers.h
  *
@@ -23,9 +20,11 @@
  *
  */
 
+#ifndef RANDOM_NUMBERS_H
+#define RANDOM_NUMBERS_H
+
 #include "slitype.h"
 #include "slimodule.h" 
-//#include "dictdatum.h"
 
 #include <string>
 
@@ -55,22 +54,21 @@ class RandomNumbers: public SLIModule
   ~RandomNumbers();
 
   const std::string name(void) const
-    {
-      return "RandomNumbers";
-    }
+  {
+    return "RandomNumbers";
+  }
 
-   const std::string commandstring(void) const
-    {
-      return std::string("/librandom /C++ ($Revision: $) provide-component "
-                         "/librandom /SLI (6796) require-component");
-    }
+  const std::string commandstring(void) const
+  {
+    return std::string("(librandom) run");
+  }
 
   /**
    * Initializes the random number module.  
    * The random number generator
    * and the random deviate generator dictionaries are set up.
    */
- void init(SLIInterpreter *);
+  void init(SLIInterpreter *);
 
   // RNG creation function
   class CreateRNGFunction: public SLIFunction

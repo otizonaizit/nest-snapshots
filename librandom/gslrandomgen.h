@@ -1,5 +1,3 @@
-#ifndef GSLRANDOMGEN_H
-#define GSLRANDOMGEN_H
 /*
  *  gslrandomgen.h
  *
@@ -20,9 +18,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
+ */
+
+/*
  *  Interface to GSL Random Number Generators
  *
  */
+
+#ifndef GSLRANDOMGEN_H
+#define GSLRANDOMGEN_H
+
 #include <cassert>
 #include <list>
 #include <string>
@@ -117,28 +122,9 @@ namespace librandom {
     static void add_gsl_rngs(DictionaryDatum&) {}
 
   private:
-    GslRandomGen() {assert(false);}   
-    ~GslRandomGen() {assert(false);}
-    RngPtr clone(unsigned long s) {assert(false);}
-
-  private:
-    void           seed_(unsigned long s);
-    double         drand_(void);
-
+    GslRandomGen() { assert(false); }
+    ~GslRandomGen() { assert(false); }
   };
-
-  inline
-  void GslRandomGen::seed_(unsigned long s)   
-  { 
-    (void) s; //remove warning of unused variable
-    assert(false);
-  }
-
-  inline
-  double GslRandomGen::drand_(void)  
-  { 
-    assert(false);
-  }
 
 }
 

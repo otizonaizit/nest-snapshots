@@ -170,7 +170,9 @@ void nest::noise_generator::update(Time const &origin, const long_t from, const 
       // compute new currents
       for ( AmpVec_::iterator it = B_.amps_.begin() ;
             it != B_.amps_.end() ; ++it )
-        *it = P_.mean_ + P_.std_ * V_.normal_dev_(net_->get_rng(get_thread()));
+	{
+	  *it = P_.mean_ + P_.std_ * V_.normal_dev_(net_->get_rng(get_thread()));
+	}
 
       // use now as reference, in case we woke up from inactive period
       B_.next_step_ = now + V_.dt_steps_;

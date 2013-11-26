@@ -1,4 +1,3 @@
-
 /*
  *  lockptrdatum_impl.h
  *
@@ -25,8 +24,6 @@
 #define LOCKPTRDATUMIMPL_H
 
 #include "lockptrdatum.h"
-#include "datumconverter.h"
-
 
 template <class D, SLIType *slt>
 bool lockPTRDatum<D, slt>::equals(const Datum *dat) const
@@ -59,25 +56,11 @@ void lockPTRDatum<D, slt>::print(std::ostream &out) const
   out << '<' << this->gettypename() << '>';   
 }
 
-
 template <class D, SLIType *slt>
 void lockPTRDatum<D, slt>::info(std::ostream &out) const
 {
 //  out << *dynamic_cast<C *>(const_cast<lockPTR<C,slt> *>(this));    
    pprint(out);   
-}
-
-/**
- * Accept a DatumConverter as a visitor to this datum.
- * A visitor may be used to make a conversion to a type, which is not
- * known to NEST.  (visitor pattern).
- */
-template<class D, SLIType *slt>
-void lockPTRDatum<D, slt>::use_converter(DatumConverter &converter)
-{
-  // call convert_me with our own type here this will call the
-  // approproate implementation of the derived class
-  converter.convert_me(*this);
 }
 
 #endif

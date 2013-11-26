@@ -1,5 +1,5 @@
 /*
- *  test_GetConnections.sli
+ *  test_DataConnect.sli
  *
  *  This file is part of NEST.
  *
@@ -35,7 +35,7 @@
    Author: Marc-Oliver Gewaltig
  */
 
-/unittest (7488) require
+(unittest) run
 /unittest using
 
 % Create Random number generator

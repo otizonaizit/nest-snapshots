@@ -39,11 +39,11 @@ nest.ResetKernel()
 
 # Obtain receptor dictionary
 syns = nest.GetDefaults('iaf_cond_alpha_mc')['receptor_types']
-print "iaf_cond_alpha_mc receptor_types: ", syns
+print("iaf_cond_alpha_mc receptor_types: {0}".format(syns))
 
 # Obtain list of recordable quantities
 rqs = nest.GetDefaults('iaf_cond_alpha_mc')['recordables']
-print "iaf_cond_alpha_mc recordables   : ", rqs
+print("iaf_cond_alpha_mc recordables   : {0}".format(rqs))
 
 # Change some default values:
 #  - threshold potential

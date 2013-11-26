@@ -196,7 +196,7 @@ std::ostream & operator<<(std::ostream &out, const Dictionary &d)
 {
     out << "<<";
         
-    for(TokenMap::const_iterator where = d.begin(); where != d.end(); where ++)
+    for(TokenMap::const_iterator where = d.begin(); where != d.end(); ++where)
     {
         out << (*where).first << ' ' 
 	    << (*where).second << ',';

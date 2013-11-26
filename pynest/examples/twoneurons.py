@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+#
 # twoneurons.py
 #
 # This file is part of NEST.

@@ -44,6 +44,7 @@
 
 nest::Network* nest::Communicator::net_ = 0;
 int nest::Communicator::rank_ = 0;
+int nest::Communicator::num_spikes_ = 0;
 int nest::Communicator::num_processes_ = 1;
 int nest::Communicator::n_vps_ = 1;
 int nest::Communicator::send_buffer_size_ = 1;
@@ -68,6 +69,7 @@ MPI_Comm comm=0;
 template<> MPI_Datatype MPI_Type<nest::int_t>::type = MPI_INT;
 template<> MPI_Datatype MPI_Type<nest::double_t>::type = MPI_DOUBLE;
 template<> MPI_Datatype MPI_Type<nest::long_t>::type = MPI_LONG;
+template<> MPI_Datatype MPI_Type<nest::uint_t>::type = MPI_INT;
 
 MPI_Datatype MPI_OFFGRID_SPIKE = 0;
 
@@ -81,7 +83,7 @@ std::vector<int> nest::Communicator::comm_step_ = std::vector<int>();
  * Set up MPI, establish number of processes and rank, and initialize
  * the vector of communication partners.
  */
-void nest::Communicator::init (int* argc, char** argv[])
+void nest::Communicator::init(int* argc, char** argv[])
 {
   /* Initialize MPI
 
@@ -153,7 +155,7 @@ void nest::Communicator::init (int* argc, char** argv[])
  */
 void nest::Communicator::finalize()
 {
-  MPI_Type_free (&MPI_OFFGRID_SPIKE);
+  MPI_Type_free(&MPI_OFFGRID_SPIKE);
 
   int finalized;
   MPI_Finalized(&finalized);
@@ -236,9 +238,9 @@ void nest::Communicator::init_communication ()
   }
 }
 
-void nest::Communicator::communicate (std::vector<uint_t>& send_buffer, 
-				      std::vector<uint_t>& recv_buffer, 
-				      std::vector<int>& displacements)
+void nest::Communicator::communicate(std::vector<uint_t>& send_buffer, 
+				     std::vector<uint_t>& recv_buffer, 
+				     std::vector<int>& displacements)
 {
   if (num_processes_ == 1)    //purely thread-based
     {
@@ -256,9 +258,9 @@ void nest::Communicator::communicate (std::vector<uint_t>& send_buffer,
     communicate_CPEX(send_buffer, recv_buffer,displacements);
 }
 
-void nest::Communicator::communicate_Allgather (std::vector<uint_t>& send_buffer, 
-						std::vector<uint_t>& recv_buffer, 
-						std::vector<int>& displacements)
+void nest::Communicator::communicate_Allgather(std::vector<uint_t>& send_buffer, 
+					       std::vector<uint_t>& recv_buffer, 
+					       std::vector<int>& displacements)
 {  
   std::vector<int> recv_counts(num_processes_,send_buffer_size_);
 
@@ -292,6 +294,7 @@ void nest::Communicator::communicate_Allgather (std::vector<uint_t>& send_buffer
 	}
       disp += recv_counts[pid]; 
     }
+  num_spikes_ += disp;
 	
   //do Allgatherv if necessary
   if (overflow)
@@ -304,9 +307,9 @@ void nest::Communicator::communicate_Allgather (std::vector<uint_t>& send_buffer
     }
 }
   
-void nest::Communicator::communicate_CPEX (std::vector<uint_t>& send_buffer, 
-					   std::vector<uint_t>& recv_buffer, 
-					   std::vector<int>& displacements)
+void nest::Communicator::communicate_CPEX(std::vector<uint_t>& send_buffer, 
+					  std::vector<uint_t>& recv_buffer, 
+					  std::vector<int>& displacements)
 {      
   MPI_Status status;
   int partner;
@@ -460,9 +463,9 @@ void nest::Communicator::communicate_Allgather(std::vector<T>& send_buffer,
     }
 }
 
-void nest::Communicator::communicate (std::vector<OffGridSpike>& send_buffer, 
-				      std::vector<OffGridSpike>& recv_buffer, 
-				      std::vector<int>& displacements)
+void nest::Communicator::communicate(std::vector<OffGridSpike>& send_buffer, 
+                                     std::vector<OffGridSpike>& recv_buffer, 
+                                     std::vector<int>& displacements)
 {
   if (num_processes_ == 1)    //purely thread-based
     {
@@ -480,9 +483,9 @@ void nest::Communicator::communicate (std::vector<OffGridSpike>& send_buffer,
     communicate_CPEX(send_buffer, recv_buffer,displacements);
 }
 
-void nest::Communicator::communicate_Allgather (std::vector<OffGridSpike>& send_buffer, 
-						std::vector<OffGridSpike>& recv_buffer, 
-						std::vector<int>& displacements)
+void nest::Communicator::communicate_Allgather(std::vector<OffGridSpike>& send_buffer, 
+                                               std::vector<OffGridSpike>& recv_buffer, 
+                                               std::vector<int>& displacements)
 {  
   std::vector<int> recv_counts(num_processes_,send_buffer_size_);
   //attempt Allgather
@@ -528,9 +531,9 @@ void nest::Communicator::communicate_Allgather (std::vector<OffGridSpike>& send_
     }
 }
 
-void nest::Communicator::communicate_CPEX (std::vector<OffGridSpike>& send_buffer, 
-					   std::vector<OffGridSpike>& recv_buffer, 
-					   std::vector<int>& displacements)
+void nest::Communicator::communicate_CPEX(std::vector<OffGridSpike>& send_buffer, 
+                                          std::vector<OffGridSpike>& recv_buffer, 
+                                          std::vector<int>& displacements)
 {      
   MPI_Status status;
   int partner;
@@ -654,11 +657,10 @@ void nest::Communicator::communicate(std::vector<double_t>& send_buffer,
 {
   //get size of buffers
   std::vector<int> n_nodes(num_processes_);
-  n_nodes[Communicator::rank_] = send_buffer.size();
+  n_nodes[rank_] = send_buffer.size();
   communicate(n_nodes);
   // Set up displacements vector.
   displacements.resize(num_processes_,0);
-
   for ( int i = 1; i < num_processes_; ++i )
     displacements.at(i) = displacements.at(i-1)+n_nodes.at(i-1);
 
@@ -782,7 +784,7 @@ bool nest::Communicator::grng_synchrony(unsigned long process_rnd_number)
   return true;
 }
 
-//average communication time for a packet size of num_bytes
+//average communication time for a packet size of num_bytes using Allgather
 nest::double_t nest::Communicator::time_communicate(int num_bytes, int samples) 
 { 
   if (num_processes_ == 1) 
@@ -803,7 +805,35 @@ nest::double_t nest::Communicator::time_communicate(int num_bytes, int samples)
   double_t total_duration = (double)(finishtime-starttime); 
   return total_duration/(samples * sysconf(_SC_CLK_TCK));
 }
- 
+
+//average communication time for a packet size of num_bytes using Allgatherv
+nest::double_t nest::Communicator::time_communicatev(int num_bytes, int samples) 
+{ 
+  if (num_processes_ == 1) 
+    return 0.0; 
+  uint_t packet_length = num_bytes/sizeof(uint_t);
+  if (packet_length < 1)
+    packet_length = 1; 
+  std::vector<uint_t> test_send_buffer(packet_length); 
+  std::vector<uint_t> test_recv_buffer(packet_length*num_processes_);
+  std::vector<int> n_nodes(num_processes_,packet_length) ;
+  std::vector<int> displacements(num_processes_,0) ;
+   
+  for ( int i = 1; i < num_processes_; ++i )
+    displacements.at(i) = displacements.at(i-1)+n_nodes.at(i-1);
+
+  //start time measurement here 
+  struct tms foo; 
+  const clock_t starttime = times(&foo); 
+  for (int i = 0; i < samples; ++i) 
+    communicate_Allgatherv(test_send_buffer, test_recv_buffer, displacements, n_nodes);
+    
+  //finish time measurement here 
+  const clock_t finishtime = times(&foo); 
+  double_t total_duration = (double)(finishtime-starttime); 
+  return total_duration/(samples * sysconf(_SC_CLK_TCK));
+}
+
 //average communication time for a packet size of num_bytes
 nest::double_t nest::Communicator::time_communicate_offgrid(int num_bytes, int samples) 
 { 
@@ -930,9 +960,9 @@ void nest::Communicator::advance_music_time(long_t num_steps)
 /**
  * communicate (on-grid) if compiled without MPI
  */
-void nest::Communicator::communicate (std::vector<uint_t>& send_buffer, 
-				      std::vector<uint_t>& recv_buffer, 
-				      std::vector<int>& displacements)
+void nest::Communicator::communicate(std::vector<uint_t>& send_buffer, 
+                                     std::vector<uint_t>& recv_buffer, 
+                                     std::vector<int>& displacements)
 {
   displacements[0] = 0;
   if (static_cast<size_t>(recv_buffer_size_) < send_buffer.size())
@@ -946,9 +976,9 @@ void nest::Communicator::communicate (std::vector<uint_t>& send_buffer,
 /**
  * communicate (off-grid) if compiled without MPI
  */
-void nest::Communicator::communicate (std::vector<OffGridSpike>& send_buffer, 
-				      std::vector<OffGridSpike>& recv_buffer, 
-				      std::vector<int>& displacements)
+void nest::Communicator::communicate(std::vector<OffGridSpike>& send_buffer, 
+                                     std::vector<OffGridSpike>& recv_buffer, 
+                                     std::vector<int>& displacements)
 {
   displacements[0] = 0;
   if (static_cast<size_t>(recv_buffer_size_) < send_buffer.size())

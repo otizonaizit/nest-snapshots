@@ -1,5 +1,3 @@
-#ifndef GENERICMODEL_H
-#define GENERICMODEL_H
 /*
  *  genericmodel.h
  *
@@ -21,6 +19,9 @@
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef GENERICMODEL_H
+#define GENERICMODEL_H
 
 #include "model.h"
 #include "dynmodule.h"

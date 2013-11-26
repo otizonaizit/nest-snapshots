@@ -35,6 +35,7 @@ Options:
     --help              Print program options and exit
     --test-pynest       Test the PyNEST installation and APIs
     --output-dir=/path  Output directory (default: ./reports)
+    --source-dir=/path  Toplevel NEST source code directory
 EOF
 
     exit $1
@@ -52,6 +53,9 @@ while test $# -gt 0 ; do
             ;;
         --output-dir=*)
             TEST_OUTDIR="$( echo "$1" | sed 's/^--output-dir=//' )"
+            ;;
+        --source-dir=*)
+            export NEST_SOURCE="$( echo "$1" | sed 's/^--source-dir=//' )"
             ;;
         *)
             usage 1 "$1"
@@ -340,12 +344,8 @@ fi
 
 mkdir "${TEST_OUTDIR}"
 
-PYTHON="/usr/bin/python"
+PYTHON="${PYTHON:-python}"
 PYTHON_HARNESS="/home/zaytsev/opt/nest/share/nest/extras/do_tests.py"
-PYTHON_PREFIX="/home/zaytsev/opt/nest/lib/python2.7"
-
-PYTHONPATH="${PYTHON_PREFIX}/site-packages:${PYTHON_PREFIX}/dist-packages:${PYTHONPATH}"
-export PYTHONPATH
 
 TMPDIR=${TMPDIR:-${TEST_OUTDIR}}
 TEST_TMPDIR="$(mktemp -d "${TMPDIR:-/tmp}/nest.XXXXX")"
@@ -369,7 +369,7 @@ TEST_FAILED=0
 TIME_TOTAL=0
 TIME_ELAPSED=0
 
-echo >  "${TEST_LOGFILE}" "NEST v. 2.2.2 testsuite log"
+echo >  "${TEST_LOGFILE}" "NEST v. 2.3.10739 testsuite log"
 echo >> "${TEST_LOGFILE}" "======================"
 echo >> "${TEST_LOGFILE}" "Running tests from ${TEST_BASEDIR}"
 
@@ -453,6 +453,7 @@ CODES_FAILURE=\
 ' 3 Failed: tested code block failed to fail,'\
 ' 4 Failed: re-run serial,'\
 ' 10 Failed: unknown error,'\
+' 20 Failed: inconsistent copyright header(s),'\
 ' 125 Failed: unknown C++ exception,'\
 ' 126 Failed: error in test script,'\
 ' 127 Failed: fatal error,'\

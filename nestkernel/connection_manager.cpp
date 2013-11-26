@@ -26,7 +26,7 @@
 #include "nest_time.h"
 #include "connectiondatum.h"
 #include <algorithm>
-// OpenMP
+
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -370,17 +370,16 @@ ArrayDatum ConnectionManager::get_connections(DictionaryDatum params) const
 {
   ArrayDatum connectome;
 
-  const Token source_t=   params->lookup(names::source);
-  const Token target_t=   params->lookup(names::target);
-  const Token syn_model_t=params->lookup(names::synapse_model);
-  const TokenArray *source_a=0;
-  const TokenArray *target_a=0;
-
+  const Token& source_t = params->lookup(names::source);
+  const Token& target_t = params->lookup(names::target);
+  const Token& syn_model_t = params->lookup(names::synapse_model);
+  const TokenArray *source_a = 0;
+  const TokenArray *target_a = 0;
 
   if (not source_t.empty())
-      source_a=dynamic_cast<TokenArray const*>(source_t.datum());
+    source_a=dynamic_cast<TokenArray const*>(source_t.datum());
   if (not target_t.empty())
-      target_a=dynamic_cast<TokenArray const*>(target_t.datum());
+    target_a=dynamic_cast<TokenArray const*>(target_t.datum());
 
   size_t syn_id = 0;
 
@@ -395,23 +394,23 @@ ArrayDatum ConnectionManager::get_connections(DictionaryDatum params) const
   // If not, we will iterate all.
   if (not syn_model_t.empty())
   {
-      Name synmodel_name = getValue<Name>(syn_model_t);
-      const Token synmodel = synapsedict_->lookup(synmodel_name);
-      if (!synmodel.empty())
-	  syn_id = static_cast<size_t>(synmodel);
-      else
-	  throw UnknownModelName(synmodel_name.toString());
-      get_connections(connectome, source_a, target_a, syn_id);
+    Name synmodel_name = getValue<Name>(syn_model_t);
+    const Token synmodel = synapsedict_->lookup(synmodel_name);
+    if (!synmodel.empty())
+      syn_id = static_cast<size_t>(synmodel);
+    else
+      throw UnknownModelName(synmodel_name.toString());
+    get_connections(connectome, source_a, target_a, syn_id);
   }
   else
   {  
-      for (syn_id = 0; syn_id < prototypes_.size(); ++syn_id)
-	{
-	  ArrayDatum conn;
-	  get_connections(conn, source_a, target_a, syn_id);
-	  if (conn.size()>0)
-	    connectome.push_back(new ArrayDatum(conn));
-	}
+    for (syn_id = 0; syn_id < prototypes_.size(); ++syn_id)
+    {
+      ArrayDatum conn;
+      get_connections(conn, source_a, target_a, syn_id);
+      if (conn.size()>0)
+        connectome.push_back(new ArrayDatum(conn));
+    }
   }
 
   return connectome;
@@ -419,17 +418,17 @@ ArrayDatum ConnectionManager::get_connections(DictionaryDatum params) const
 
 void ConnectionManager::get_connections(ArrayDatum& connectome, TokenArray const *source, TokenArray const *target, size_t syn_id) const
 { 
-    connectome.reserve(prototypes_[syn_id]->get_num_connections());
+  connectome.reserve(prototypes_[syn_id]->get_num_connections());
 
-    if ( source==0 and target == 0)
-    {
+  if (source==0 and target == 0)
+  {
 #ifdef _OPENMP
 #pragma omp parallel
-	{
-	    thread t=omp_get_thread_num();
+    {
+      thread t = omp_get_thread_num();
 #else
-        for (thread t = 0; t < net_.get_num_threads(); ++t)
-	{
+    for (thread t = 0; t < net_.get_num_threads(); ++t)
+    {
 #endif
 	    ArrayDatum conns_in_thread;
 	    size_t num_connections_in_thread=0;
@@ -466,11 +465,11 @@ void ConnectionManager::get_connections(ArrayDatum& connectome, TokenArray const
 	connectome.reserve(prototypes_[syn_id]->get_num_connections());
 #ifdef _OPENMP
 #pragma omp parallel
-	{
-	    thread t=omp_get_thread_num();
+    {
+      thread t=omp_get_thread_num();
 #else
-	for (thread t = 0; t < net_.get_num_threads(); ++t)
-	{
+    for (thread t = 0; t < net_.get_num_threads(); ++t)
+    {
 #endif
 	    ArrayDatum conns_in_thread;
 	    size_t num_connections_in_thread=0;
@@ -513,11 +512,11 @@ void ConnectionManager::get_connections(ArrayDatum& connectome, TokenArray const
       {
 #ifdef _OPENMP
 #pragma omp parallel
-	  {
-	      size_t t=omp_get_thread_num();
+    {
+      size_t t=omp_get_thread_num();
 #else
-	  for (size_t t = 0; t < net_.get_num_threads(); ++t)
-	  {
+    for (size_t t = 0; t < net_.get_num_threads(); ++t)
+    {
 #endif
 	      ArrayDatum conns_in_thread;
 	      size_t num_connections_in_thread=0;
@@ -554,18 +553,17 @@ void ConnectionManager::get_connections(ArrayDatum& connectome, TokenArray const
 		  }
 	      }
 	    
-	      if (conns_in_thread.size()>0)
-	      {
+      if (conns_in_thread.size()>0)
+      {
 #ifdef _OPENMP
 #pragma omp critical
 #endif
-                connectome.append_move(conns_in_thread);
-	      }
-	  }
-	  return;
-     } // else
+        connectome.append_move(conns_in_thread);
+      }
+    }
+    return;
+  } // else
 }
-
 
 // Return connections to all targets 
 void ConnectionManager::get_connections(ArrayDatum& connectome, index source, thread t, index syn_id) const
@@ -597,11 +595,21 @@ void ConnectionManager::connect(Node& s, Node& r, index s_gid, thread tid, Dicti
   num_conn_changed_since_counted_ = true;
 }
 
-
-// connect with a list of connection status dicts
+/**
+ * Connect, using a dictionary with arrays. 
+ * This variant of connect combines the functionalities of 
+ * - connect
+ * - divergent_connect
+ * - convergent_connect
+ * The decision is based on the details of the dictionary entries source and target. 
+ * If source and target are both either a GID or a list of GIDs with equal size, then source and target are connected one-to-one.
+ * If source is a gid and target is a list of GIDs then divergent_connect is used.
+ * If source is a list of GIDs and target is a GID, then convergent_connect is used.
+ * At this stage, the task of connect is to separate the dictionary into one for each thread and then to forward the
+ * connect call to the connectors who can then deal with the details of the connection.
+ */
 bool ConnectionManager::connect(ArrayDatum& conns)
 {
-    std::string msg;
 // #ifdef _OPENMP
 //     net_.message(SLIInterpreter::M_INFO, "ConnectionManager::Connect", msg);
 // #endif

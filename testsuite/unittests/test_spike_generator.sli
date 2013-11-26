@@ -76,10 +76,17 @@
    SeeAlso: spike_generator, testsuite::test_iaf_i0_refractory, testsuite::test_iaf_dc_aligned_stop
  */
 
-/unittest (8331) require
+(unittest) run
 /unittest using
 
 
+% check, if setting a spike time to 0 causes an exception
+{
+  ResetKernel
+  /spike_generator Create /sg Set
+  sg << /spike_times [0.0] SetStatus
+}
+fail_or_die
 
 % check, if truncating spike times to grid causes an assertion
 % if precise_times is set to false

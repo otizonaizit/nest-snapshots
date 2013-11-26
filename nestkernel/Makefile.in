@@ -73,8 +73,13 @@ subdir = nestkernel
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/depcomp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -86,8 +91,8 @@ libnest_la_DEPENDENCIES =
 am_libnest_la_OBJECTS = libnest_la-archiving_node.lo \
 	libnest_la-common_synapse_properties.lo \
 	libnest_la-communicator.lo libnest_la-sibling_container.lo \
-	libnest_la-subnet.lo libnest_la-multirange.lo \
-	libnest_la-connection.lo libnest_la-connection_het_wd.lo \
+	libnest_la-subnet.lo libnest_la-connection.lo \
+	libnest_la-connection_het_wd.lo \
 	libnest_la-connection_hom_wd.lo \
 	libnest_la-connection_manager.lo libnest_la-connectiondatum.lo \
 	libnest_la-connection_id.lo libnest_la-connector_model.lo \
@@ -98,11 +103,11 @@ am_libnest_la_OBJECTS = libnest_la-archiving_node.lo \
 	libnest_la-nest_time.lo libnest_la-nest_timeconverter.lo \
 	libnest_la-nest_timemodifier.lo libnest_la-net_thread.lo \
 	libnest_la-modelrange.lo libnest_la-modelrangemanager.lo \
-	libnest_la-network.lo libnest_la-node.lo \
-	libnest_la-nodelist.lo libnest_la-proxynode.lo \
-	libnest_la-recording_device.lo libnest_la-ring_buffer.lo \
-	libnest_la-scheduler.lo libnest_la-spikecounter.lo \
-	libnest_la-music_event_handler.lo
+	libnest_la-multirange.lo libnest_la-network.lo \
+	libnest_la-node.lo libnest_la-nodelist.lo \
+	libnest_la-proxynode.lo libnest_la-recording_device.lo \
+	libnest_la-ring_buffer.lo libnest_la-scheduler.lo \
+	libnest_la-spikecounter.lo libnest_la-music_event_handler.lo
 libnest_la_OBJECTS = $(am_libnest_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -252,6 +257,9 @@ LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBADD_DL = @LIBADD_DL@
 LIBLTDL = @LIBLTDL@
+LIBNEUROSIM_INCLUDE = @LIBNEUROSIM_INCLUDE@
+LIBNEUROSIM_LIBS = @LIBNEUROSIM_LIBS@
+LIBNEUROSIM_PY_LIBS = @LIBNEUROSIM_PY_LIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -292,10 +300,13 @@ PKGDATADIR_AS_CONFIGURED = @PKGDATADIR_AS_CONFIGURED@
 PKGDOCDIR = @PKGDOCDIR@
 PKGDOCDIR_AS_CONFIGURED = @PKGDOCDIR_AS_CONFIGURED@
 PKGSRCDIR = @PKGSRCDIR@
+PYNEST_CPPFLAGS = @PYNEST_CPPFLAGS@
 PYNEST_CXXFLAGS = @PYNEST_CXXFLAGS@
-PYNEST_PREFIX = @PYNEST_PREFIX@
 PYNEST_SUBDIR = @PYNEST_SUBDIR@
-PYTHON_EXEC = @PYTHON_EXEC@
+PYTHON = @PYTHON@
+PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+PYTHON_PLATFORM = @PYTHON_PLATFORM@
+PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -361,9 +372,13 @@ mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
 pdfdir = @pdfdir@
+pkgpyexecdir = @pkgpyexecdir@
+pkgpythondir = @pkgpythondir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+pyexecdir = @pyexecdir@
+pythondir = @pythondir@
 rp = @rp@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
@@ -386,7 +401,6 @@ libnest_la_SOURCES = \
 		communicator.h communicator_impl.h communicator.cpp\
 		sibling_container.h sibling_container.cpp\
 		subnet.h subnet.cpp\
-		multirange.h multirange.cpp\
 		connection.h connection.cpp\
 		connection_het_wd.h connection_het_wd.cpp\
 		connection_hom_wd.h connection_hom_wd.cpp\
@@ -415,6 +429,7 @@ libnest_la_SOURCES = \
 		net_thread.h net_thread.cpp\
 		modelrange.h modelrange.cpp\
 		modelrangemanager.h modelrangemanager.cpp\
+		multirange.h multirange.cpp\
 		network.h network.cpp\
 		node.h node.cpp\
 		nodelist.h nodelist.cpp\
@@ -602,13 +617,6 @@ libnest_la-subnet.lo: subnet.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -c -o libnest_la-subnet.lo `test -f 'subnet.cpp' || echo '$(srcdir)/'`subnet.cpp
 
-libnest_la-multirange.lo: multirange.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -MT libnest_la-multirange.lo -MD -MP -MF $(DEPDIR)/libnest_la-multirange.Tpo -c -o libnest_la-multirange.lo `test -f 'multirange.cpp' || echo '$(srcdir)/'`multirange.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libnest_la-multirange.Tpo $(DEPDIR)/libnest_la-multirange.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='multirange.cpp' object='libnest_la-multirange.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -c -o libnest_la-multirange.lo `test -f 'multirange.cpp' || echo '$(srcdir)/'`multirange.cpp
-
 libnest_la-connection.lo: connection.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -MT libnest_la-connection.lo -MD -MP -MF $(DEPDIR)/libnest_la-connection.Tpo -c -o libnest_la-connection.lo `test -f 'connection.cpp' || echo '$(srcdir)/'`connection.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libnest_la-connection.Tpo $(DEPDIR)/libnest_la-connection.Plo
@@ -755,6 +763,13 @@ libnest_la-modelrangemanager.lo: modelrangemanager.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='modelrangemanager.cpp' object='libnest_la-modelrangemanager.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -c -o libnest_la-modelrangemanager.lo `test -f 'modelrangemanager.cpp' || echo '$(srcdir)/'`modelrangemanager.cpp
+
+libnest_la-multirange.lo: multirange.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -MT libnest_la-multirange.lo -MD -MP -MF $(DEPDIR)/libnest_la-multirange.Tpo -c -o libnest_la-multirange.lo `test -f 'multirange.cpp' || echo '$(srcdir)/'`multirange.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libnest_la-multirange.Tpo $(DEPDIR)/libnest_la-multirange.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='multirange.cpp' object='libnest_la-multirange.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -c -o libnest_la-multirange.lo `test -f 'multirange.cpp' || echo '$(srcdir)/'`multirange.cpp
 
 libnest_la-network.lo: network.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnest_la_CXXFLAGS) $(CXXFLAGS) -MT libnest_la-network.lo -MD -MP -MF $(DEPDIR)/libnest_la-network.Tpo -c -o libnest_la-network.lo `test -f 'network.cpp' || echo '$(srcdir)/'`network.cpp

@@ -64,8 +64,13 @@ subdir = models
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/depcomp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -74,11 +79,24 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libmodelsmodule_la_LIBADD =
-am_libmodelsmodule_la_OBJECTS =  \
-	libmodelsmodule_la-music_event_in_proxy.lo \
-	libmodelsmodule_la-music_event_out_proxy.lo \
-	libmodelsmodule_la-music_cont_in_proxy.lo \
-	libmodelsmodule_la-music_message_in_proxy.lo \
+am_libmodelsmodule_la_OBJECTS = libmodelsmodule_la-ac_generator.lo \
+	libmodelsmodule_la-aeif_cond_alpha.lo \
+	libmodelsmodule_la-aeif_cond_alpha_RK5.lo \
+	libmodelsmodule_la-aeif_cond_exp.lo \
+	libmodelsmodule_la-cont_delay_connection.lo \
+	libmodelsmodule_la-correlation_detector.lo \
+	libmodelsmodule_la-correlomatrix_detector.lo \
+	libmodelsmodule_la-dc_generator.lo \
+	libmodelsmodule_la-gamma_sup_generator.lo \
+	libmodelsmodule_la-ginzburg_neuron.lo \
+	libmodelsmodule_la-hh_cond_exp_traub.lo \
+	libmodelsmodule_la-hh_psc_alpha.lo \
+	libmodelsmodule_la-ht_connection.lo \
+	libmodelsmodule_la-ht_neuron.lo \
+	libmodelsmodule_la-iaf_cond_alpha.lo \
+	libmodelsmodule_la-iaf_cond_alpha_mc.lo \
+	libmodelsmodule_la-iaf_cond_exp.lo \
+	libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo \
 	libmodelsmodule_la-iaf_neuron.lo \
 	libmodelsmodule_la-iaf_psc_alpha.lo \
 	libmodelsmodule_la-iaf_psc_alpha_multisynapse.lo \
@@ -86,49 +104,37 @@ am_libmodelsmodule_la_OBJECTS =  \
 	libmodelsmodule_la-iaf_psc_delta.lo \
 	libmodelsmodule_la-iaf_psc_exp.lo \
 	libmodelsmodule_la-iaf_tum_2000.lo \
-	libmodelsmodule_la-iaf_cond_alpha.lo \
-	libmodelsmodule_la-iaf_cond_exp.lo \
-	libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo \
-	libmodelsmodule_la-iaf_cond_alpha_mc.lo \
-	libmodelsmodule_la-aeif_cond_alpha.lo \
-	libmodelsmodule_la-aeif_cond_exp.lo \
-	libmodelsmodule_la-hh_psc_alpha.lo \
-	libmodelsmodule_la-hh_cond_exp_traub.lo \
+	libmodelsmodule_la-izhikevich.lo \
 	libmodelsmodule_la-mat2_psc_exp.lo \
-	libmodelsmodule_la-parrot_neuron.lo \
-	libmodelsmodule_la-pp_psc_delta.lo \
-	libmodelsmodule_la-ac_generator.lo \
-	libmodelsmodule_la-dc_generator.lo \
-	libmodelsmodule_la-spike_generator.lo \
-	libmodelsmodule_la-poisson_generator.lo \
-	libmodelsmodule_la-noise_generator.lo \
+	libmodelsmodule_la-mcculloch_pitts_neuron.lo \
 	libmodelsmodule_la-mip_generator.lo \
-	libmodelsmodule_la-step_current_generator.lo \
-	libmodelsmodule_la-pulsepacket_generator.lo \
+	libmodelsmodule_la-modelsmodule.lo \
+	libmodelsmodule_la-multimeter.lo \
+	libmodelsmodule_la-music_cont_in_proxy.lo \
+	libmodelsmodule_la-music_event_in_proxy.lo \
+	libmodelsmodule_la-music_event_out_proxy.lo \
+	libmodelsmodule_la-music_message_in_proxy.lo \
+	libmodelsmodule_la-noise_generator.lo \
+	libmodelsmodule_la-parrot_neuron.lo \
+	libmodelsmodule_la-poisson_generator.lo \
+	libmodelsmodule_la-pp_psc_delta.lo \
 	libmodelsmodule_la-ppd_sup_generator.lo \
-	libmodelsmodule_la-gamma_sup_generator.lo \
+	libmodelsmodule_la-pulsepacket_generator.lo \
+	libmodelsmodule_la-sli_neuron.lo \
+	libmodelsmodule_la-sinusoidal_poisson_generator.lo \
 	libmodelsmodule_la-sinusoidal_gamma_generator.lo \
 	libmodelsmodule_la-spike_detector.lo \
+	libmodelsmodule_la-spike_generator.lo \
 	libmodelsmodule_la-spin_detector.lo \
-	libmodelsmodule_la-multimeter.lo \
-	libmodelsmodule_la-correlation_detector.lo \
-	libmodelsmodule_la-volume_transmitter.lo \
-	libmodelsmodule_la-cont_delay_connection.lo \
-	libmodelsmodule_la-tsodyks_connection.lo \
-	libmodelsmodule_la-tsodyks2_connection.lo \
 	libmodelsmodule_la-stdp_connection.lo \
-	libmodelsmodule_la-stdp_connection_hom.lo \
 	libmodelsmodule_la-stdp_connection_facetshw_hom.lo \
-	libmodelsmodule_la-stdp_pl_connection_hom.lo \
+	libmodelsmodule_la-stdp_connection_hom.lo \
 	libmodelsmodule_la-stdp_dopa_connection.lo \
-	libmodelsmodule_la-ht_neuron.lo \
-	libmodelsmodule_la-ht_connection.lo \
-	libmodelsmodule_la-sinusoidal_poisson_generator.lo \
-	libmodelsmodule_la-sli_neuron.lo \
-	libmodelsmodule_la-ginzburg_neuron.lo \
-	libmodelsmodule_la-mcculloch_pitts_neuron.lo \
-	libmodelsmodule_la-izhikevich.lo \
-	libmodelsmodule_la-modelsmodule.lo
+	libmodelsmodule_la-stdp_pl_connection_hom.lo \
+	libmodelsmodule_la-step_current_generator.lo \
+	libmodelsmodule_la-tsodyks2_connection.lo \
+	libmodelsmodule_la-tsodyks_connection.lo \
+	libmodelsmodule_la-volume_transmitter.lo
 libmodelsmodule_la_OBJECTS = $(am_libmodelsmodule_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -308,6 +314,9 @@ LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBADD_DL = @LIBADD_DL@
 LIBLTDL = @LIBLTDL@
+LIBNEUROSIM_INCLUDE = @LIBNEUROSIM_INCLUDE@
+LIBNEUROSIM_LIBS = @LIBNEUROSIM_LIBS@
+LIBNEUROSIM_PY_LIBS = @LIBNEUROSIM_PY_LIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -348,10 +357,13 @@ PKGDATADIR_AS_CONFIGURED = @PKGDATADIR_AS_CONFIGURED@
 PKGDOCDIR = @PKGDOCDIR@
 PKGDOCDIR_AS_CONFIGURED = @PKGDOCDIR_AS_CONFIGURED@
 PKGSRCDIR = @PKGSRCDIR@
+PYNEST_CPPFLAGS = @PYNEST_CPPFLAGS@
 PYNEST_CXXFLAGS = @PYNEST_CXXFLAGS@
-PYNEST_PREFIX = @PYNEST_PREFIX@
 PYNEST_SUBDIR = @PYNEST_SUBDIR@
-PYTHON_EXEC = @PYTHON_EXEC@
+PYTHON = @PYTHON@
+PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+PYTHON_PLATFORM = @PYTHON_PLATFORM@
+PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -417,9 +429,13 @@ mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
 pdfdir = @pdfdir@
+pkgpyexecdir = @pkgpyexecdir@
+pkgpythondir = @pkgpythondir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+pyexecdir = @pyexecdir@
+pythondir = @pythondir@
 rp = @rp@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
@@ -435,10 +451,25 @@ MAKEFLAGS = @MAKE_FLAGS@
 noinst_LTLIBRARIES = libmodelsmodule.la
 libmodelsmodule_la_CXXFLAGS = @AM_CXXFLAGS@
 libmodelsmodule_la_SOURCES = \
-		music_event_in_proxy.cpp music_event_in_proxy.h\
-		music_event_out_proxy.cpp music_event_out_proxy.h\
-		music_cont_in_proxy.cpp music_cont_in_proxy.h\
-		music_message_in_proxy.cpp music_message_in_proxy.h\
+		ac_generator.h ac_generator.cpp\
+		aeif_cond_alpha.h aeif_cond_alpha.cpp\
+		aeif_cond_alpha_RK5.h aeif_cond_alpha_RK5.cpp\
+		aeif_cond_exp.h aeif_cond_exp.cpp\
+		binary_neuron.h binary_neuron_impl.h\
+		cont_delay_connection.h cont_delay_connection.cpp\
+		correlation_detector.h correlation_detector.cpp\
+		correlomatrix_detector.h correlomatrix_detector.cpp\
+		dc_generator.h dc_generator.cpp\
+		gamma_sup_generator.h gamma_sup_generator.cpp\
+		ginzburg_neuron.h ginzburg_neuron.cpp\
+		hh_cond_exp_traub.h hh_cond_exp_traub.cpp\
+		hh_psc_alpha.h hh_psc_alpha.cpp\
+		ht_connection.h ht_connection.cpp\
+		ht_neuron.h ht_neuron.cpp\
+		iaf_cond_alpha.h iaf_cond_alpha.cpp\
+		iaf_cond_alpha_mc.h iaf_cond_alpha_mc.cpp\
+		iaf_cond_exp.h iaf_cond_exp.cpp\
+		iaf_cond_exp_sfa_rr.h iaf_cond_exp_sfa_rr.cpp\
 		iaf_neuron.h iaf_neuron.cpp\
 		iaf_psc_alpha.h iaf_psc_alpha.cpp\
 		iaf_psc_alpha_multisynapse.h iaf_psc_alpha_multisynapse.cpp\
@@ -446,52 +477,39 @@ libmodelsmodule_la_SOURCES = \
 		iaf_psc_delta.h iaf_psc_delta.cpp\
 		iaf_psc_exp.h iaf_psc_exp.cpp\
 		iaf_tum_2000.h iaf_tum_2000.cpp\
-		iaf_cond_alpha.h iaf_cond_alpha.cpp\
-		iaf_cond_exp.h iaf_cond_exp.cpp\
-		iaf_cond_exp_sfa_rr.h iaf_cond_exp_sfa_rr.cpp\
-		iaf_cond_alpha_mc.cpp iaf_cond_alpha_mc.h\
-		aeif_cond_alpha.h aeif_cond_alpha.cpp\
-		aeif_cond_exp.h aeif_cond_exp.cpp\
-		hh_psc_alpha.h hh_psc_alpha.cpp\
-		hh_cond_exp_traub.cpp hh_cond_exp_traub.h\
+		izhikevich.h izhikevich.cpp\
 		mat2_psc_exp.h mat2_psc_exp.cpp\
-		parrot_neuron.h parrot_neuron.cpp\
-		pp_psc_delta.h pp_psc_delta.cpp\
-		ac_generator.h ac_generator.cpp\
-		dc_generator.h dc_generator.cpp\
-		spike_generator.h spike_generator.cpp\
-		poisson_generator.h poisson_generator.cpp\
-		noise_generator.h noise_generator.cpp\
+		mcculloch_pitts_neuron.h mcculloch_pitts_neuron.cpp\
 		mip_generator.h mip_generator.cpp\
-		step_current_generator.h step_current_generator.cpp\
+		modelsmodule.h modelsmodule.cpp\
+		multimeter.h multimeter.cpp\
+		music_cont_in_proxy.h music_cont_in_proxy.cpp\
+		music_event_in_proxy.h music_event_in_proxy.cpp\
+		music_event_out_proxy.h music_event_out_proxy.cpp\
+		music_message_in_proxy.h music_message_in_proxy.cpp\
+		noise_generator.h noise_generator.cpp\
+		parrot_neuron.h parrot_neuron.cpp\
+		poisson_generator.h poisson_generator.cpp\
+		pp_psc_delta.h pp_psc_delta.cpp\
+		ppd_sup_generator.h ppd_sup_generator.cpp\
 		pulsepacket_generator.h pulsepacket_generator.cpp\
-		ppd_sup_generator.cpp ppd_sup_generator.h\
-		gamma_sup_generator.cpp gamma_sup_generator.h\
+		sli_neuron.h sli_neuron.cpp\
+		sinusoidal_poisson_generator.h sinusoidal_poisson_generator.cpp \
 		sinusoidal_gamma_generator.h sinusoidal_gamma_generator.cpp \
 		spike_detector.h spike_detector.cpp\
+		spike_generator.h spike_generator.cpp\
 		spin_detector.h spin_detector.cpp\
-		multimeter.cpp multimeter.h\
-		correlation_detector.h correlation_detector.cpp\
-		volume_transmitter.h volume_transmitter.cpp\
 		static_connection.h\
 		static_connection_hom_wd.h\
-		cont_delay_connection.h cont_delay_connection.cpp\
-		tsodyks_connection.h tsodyks_connection.cpp\
-		tsodyks2_connection.h tsodyks2_connection.cpp\
 		stdp_connection.h stdp_connection.cpp\
-		stdp_connection_hom.h stdp_connection_hom.cpp\
 		stdp_connection_facetshw_hom.h stdp_connection_facetshw_hom.cpp\
-		stdp_pl_connection_hom.h stdp_pl_connection_hom.cpp\
+		stdp_connection_hom.h stdp_connection_hom.cpp\
 		stdp_dopa_connection.h stdp_dopa_connection.cpp\
-		ht_neuron.cpp ht_neuron.h \
-		ht_connection.cpp ht_connection.h \
-		sinusoidal_poisson_generator.h sinusoidal_poisson_generator.cpp \
-		sli_neuron.cpp sli_neuron.h\
-		binary_neuron.h binary_neuron_impl.h\
-		ginzburg_neuron.cpp ginzburg_neuron.h\
-		mcculloch_pitts_neuron.cpp mcculloch_pitts_neuron.h\
-		izhikevich.cpp izhikevich.h\
-	 	modelsmodule.h modelsmodule.cpp
+		stdp_pl_connection_hom.h stdp_pl_connection_hom.cpp\
+		step_current_generator.h step_current_generator.cpp\
+		tsodyks2_connection.h tsodyks2_connection.cpp\
+		tsodyks_connection.h tsodyks_connection.cpp\
+		volume_transmitter.h volume_transmitter.cpp
 
 AM_CPPFLAGS = -I$(top_srcdir)/libnestutil\
 		-I$(top_srcdir)/librandom\
@@ -558,9 +576,11 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-ac_generator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha_RK5.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-aeif_cond_exp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-cont_delay_connection.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-correlation_detector.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-correlomatrix_detector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-dc_generator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-gamma_sup_generator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmodelsmodule_la-ginzburg_neuron.Plo@am__quote@
@@ -632,33 +652,131 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
-libmodelsmodule_la-music_event_in_proxy.lo: music_event_in_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_event_in_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_event_in_proxy.Tpo -c -o libmodelsmodule_la-music_event_in_proxy.lo `test -f 'music_event_in_proxy.cpp' || echo '$(srcdir)/'`music_event_in_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_event_in_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_event_in_proxy.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_event_in_proxy.cpp' object='libmodelsmodule_la-music_event_in_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-ac_generator.lo: ac_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ac_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ac_generator.Tpo -c -o libmodelsmodule_la-ac_generator.lo `test -f 'ac_generator.cpp' || echo '$(srcdir)/'`ac_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ac_generator.Tpo $(DEPDIR)/libmodelsmodule_la-ac_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ac_generator.cpp' object='libmodelsmodule_la-ac_generator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_event_in_proxy.lo `test -f 'music_event_in_proxy.cpp' || echo '$(srcdir)/'`music_event_in_proxy.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ac_generator.lo `test -f 'ac_generator.cpp' || echo '$(srcdir)/'`ac_generator.cpp
 
-libmodelsmodule_la-music_event_out_proxy.lo: music_event_out_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_event_out_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_event_out_proxy.Tpo -c -o libmodelsmodule_la-music_event_out_proxy.lo `test -f 'music_event_out_proxy.cpp' || echo '$(srcdir)/'`music_event_out_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_event_out_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_event_out_proxy.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_event_out_proxy.cpp' object='libmodelsmodule_la-music_event_out_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-aeif_cond_alpha.lo: aeif_cond_alpha.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-aeif_cond_alpha.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha.Tpo -c -o libmodelsmodule_la-aeif_cond_alpha.lo `test -f 'aeif_cond_alpha.cpp' || echo '$(srcdir)/'`aeif_cond_alpha.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha.Tpo $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='aeif_cond_alpha.cpp' object='libmodelsmodule_la-aeif_cond_alpha.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_event_out_proxy.lo `test -f 'music_event_out_proxy.cpp' || echo '$(srcdir)/'`music_event_out_proxy.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-aeif_cond_alpha.lo `test -f 'aeif_cond_alpha.cpp' || echo '$(srcdir)/'`aeif_cond_alpha.cpp
 
-libmodelsmodule_la-music_cont_in_proxy.lo: music_cont_in_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_cont_in_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_cont_in_proxy.Tpo -c -o libmodelsmodule_la-music_cont_in_proxy.lo `test -f 'music_cont_in_proxy.cpp' || echo '$(srcdir)/'`music_cont_in_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_cont_in_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_cont_in_proxy.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_cont_in_proxy.cpp' object='libmodelsmodule_la-music_cont_in_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-aeif_cond_alpha_RK5.lo: aeif_cond_alpha_RK5.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-aeif_cond_alpha_RK5.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha_RK5.Tpo -c -o libmodelsmodule_la-aeif_cond_alpha_RK5.lo `test -f 'aeif_cond_alpha_RK5.cpp' || echo '$(srcdir)/'`aeif_cond_alpha_RK5.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha_RK5.Tpo $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha_RK5.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='aeif_cond_alpha_RK5.cpp' object='libmodelsmodule_la-aeif_cond_alpha_RK5.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_cont_in_proxy.lo `test -f 'music_cont_in_proxy.cpp' || echo '$(srcdir)/'`music_cont_in_proxy.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-aeif_cond_alpha_RK5.lo `test -f 'aeif_cond_alpha_RK5.cpp' || echo '$(srcdir)/'`aeif_cond_alpha_RK5.cpp
 
-libmodelsmodule_la-music_message_in_proxy.lo: music_message_in_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_message_in_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_message_in_proxy.Tpo -c -o libmodelsmodule_la-music_message_in_proxy.lo `test -f 'music_message_in_proxy.cpp' || echo '$(srcdir)/'`music_message_in_proxy.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_message_in_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_message_in_proxy.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_message_in_proxy.cpp' object='libmodelsmodule_la-music_message_in_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-aeif_cond_exp.lo: aeif_cond_exp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-aeif_cond_exp.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-aeif_cond_exp.Tpo -c -o libmodelsmodule_la-aeif_cond_exp.lo `test -f 'aeif_cond_exp.cpp' || echo '$(srcdir)/'`aeif_cond_exp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-aeif_cond_exp.Tpo $(DEPDIR)/libmodelsmodule_la-aeif_cond_exp.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='aeif_cond_exp.cpp' object='libmodelsmodule_la-aeif_cond_exp.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_message_in_proxy.lo `test -f 'music_message_in_proxy.cpp' || echo '$(srcdir)/'`music_message_in_proxy.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-aeif_cond_exp.lo `test -f 'aeif_cond_exp.cpp' || echo '$(srcdir)/'`aeif_cond_exp.cpp
+
+libmodelsmodule_la-cont_delay_connection.lo: cont_delay_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-cont_delay_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-cont_delay_connection.Tpo -c -o libmodelsmodule_la-cont_delay_connection.lo `test -f 'cont_delay_connection.cpp' || echo '$(srcdir)/'`cont_delay_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-cont_delay_connection.Tpo $(DEPDIR)/libmodelsmodule_la-cont_delay_connection.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='cont_delay_connection.cpp' object='libmodelsmodule_la-cont_delay_connection.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-cont_delay_connection.lo `test -f 'cont_delay_connection.cpp' || echo '$(srcdir)/'`cont_delay_connection.cpp
+
+libmodelsmodule_la-correlation_detector.lo: correlation_detector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-correlation_detector.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-correlation_detector.Tpo -c -o libmodelsmodule_la-correlation_detector.lo `test -f 'correlation_detector.cpp' || echo '$(srcdir)/'`correlation_detector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-correlation_detector.Tpo $(DEPDIR)/libmodelsmodule_la-correlation_detector.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='correlation_detector.cpp' object='libmodelsmodule_la-correlation_detector.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-correlation_detector.lo `test -f 'correlation_detector.cpp' || echo '$(srcdir)/'`correlation_detector.cpp
+
+libmodelsmodule_la-correlomatrix_detector.lo: correlomatrix_detector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-correlomatrix_detector.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-correlomatrix_detector.Tpo -c -o libmodelsmodule_la-correlomatrix_detector.lo `test -f 'correlomatrix_detector.cpp' || echo '$(srcdir)/'`correlomatrix_detector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-correlomatrix_detector.Tpo $(DEPDIR)/libmodelsmodule_la-correlomatrix_detector.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='correlomatrix_detector.cpp' object='libmodelsmodule_la-correlomatrix_detector.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-correlomatrix_detector.lo `test -f 'correlomatrix_detector.cpp' || echo '$(srcdir)/'`correlomatrix_detector.cpp
+
+libmodelsmodule_la-dc_generator.lo: dc_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-dc_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-dc_generator.Tpo -c -o libmodelsmodule_la-dc_generator.lo `test -f 'dc_generator.cpp' || echo '$(srcdir)/'`dc_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-dc_generator.Tpo $(DEPDIR)/libmodelsmodule_la-dc_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='dc_generator.cpp' object='libmodelsmodule_la-dc_generator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-dc_generator.lo `test -f 'dc_generator.cpp' || echo '$(srcdir)/'`dc_generator.cpp
+
+libmodelsmodule_la-gamma_sup_generator.lo: gamma_sup_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-gamma_sup_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-gamma_sup_generator.Tpo -c -o libmodelsmodule_la-gamma_sup_generator.lo `test -f 'gamma_sup_generator.cpp' || echo '$(srcdir)/'`gamma_sup_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-gamma_sup_generator.Tpo $(DEPDIR)/libmodelsmodule_la-gamma_sup_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='gamma_sup_generator.cpp' object='libmodelsmodule_la-gamma_sup_generator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-gamma_sup_generator.lo `test -f 'gamma_sup_generator.cpp' || echo '$(srcdir)/'`gamma_sup_generator.cpp
+
+libmodelsmodule_la-ginzburg_neuron.lo: ginzburg_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ginzburg_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ginzburg_neuron.Tpo -c -o libmodelsmodule_la-ginzburg_neuron.lo `test -f 'ginzburg_neuron.cpp' || echo '$(srcdir)/'`ginzburg_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ginzburg_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-ginzburg_neuron.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ginzburg_neuron.cpp' object='libmodelsmodule_la-ginzburg_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ginzburg_neuron.lo `test -f 'ginzburg_neuron.cpp' || echo '$(srcdir)/'`ginzburg_neuron.cpp
+
+libmodelsmodule_la-hh_cond_exp_traub.lo: hh_cond_exp_traub.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-hh_cond_exp_traub.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-hh_cond_exp_traub.Tpo -c -o libmodelsmodule_la-hh_cond_exp_traub.lo `test -f 'hh_cond_exp_traub.cpp' || echo '$(srcdir)/'`hh_cond_exp_traub.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-hh_cond_exp_traub.Tpo $(DEPDIR)/libmodelsmodule_la-hh_cond_exp_traub.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='hh_cond_exp_traub.cpp' object='libmodelsmodule_la-hh_cond_exp_traub.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-hh_cond_exp_traub.lo `test -f 'hh_cond_exp_traub.cpp' || echo '$(srcdir)/'`hh_cond_exp_traub.cpp
+
+libmodelsmodule_la-hh_psc_alpha.lo: hh_psc_alpha.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-hh_psc_alpha.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-hh_psc_alpha.Tpo -c -o libmodelsmodule_la-hh_psc_alpha.lo `test -f 'hh_psc_alpha.cpp' || echo '$(srcdir)/'`hh_psc_alpha.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-hh_psc_alpha.Tpo $(DEPDIR)/libmodelsmodule_la-hh_psc_alpha.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='hh_psc_alpha.cpp' object='libmodelsmodule_la-hh_psc_alpha.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-hh_psc_alpha.lo `test -f 'hh_psc_alpha.cpp' || echo '$(srcdir)/'`hh_psc_alpha.cpp
+
+libmodelsmodule_la-ht_connection.lo: ht_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ht_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ht_connection.Tpo -c -o libmodelsmodule_la-ht_connection.lo `test -f 'ht_connection.cpp' || echo '$(srcdir)/'`ht_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ht_connection.Tpo $(DEPDIR)/libmodelsmodule_la-ht_connection.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ht_connection.cpp' object='libmodelsmodule_la-ht_connection.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ht_connection.lo `test -f 'ht_connection.cpp' || echo '$(srcdir)/'`ht_connection.cpp
+
+libmodelsmodule_la-ht_neuron.lo: ht_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ht_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ht_neuron.Tpo -c -o libmodelsmodule_la-ht_neuron.lo `test -f 'ht_neuron.cpp' || echo '$(srcdir)/'`ht_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ht_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-ht_neuron.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ht_neuron.cpp' object='libmodelsmodule_la-ht_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ht_neuron.lo `test -f 'ht_neuron.cpp' || echo '$(srcdir)/'`ht_neuron.cpp
+
+libmodelsmodule_la-iaf_cond_alpha.lo: iaf_cond_alpha.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_alpha.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha.Tpo -c -o libmodelsmodule_la-iaf_cond_alpha.lo `test -f 'iaf_cond_alpha.cpp' || echo '$(srcdir)/'`iaf_cond_alpha.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_alpha.cpp' object='libmodelsmodule_la-iaf_cond_alpha.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_alpha.lo `test -f 'iaf_cond_alpha.cpp' || echo '$(srcdir)/'`iaf_cond_alpha.cpp
+
+libmodelsmodule_la-iaf_cond_alpha_mc.lo: iaf_cond_alpha_mc.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_alpha_mc.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha_mc.Tpo -c -o libmodelsmodule_la-iaf_cond_alpha_mc.lo `test -f 'iaf_cond_alpha_mc.cpp' || echo '$(srcdir)/'`iaf_cond_alpha_mc.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha_mc.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha_mc.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_alpha_mc.cpp' object='libmodelsmodule_la-iaf_cond_alpha_mc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_alpha_mc.lo `test -f 'iaf_cond_alpha_mc.cpp' || echo '$(srcdir)/'`iaf_cond_alpha_mc.cpp
+
+libmodelsmodule_la-iaf_cond_exp.lo: iaf_cond_exp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_exp.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp.Tpo -c -o libmodelsmodule_la-iaf_cond_exp.lo `test -f 'iaf_cond_exp.cpp' || echo '$(srcdir)/'`iaf_cond_exp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_exp.cpp' object='libmodelsmodule_la-iaf_cond_exp.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_exp.lo `test -f 'iaf_cond_exp.cpp' || echo '$(srcdir)/'`iaf_cond_exp.cpp
+
+libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo: iaf_cond_exp_sfa_rr.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp_sfa_rr.Tpo -c -o libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo `test -f 'iaf_cond_exp_sfa_rr.cpp' || echo '$(srcdir)/'`iaf_cond_exp_sfa_rr.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp_sfa_rr.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp_sfa_rr.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_exp_sfa_rr.cpp' object='libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo `test -f 'iaf_cond_exp_sfa_rr.cpp' || echo '$(srcdir)/'`iaf_cond_exp_sfa_rr.cpp
 
 libmodelsmodule_la-iaf_neuron.lo: iaf_neuron.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_neuron.Tpo -c -o libmodelsmodule_la-iaf_neuron.lo `test -f 'iaf_neuron.cpp' || echo '$(srcdir)/'`iaf_neuron.cpp
@@ -709,61 +827,12 @@ libmodelsmodule_la-iaf_tum_2000.lo: iaf_tum_2000.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_tum_2000.lo `test -f 'iaf_tum_2000.cpp' || echo '$(srcdir)/'`iaf_tum_2000.cpp
 
-libmodelsmodule_la-iaf_cond_alpha.lo: iaf_cond_alpha.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_alpha.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha.Tpo -c -o libmodelsmodule_la-iaf_cond_alpha.lo `test -f 'iaf_cond_alpha.cpp' || echo '$(srcdir)/'`iaf_cond_alpha.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_alpha.cpp' object='libmodelsmodule_la-iaf_cond_alpha.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-izhikevich.lo: izhikevich.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-izhikevich.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-izhikevich.Tpo -c -o libmodelsmodule_la-izhikevich.lo `test -f 'izhikevich.cpp' || echo '$(srcdir)/'`izhikevich.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-izhikevich.Tpo $(DEPDIR)/libmodelsmodule_la-izhikevich.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='izhikevich.cpp' object='libmodelsmodule_la-izhikevich.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_alpha.lo `test -f 'iaf_cond_alpha.cpp' || echo '$(srcdir)/'`iaf_cond_alpha.cpp
-
-libmodelsmodule_la-iaf_cond_exp.lo: iaf_cond_exp.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_exp.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp.Tpo -c -o libmodelsmodule_la-iaf_cond_exp.lo `test -f 'iaf_cond_exp.cpp' || echo '$(srcdir)/'`iaf_cond_exp.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_exp.cpp' object='libmodelsmodule_la-iaf_cond_exp.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_exp.lo `test -f 'iaf_cond_exp.cpp' || echo '$(srcdir)/'`iaf_cond_exp.cpp
-
-libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo: iaf_cond_exp_sfa_rr.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp_sfa_rr.Tpo -c -o libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo `test -f 'iaf_cond_exp_sfa_rr.cpp' || echo '$(srcdir)/'`iaf_cond_exp_sfa_rr.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp_sfa_rr.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_exp_sfa_rr.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_exp_sfa_rr.cpp' object='libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_exp_sfa_rr.lo `test -f 'iaf_cond_exp_sfa_rr.cpp' || echo '$(srcdir)/'`iaf_cond_exp_sfa_rr.cpp
-
-libmodelsmodule_la-iaf_cond_alpha_mc.lo: iaf_cond_alpha_mc.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-iaf_cond_alpha_mc.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha_mc.Tpo -c -o libmodelsmodule_la-iaf_cond_alpha_mc.lo `test -f 'iaf_cond_alpha_mc.cpp' || echo '$(srcdir)/'`iaf_cond_alpha_mc.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha_mc.Tpo $(DEPDIR)/libmodelsmodule_la-iaf_cond_alpha_mc.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='iaf_cond_alpha_mc.cpp' object='libmodelsmodule_la-iaf_cond_alpha_mc.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-iaf_cond_alpha_mc.lo `test -f 'iaf_cond_alpha_mc.cpp' || echo '$(srcdir)/'`iaf_cond_alpha_mc.cpp
-
-libmodelsmodule_la-aeif_cond_alpha.lo: aeif_cond_alpha.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-aeif_cond_alpha.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha.Tpo -c -o libmodelsmodule_la-aeif_cond_alpha.lo `test -f 'aeif_cond_alpha.cpp' || echo '$(srcdir)/'`aeif_cond_alpha.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha.Tpo $(DEPDIR)/libmodelsmodule_la-aeif_cond_alpha.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='aeif_cond_alpha.cpp' object='libmodelsmodule_la-aeif_cond_alpha.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-aeif_cond_alpha.lo `test -f 'aeif_cond_alpha.cpp' || echo '$(srcdir)/'`aeif_cond_alpha.cpp
-
-libmodelsmodule_la-aeif_cond_exp.lo: aeif_cond_exp.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-aeif_cond_exp.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-aeif_cond_exp.Tpo -c -o libmodelsmodule_la-aeif_cond_exp.lo `test -f 'aeif_cond_exp.cpp' || echo '$(srcdir)/'`aeif_cond_exp.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-aeif_cond_exp.Tpo $(DEPDIR)/libmodelsmodule_la-aeif_cond_exp.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='aeif_cond_exp.cpp' object='libmodelsmodule_la-aeif_cond_exp.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-aeif_cond_exp.lo `test -f 'aeif_cond_exp.cpp' || echo '$(srcdir)/'`aeif_cond_exp.cpp
-
-libmodelsmodule_la-hh_psc_alpha.lo: hh_psc_alpha.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-hh_psc_alpha.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-hh_psc_alpha.Tpo -c -o libmodelsmodule_la-hh_psc_alpha.lo `test -f 'hh_psc_alpha.cpp' || echo '$(srcdir)/'`hh_psc_alpha.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-hh_psc_alpha.Tpo $(DEPDIR)/libmodelsmodule_la-hh_psc_alpha.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='hh_psc_alpha.cpp' object='libmodelsmodule_la-hh_psc_alpha.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-hh_psc_alpha.lo `test -f 'hh_psc_alpha.cpp' || echo '$(srcdir)/'`hh_psc_alpha.cpp
-
-libmodelsmodule_la-hh_cond_exp_traub.lo: hh_cond_exp_traub.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-hh_cond_exp_traub.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-hh_cond_exp_traub.Tpo -c -o libmodelsmodule_la-hh_cond_exp_traub.lo `test -f 'hh_cond_exp_traub.cpp' || echo '$(srcdir)/'`hh_cond_exp_traub.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-hh_cond_exp_traub.Tpo $(DEPDIR)/libmodelsmodule_la-hh_cond_exp_traub.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='hh_cond_exp_traub.cpp' object='libmodelsmodule_la-hh_cond_exp_traub.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-hh_cond_exp_traub.lo `test -f 'hh_cond_exp_traub.cpp' || echo '$(srcdir)/'`hh_cond_exp_traub.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-izhikevich.lo `test -f 'izhikevich.cpp' || echo '$(srcdir)/'`izhikevich.cpp
 
 libmodelsmodule_la-mat2_psc_exp.lo: mat2_psc_exp.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-mat2_psc_exp.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-mat2_psc_exp.Tpo -c -o libmodelsmodule_la-mat2_psc_exp.lo `test -f 'mat2_psc_exp.cpp' || echo '$(srcdir)/'`mat2_psc_exp.cpp
@@ -772,54 +841,12 @@ libmodelsmodule_la-mat2_psc_exp.lo: mat2_psc_exp.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-mat2_psc_exp.lo `test -f 'mat2_psc_exp.cpp' || echo '$(srcdir)/'`mat2_psc_exp.cpp
 
-libmodelsmodule_la-parrot_neuron.lo: parrot_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-parrot_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-parrot_neuron.Tpo -c -o libmodelsmodule_la-parrot_neuron.lo `test -f 'parrot_neuron.cpp' || echo '$(srcdir)/'`parrot_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-parrot_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-parrot_neuron.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='parrot_neuron.cpp' object='libmodelsmodule_la-parrot_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-mcculloch_pitts_neuron.lo: mcculloch_pitts_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-mcculloch_pitts_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Tpo -c -o libmodelsmodule_la-mcculloch_pitts_neuron.lo `test -f 'mcculloch_pitts_neuron.cpp' || echo '$(srcdir)/'`mcculloch_pitts_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='mcculloch_pitts_neuron.cpp' object='libmodelsmodule_la-mcculloch_pitts_neuron.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-parrot_neuron.lo `test -f 'parrot_neuron.cpp' || echo '$(srcdir)/'`parrot_neuron.cpp
-
-libmodelsmodule_la-pp_psc_delta.lo: pp_psc_delta.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-pp_psc_delta.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-pp_psc_delta.Tpo -c -o libmodelsmodule_la-pp_psc_delta.lo `test -f 'pp_psc_delta.cpp' || echo '$(srcdir)/'`pp_psc_delta.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-pp_psc_delta.Tpo $(DEPDIR)/libmodelsmodule_la-pp_psc_delta.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pp_psc_delta.cpp' object='libmodelsmodule_la-pp_psc_delta.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-pp_psc_delta.lo `test -f 'pp_psc_delta.cpp' || echo '$(srcdir)/'`pp_psc_delta.cpp
-
-libmodelsmodule_la-ac_generator.lo: ac_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ac_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ac_generator.Tpo -c -o libmodelsmodule_la-ac_generator.lo `test -f 'ac_generator.cpp' || echo '$(srcdir)/'`ac_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ac_generator.Tpo $(DEPDIR)/libmodelsmodule_la-ac_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ac_generator.cpp' object='libmodelsmodule_la-ac_generator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ac_generator.lo `test -f 'ac_generator.cpp' || echo '$(srcdir)/'`ac_generator.cpp
-
-libmodelsmodule_la-dc_generator.lo: dc_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-dc_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-dc_generator.Tpo -c -o libmodelsmodule_la-dc_generator.lo `test -f 'dc_generator.cpp' || echo '$(srcdir)/'`dc_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-dc_generator.Tpo $(DEPDIR)/libmodelsmodule_la-dc_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='dc_generator.cpp' object='libmodelsmodule_la-dc_generator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-dc_generator.lo `test -f 'dc_generator.cpp' || echo '$(srcdir)/'`dc_generator.cpp
-
-libmodelsmodule_la-spike_generator.lo: spike_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-spike_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-spike_generator.Tpo -c -o libmodelsmodule_la-spike_generator.lo `test -f 'spike_generator.cpp' || echo '$(srcdir)/'`spike_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-spike_generator.Tpo $(DEPDIR)/libmodelsmodule_la-spike_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='spike_generator.cpp' object='libmodelsmodule_la-spike_generator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-spike_generator.lo `test -f 'spike_generator.cpp' || echo '$(srcdir)/'`spike_generator.cpp
-
-libmodelsmodule_la-poisson_generator.lo: poisson_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-poisson_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-poisson_generator.Tpo -c -o libmodelsmodule_la-poisson_generator.lo `test -f 'poisson_generator.cpp' || echo '$(srcdir)/'`poisson_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-poisson_generator.Tpo $(DEPDIR)/libmodelsmodule_la-poisson_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='poisson_generator.cpp' object='libmodelsmodule_la-poisson_generator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-poisson_generator.lo `test -f 'poisson_generator.cpp' || echo '$(srcdir)/'`poisson_generator.cpp
-
-libmodelsmodule_la-noise_generator.lo: noise_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-noise_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-noise_generator.Tpo -c -o libmodelsmodule_la-noise_generator.lo `test -f 'noise_generator.cpp' || echo '$(srcdir)/'`noise_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-noise_generator.Tpo $(DEPDIR)/libmodelsmodule_la-noise_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='noise_generator.cpp' object='libmodelsmodule_la-noise_generator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-noise_generator.lo `test -f 'noise_generator.cpp' || echo '$(srcdir)/'`noise_generator.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-mcculloch_pitts_neuron.lo `test -f 'mcculloch_pitts_neuron.cpp' || echo '$(srcdir)/'`mcculloch_pitts_neuron.cpp
 
 libmodelsmodule_la-mip_generator.lo: mip_generator.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-mip_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-mip_generator.Tpo -c -o libmodelsmodule_la-mip_generator.lo `test -f 'mip_generator.cpp' || echo '$(srcdir)/'`mip_generator.cpp
@@ -828,19 +855,75 @@ libmodelsmodule_la-mip_generator.lo: mip_generator.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-mip_generator.lo `test -f 'mip_generator.cpp' || echo '$(srcdir)/'`mip_generator.cpp
 
-libmodelsmodule_la-step_current_generator.lo: step_current_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-step_current_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-step_current_generator.Tpo -c -o libmodelsmodule_la-step_current_generator.lo `test -f 'step_current_generator.cpp' || echo '$(srcdir)/'`step_current_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-step_current_generator.Tpo $(DEPDIR)/libmodelsmodule_la-step_current_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='step_current_generator.cpp' object='libmodelsmodule_la-step_current_generator.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-modelsmodule.lo: modelsmodule.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-modelsmodule.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-modelsmodule.Tpo -c -o libmodelsmodule_la-modelsmodule.lo `test -f 'modelsmodule.cpp' || echo '$(srcdir)/'`modelsmodule.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-modelsmodule.Tpo $(DEPDIR)/libmodelsmodule_la-modelsmodule.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='modelsmodule.cpp' object='libmodelsmodule_la-modelsmodule.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-step_current_generator.lo `test -f 'step_current_generator.cpp' || echo '$(srcdir)/'`step_current_generator.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-modelsmodule.lo `test -f 'modelsmodule.cpp' || echo '$(srcdir)/'`modelsmodule.cpp
 
-libmodelsmodule_la-pulsepacket_generator.lo: pulsepacket_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-pulsepacket_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-pulsepacket_generator.Tpo -c -o libmodelsmodule_la-pulsepacket_generator.lo `test -f 'pulsepacket_generator.cpp' || echo '$(srcdir)/'`pulsepacket_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-pulsepacket_generator.Tpo $(DEPDIR)/libmodelsmodule_la-pulsepacket_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pulsepacket_generator.cpp' object='libmodelsmodule_la-pulsepacket_generator.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-multimeter.lo: multimeter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-multimeter.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-multimeter.Tpo -c -o libmodelsmodule_la-multimeter.lo `test -f 'multimeter.cpp' || echo '$(srcdir)/'`multimeter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-multimeter.Tpo $(DEPDIR)/libmodelsmodule_la-multimeter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='multimeter.cpp' object='libmodelsmodule_la-multimeter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-pulsepacket_generator.lo `test -f 'pulsepacket_generator.cpp' || echo '$(srcdir)/'`pulsepacket_generator.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-multimeter.lo `test -f 'multimeter.cpp' || echo '$(srcdir)/'`multimeter.cpp
+
+libmodelsmodule_la-music_cont_in_proxy.lo: music_cont_in_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_cont_in_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_cont_in_proxy.Tpo -c -o libmodelsmodule_la-music_cont_in_proxy.lo `test -f 'music_cont_in_proxy.cpp' || echo '$(srcdir)/'`music_cont_in_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_cont_in_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_cont_in_proxy.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_cont_in_proxy.cpp' object='libmodelsmodule_la-music_cont_in_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_cont_in_proxy.lo `test -f 'music_cont_in_proxy.cpp' || echo '$(srcdir)/'`music_cont_in_proxy.cpp
+
+libmodelsmodule_la-music_event_in_proxy.lo: music_event_in_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_event_in_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_event_in_proxy.Tpo -c -o libmodelsmodule_la-music_event_in_proxy.lo `test -f 'music_event_in_proxy.cpp' || echo '$(srcdir)/'`music_event_in_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_event_in_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_event_in_proxy.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_event_in_proxy.cpp' object='libmodelsmodule_la-music_event_in_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_event_in_proxy.lo `test -f 'music_event_in_proxy.cpp' || echo '$(srcdir)/'`music_event_in_proxy.cpp
+
+libmodelsmodule_la-music_event_out_proxy.lo: music_event_out_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_event_out_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_event_out_proxy.Tpo -c -o libmodelsmodule_la-music_event_out_proxy.lo `test -f 'music_event_out_proxy.cpp' || echo '$(srcdir)/'`music_event_out_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_event_out_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_event_out_proxy.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_event_out_proxy.cpp' object='libmodelsmodule_la-music_event_out_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_event_out_proxy.lo `test -f 'music_event_out_proxy.cpp' || echo '$(srcdir)/'`music_event_out_proxy.cpp
+
+libmodelsmodule_la-music_message_in_proxy.lo: music_message_in_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-music_message_in_proxy.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-music_message_in_proxy.Tpo -c -o libmodelsmodule_la-music_message_in_proxy.lo `test -f 'music_message_in_proxy.cpp' || echo '$(srcdir)/'`music_message_in_proxy.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-music_message_in_proxy.Tpo $(DEPDIR)/libmodelsmodule_la-music_message_in_proxy.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='music_message_in_proxy.cpp' object='libmodelsmodule_la-music_message_in_proxy.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-music_message_in_proxy.lo `test -f 'music_message_in_proxy.cpp' || echo '$(srcdir)/'`music_message_in_proxy.cpp
+
+libmodelsmodule_la-noise_generator.lo: noise_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-noise_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-noise_generator.Tpo -c -o libmodelsmodule_la-noise_generator.lo `test -f 'noise_generator.cpp' || echo '$(srcdir)/'`noise_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-noise_generator.Tpo $(DEPDIR)/libmodelsmodule_la-noise_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='noise_generator.cpp' object='libmodelsmodule_la-noise_generator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-noise_generator.lo `test -f 'noise_generator.cpp' || echo '$(srcdir)/'`noise_generator.cpp
+
+libmodelsmodule_la-parrot_neuron.lo: parrot_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-parrot_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-parrot_neuron.Tpo -c -o libmodelsmodule_la-parrot_neuron.lo `test -f 'parrot_neuron.cpp' || echo '$(srcdir)/'`parrot_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-parrot_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-parrot_neuron.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='parrot_neuron.cpp' object='libmodelsmodule_la-parrot_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-parrot_neuron.lo `test -f 'parrot_neuron.cpp' || echo '$(srcdir)/'`parrot_neuron.cpp
+
+libmodelsmodule_la-poisson_generator.lo: poisson_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-poisson_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-poisson_generator.Tpo -c -o libmodelsmodule_la-poisson_generator.lo `test -f 'poisson_generator.cpp' || echo '$(srcdir)/'`poisson_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-poisson_generator.Tpo $(DEPDIR)/libmodelsmodule_la-poisson_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='poisson_generator.cpp' object='libmodelsmodule_la-poisson_generator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-poisson_generator.lo `test -f 'poisson_generator.cpp' || echo '$(srcdir)/'`poisson_generator.cpp
+
+libmodelsmodule_la-pp_psc_delta.lo: pp_psc_delta.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-pp_psc_delta.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-pp_psc_delta.Tpo -c -o libmodelsmodule_la-pp_psc_delta.lo `test -f 'pp_psc_delta.cpp' || echo '$(srcdir)/'`pp_psc_delta.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-pp_psc_delta.Tpo $(DEPDIR)/libmodelsmodule_la-pp_psc_delta.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pp_psc_delta.cpp' object='libmodelsmodule_la-pp_psc_delta.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-pp_psc_delta.lo `test -f 'pp_psc_delta.cpp' || echo '$(srcdir)/'`pp_psc_delta.cpp
 
 libmodelsmodule_la-ppd_sup_generator.lo: ppd_sup_generator.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ppd_sup_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ppd_sup_generator.Tpo -c -o libmodelsmodule_la-ppd_sup_generator.lo `test -f 'ppd_sup_generator.cpp' || echo '$(srcdir)/'`ppd_sup_generator.cpp
@@ -849,12 +932,26 @@ libmodelsmodule_la-ppd_sup_generator.lo: ppd_sup_generator.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ppd_sup_generator.lo `test -f 'ppd_sup_generator.cpp' || echo '$(srcdir)/'`ppd_sup_generator.cpp
 
-libmodelsmodule_la-gamma_sup_generator.lo: gamma_sup_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-gamma_sup_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-gamma_sup_generator.Tpo -c -o libmodelsmodule_la-gamma_sup_generator.lo `test -f 'gamma_sup_generator.cpp' || echo '$(srcdir)/'`gamma_sup_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-gamma_sup_generator.Tpo $(DEPDIR)/libmodelsmodule_la-gamma_sup_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='gamma_sup_generator.cpp' object='libmodelsmodule_la-gamma_sup_generator.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-pulsepacket_generator.lo: pulsepacket_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-pulsepacket_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-pulsepacket_generator.Tpo -c -o libmodelsmodule_la-pulsepacket_generator.lo `test -f 'pulsepacket_generator.cpp' || echo '$(srcdir)/'`pulsepacket_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-pulsepacket_generator.Tpo $(DEPDIR)/libmodelsmodule_la-pulsepacket_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pulsepacket_generator.cpp' object='libmodelsmodule_la-pulsepacket_generator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-gamma_sup_generator.lo `test -f 'gamma_sup_generator.cpp' || echo '$(srcdir)/'`gamma_sup_generator.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-pulsepacket_generator.lo `test -f 'pulsepacket_generator.cpp' || echo '$(srcdir)/'`pulsepacket_generator.cpp
+
+libmodelsmodule_la-sli_neuron.lo: sli_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sli_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sli_neuron.Tpo -c -o libmodelsmodule_la-sli_neuron.lo `test -f 'sli_neuron.cpp' || echo '$(srcdir)/'`sli_neuron.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-sli_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-sli_neuron.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='sli_neuron.cpp' object='libmodelsmodule_la-sli_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-sli_neuron.lo `test -f 'sli_neuron.cpp' || echo '$(srcdir)/'`sli_neuron.cpp
+
+libmodelsmodule_la-sinusoidal_poisson_generator.lo: sinusoidal_poisson_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sinusoidal_poisson_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Tpo -c -o libmodelsmodule_la-sinusoidal_poisson_generator.lo `test -f 'sinusoidal_poisson_generator.cpp' || echo '$(srcdir)/'`sinusoidal_poisson_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Tpo $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='sinusoidal_poisson_generator.cpp' object='libmodelsmodule_la-sinusoidal_poisson_generator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-sinusoidal_poisson_generator.lo `test -f 'sinusoidal_poisson_generator.cpp' || echo '$(srcdir)/'`sinusoidal_poisson_generator.cpp
 
 libmodelsmodule_la-sinusoidal_gamma_generator.lo: sinusoidal_gamma_generator.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sinusoidal_gamma_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sinusoidal_gamma_generator.Tpo -c -o libmodelsmodule_la-sinusoidal_gamma_generator.lo `test -f 'sinusoidal_gamma_generator.cpp' || echo '$(srcdir)/'`sinusoidal_gamma_generator.cpp
@@ -870,54 +967,19 @@ libmodelsmodule_la-spike_detector.lo: spike_detector.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-spike_detector.lo `test -f 'spike_detector.cpp' || echo '$(srcdir)/'`spike_detector.cpp
 
+libmodelsmodule_la-spike_generator.lo: spike_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-spike_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-spike_generator.Tpo -c -o libmodelsmodule_la-spike_generator.lo `test -f 'spike_generator.cpp' || echo '$(srcdir)/'`spike_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-spike_generator.Tpo $(DEPDIR)/libmodelsmodule_la-spike_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='spike_generator.cpp' object='libmodelsmodule_la-spike_generator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-spike_generator.lo `test -f 'spike_generator.cpp' || echo '$(srcdir)/'`spike_generator.cpp
+
 libmodelsmodule_la-spin_detector.lo: spin_detector.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-spin_detector.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-spin_detector.Tpo -c -o libmodelsmodule_la-spin_detector.lo `test -f 'spin_detector.cpp' || echo '$(srcdir)/'`spin_detector.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-spin_detector.Tpo $(DEPDIR)/libmodelsmodule_la-spin_detector.Plo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='spin_detector.cpp' object='libmodelsmodule_la-spin_detector.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-spin_detector.lo `test -f 'spin_detector.cpp' || echo '$(srcdir)/'`spin_detector.cpp
-
-libmodelsmodule_la-multimeter.lo: multimeter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-multimeter.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-multimeter.Tpo -c -o libmodelsmodule_la-multimeter.lo `test -f 'multimeter.cpp' || echo '$(srcdir)/'`multimeter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-multimeter.Tpo $(DEPDIR)/libmodelsmodule_la-multimeter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='multimeter.cpp' object='libmodelsmodule_la-multimeter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-multimeter.lo `test -f 'multimeter.cpp' || echo '$(srcdir)/'`multimeter.cpp
-
-libmodelsmodule_la-correlation_detector.lo: correlation_detector.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-correlation_detector.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-correlation_detector.Tpo -c -o libmodelsmodule_la-correlation_detector.lo `test -f 'correlation_detector.cpp' || echo '$(srcdir)/'`correlation_detector.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-correlation_detector.Tpo $(DEPDIR)/libmodelsmodule_la-correlation_detector.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='correlation_detector.cpp' object='libmodelsmodule_la-correlation_detector.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-correlation_detector.lo `test -f 'correlation_detector.cpp' || echo '$(srcdir)/'`correlation_detector.cpp
-
-libmodelsmodule_la-volume_transmitter.lo: volume_transmitter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-volume_transmitter.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-volume_transmitter.Tpo -c -o libmodelsmodule_la-volume_transmitter.lo `test -f 'volume_transmitter.cpp' || echo '$(srcdir)/'`volume_transmitter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-volume_transmitter.Tpo $(DEPDIR)/libmodelsmodule_la-volume_transmitter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='volume_transmitter.cpp' object='libmodelsmodule_la-volume_transmitter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-volume_transmitter.lo `test -f 'volume_transmitter.cpp' || echo '$(srcdir)/'`volume_transmitter.cpp
-
-libmodelsmodule_la-cont_delay_connection.lo: cont_delay_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-cont_delay_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-cont_delay_connection.Tpo -c -o libmodelsmodule_la-cont_delay_connection.lo `test -f 'cont_delay_connection.cpp' || echo '$(srcdir)/'`cont_delay_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-cont_delay_connection.Tpo $(DEPDIR)/libmodelsmodule_la-cont_delay_connection.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='cont_delay_connection.cpp' object='libmodelsmodule_la-cont_delay_connection.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-cont_delay_connection.lo `test -f 'cont_delay_connection.cpp' || echo '$(srcdir)/'`cont_delay_connection.cpp
-
-libmodelsmodule_la-tsodyks_connection.lo: tsodyks_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-tsodyks_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-tsodyks_connection.Tpo -c -o libmodelsmodule_la-tsodyks_connection.lo `test -f 'tsodyks_connection.cpp' || echo '$(srcdir)/'`tsodyks_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-tsodyks_connection.Tpo $(DEPDIR)/libmodelsmodule_la-tsodyks_connection.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='tsodyks_connection.cpp' object='libmodelsmodule_la-tsodyks_connection.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-tsodyks_connection.lo `test -f 'tsodyks_connection.cpp' || echo '$(srcdir)/'`tsodyks_connection.cpp
-
-libmodelsmodule_la-tsodyks2_connection.lo: tsodyks2_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-tsodyks2_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-tsodyks2_connection.Tpo -c -o libmodelsmodule_la-tsodyks2_connection.lo `test -f 'tsodyks2_connection.cpp' || echo '$(srcdir)/'`tsodyks2_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-tsodyks2_connection.Tpo $(DEPDIR)/libmodelsmodule_la-tsodyks2_connection.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='tsodyks2_connection.cpp' object='libmodelsmodule_la-tsodyks2_connection.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-tsodyks2_connection.lo `test -f 'tsodyks2_connection.cpp' || echo '$(srcdir)/'`tsodyks2_connection.cpp
 
 libmodelsmodule_la-stdp_connection.lo: stdp_connection.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-stdp_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-stdp_connection.Tpo -c -o libmodelsmodule_la-stdp_connection.lo `test -f 'stdp_connection.cpp' || echo '$(srcdir)/'`stdp_connection.cpp
@@ -926,13 +988,6 @@ libmodelsmodule_la-stdp_connection.lo: stdp_connection.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-stdp_connection.lo `test -f 'stdp_connection.cpp' || echo '$(srcdir)/'`stdp_connection.cpp
 
-libmodelsmodule_la-stdp_connection_hom.lo: stdp_connection_hom.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-stdp_connection_hom.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-stdp_connection_hom.Tpo -c -o libmodelsmodule_la-stdp_connection_hom.lo `test -f 'stdp_connection_hom.cpp' || echo '$(srcdir)/'`stdp_connection_hom.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-stdp_connection_hom.Tpo $(DEPDIR)/libmodelsmodule_la-stdp_connection_hom.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='stdp_connection_hom.cpp' object='libmodelsmodule_la-stdp_connection_hom.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-stdp_connection_hom.lo `test -f 'stdp_connection_hom.cpp' || echo '$(srcdir)/'`stdp_connection_hom.cpp
-
 libmodelsmodule_la-stdp_connection_facetshw_hom.lo: stdp_connection_facetshw_hom.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-stdp_connection_facetshw_hom.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-stdp_connection_facetshw_hom.Tpo -c -o libmodelsmodule_la-stdp_connection_facetshw_hom.lo `test -f 'stdp_connection_facetshw_hom.cpp' || echo '$(srcdir)/'`stdp_connection_facetshw_hom.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-stdp_connection_facetshw_hom.Tpo $(DEPDIR)/libmodelsmodule_la-stdp_connection_facetshw_hom.Plo
@@ -940,12 +995,12 @@ libmodelsmodule_la-stdp_connection_facetshw_hom.lo: stdp_connection_facetshw_hom
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-stdp_connection_facetshw_hom.lo `test -f 'stdp_connection_facetshw_hom.cpp' || echo '$(srcdir)/'`stdp_connection_facetshw_hom.cpp
 
-libmodelsmodule_la-stdp_pl_connection_hom.lo: stdp_pl_connection_hom.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-stdp_pl_connection_hom.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-stdp_pl_connection_hom.Tpo -c -o libmodelsmodule_la-stdp_pl_connection_hom.lo `test -f 'stdp_pl_connection_hom.cpp' || echo '$(srcdir)/'`stdp_pl_connection_hom.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-stdp_pl_connection_hom.Tpo $(DEPDIR)/libmodelsmodule_la-stdp_pl_connection_hom.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='stdp_pl_connection_hom.cpp' object='libmodelsmodule_la-stdp_pl_connection_hom.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-stdp_connection_hom.lo: stdp_connection_hom.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-stdp_connection_hom.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-stdp_connection_hom.Tpo -c -o libmodelsmodule_la-stdp_connection_hom.lo `test -f 'stdp_connection_hom.cpp' || echo '$(srcdir)/'`stdp_connection_hom.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-stdp_connection_hom.Tpo $(DEPDIR)/libmodelsmodule_la-stdp_connection_hom.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='stdp_connection_hom.cpp' object='libmodelsmodule_la-stdp_connection_hom.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-stdp_pl_connection_hom.lo `test -f 'stdp_pl_connection_hom.cpp' || echo '$(srcdir)/'`stdp_pl_connection_hom.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-stdp_connection_hom.lo `test -f 'stdp_connection_hom.cpp' || echo '$(srcdir)/'`stdp_connection_hom.cpp
 
 libmodelsmodule_la-stdp_dopa_connection.lo: stdp_dopa_connection.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-stdp_dopa_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-stdp_dopa_connection.Tpo -c -o libmodelsmodule_la-stdp_dopa_connection.lo `test -f 'stdp_dopa_connection.cpp' || echo '$(srcdir)/'`stdp_dopa_connection.cpp
@@ -954,61 +1009,40 @@ libmodelsmodule_la-stdp_dopa_connection.lo: stdp_dopa_connection.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-stdp_dopa_connection.lo `test -f 'stdp_dopa_connection.cpp' || echo '$(srcdir)/'`stdp_dopa_connection.cpp
 
-libmodelsmodule_la-ht_neuron.lo: ht_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ht_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ht_neuron.Tpo -c -o libmodelsmodule_la-ht_neuron.lo `test -f 'ht_neuron.cpp' || echo '$(srcdir)/'`ht_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ht_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-ht_neuron.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ht_neuron.cpp' object='libmodelsmodule_la-ht_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-stdp_pl_connection_hom.lo: stdp_pl_connection_hom.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-stdp_pl_connection_hom.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-stdp_pl_connection_hom.Tpo -c -o libmodelsmodule_la-stdp_pl_connection_hom.lo `test -f 'stdp_pl_connection_hom.cpp' || echo '$(srcdir)/'`stdp_pl_connection_hom.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-stdp_pl_connection_hom.Tpo $(DEPDIR)/libmodelsmodule_la-stdp_pl_connection_hom.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='stdp_pl_connection_hom.cpp' object='libmodelsmodule_la-stdp_pl_connection_hom.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ht_neuron.lo `test -f 'ht_neuron.cpp' || echo '$(srcdir)/'`ht_neuron.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-stdp_pl_connection_hom.lo `test -f 'stdp_pl_connection_hom.cpp' || echo '$(srcdir)/'`stdp_pl_connection_hom.cpp
 
-libmodelsmodule_la-ht_connection.lo: ht_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ht_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ht_connection.Tpo -c -o libmodelsmodule_la-ht_connection.lo `test -f 'ht_connection.cpp' || echo '$(srcdir)/'`ht_connection.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ht_connection.Tpo $(DEPDIR)/libmodelsmodule_la-ht_connection.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ht_connection.cpp' object='libmodelsmodule_la-ht_connection.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-step_current_generator.lo: step_current_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-step_current_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-step_current_generator.Tpo -c -o libmodelsmodule_la-step_current_generator.lo `test -f 'step_current_generator.cpp' || echo '$(srcdir)/'`step_current_generator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-step_current_generator.Tpo $(DEPDIR)/libmodelsmodule_la-step_current_generator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='step_current_generator.cpp' object='libmodelsmodule_la-step_current_generator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ht_connection.lo `test -f 'ht_connection.cpp' || echo '$(srcdir)/'`ht_connection.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-step_current_generator.lo `test -f 'step_current_generator.cpp' || echo '$(srcdir)/'`step_current_generator.cpp
 
-libmodelsmodule_la-sinusoidal_poisson_generator.lo: sinusoidal_poisson_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sinusoidal_poisson_generator.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Tpo -c -o libmodelsmodule_la-sinusoidal_poisson_generator.lo `test -f 'sinusoidal_poisson_generator.cpp' || echo '$(srcdir)/'`sinusoidal_poisson_generator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Tpo $(DEPDIR)/libmodelsmodule_la-sinusoidal_poisson_generator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='sinusoidal_poisson_generator.cpp' object='libmodelsmodule_la-sinusoidal_poisson_generator.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-tsodyks2_connection.lo: tsodyks2_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-tsodyks2_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-tsodyks2_connection.Tpo -c -o libmodelsmodule_la-tsodyks2_connection.lo `test -f 'tsodyks2_connection.cpp' || echo '$(srcdir)/'`tsodyks2_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-tsodyks2_connection.Tpo $(DEPDIR)/libmodelsmodule_la-tsodyks2_connection.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='tsodyks2_connection.cpp' object='libmodelsmodule_la-tsodyks2_connection.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-sinusoidal_poisson_generator.lo `test -f 'sinusoidal_poisson_generator.cpp' || echo '$(srcdir)/'`sinusoidal_poisson_generator.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-tsodyks2_connection.lo `test -f 'tsodyks2_connection.cpp' || echo '$(srcdir)/'`tsodyks2_connection.cpp
 
-libmodelsmodule_la-sli_neuron.lo: sli_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-sli_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-sli_neuron.Tpo -c -o libmodelsmodule_la-sli_neuron.lo `test -f 'sli_neuron.cpp' || echo '$(srcdir)/'`sli_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-sli_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-sli_neuron.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='sli_neuron.cpp' object='libmodelsmodule_la-sli_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-tsodyks_connection.lo: tsodyks_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-tsodyks_connection.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-tsodyks_connection.Tpo -c -o libmodelsmodule_la-tsodyks_connection.lo `test -f 'tsodyks_connection.cpp' || echo '$(srcdir)/'`tsodyks_connection.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-tsodyks_connection.Tpo $(DEPDIR)/libmodelsmodule_la-tsodyks_connection.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='tsodyks_connection.cpp' object='libmodelsmodule_la-tsodyks_connection.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-sli_neuron.lo `test -f 'sli_neuron.cpp' || echo '$(srcdir)/'`sli_neuron.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-tsodyks_connection.lo `test -f 'tsodyks_connection.cpp' || echo '$(srcdir)/'`tsodyks_connection.cpp
 
-libmodelsmodule_la-ginzburg_neuron.lo: ginzburg_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-ginzburg_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-ginzburg_neuron.Tpo -c -o libmodelsmodule_la-ginzburg_neuron.lo `test -f 'ginzburg_neuron.cpp' || echo '$(srcdir)/'`ginzburg_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-ginzburg_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-ginzburg_neuron.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ginzburg_neuron.cpp' object='libmodelsmodule_la-ginzburg_neuron.lo' libtool=yes @AMDEPBACKSLASH@
+libmodelsmodule_la-volume_transmitter.lo: volume_transmitter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-volume_transmitter.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-volume_transmitter.Tpo -c -o libmodelsmodule_la-volume_transmitter.lo `test -f 'volume_transmitter.cpp' || echo '$(srcdir)/'`volume_transmitter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-volume_transmitter.Tpo $(DEPDIR)/libmodelsmodule_la-volume_transmitter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='volume_transmitter.cpp' object='libmodelsmodule_la-volume_transmitter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-ginzburg_neuron.lo `test -f 'ginzburg_neuron.cpp' || echo '$(srcdir)/'`ginzburg_neuron.cpp
-
-libmodelsmodule_la-mcculloch_pitts_neuron.lo: mcculloch_pitts_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-mcculloch_pitts_neuron.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Tpo -c -o libmodelsmodule_la-mcculloch_pitts_neuron.lo `test -f 'mcculloch_pitts_neuron.cpp' || echo '$(srcdir)/'`mcculloch_pitts_neuron.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Tpo $(DEPDIR)/libmodelsmodule_la-mcculloch_pitts_neuron.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='mcculloch_pitts_neuron.cpp' object='libmodelsmodule_la-mcculloch_pitts_neuron.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-mcculloch_pitts_neuron.lo `test -f 'mcculloch_pitts_neuron.cpp' || echo '$(srcdir)/'`mcculloch_pitts_neuron.cpp
-
-libmodelsmodule_la-izhikevich.lo: izhikevich.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-izhikevich.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-izhikevich.Tpo -c -o libmodelsmodule_la-izhikevich.lo `test -f 'izhikevich.cpp' || echo '$(srcdir)/'`izhikevich.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-izhikevich.Tpo $(DEPDIR)/libmodelsmodule_la-izhikevich.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='izhikevich.cpp' object='libmodelsmodule_la-izhikevich.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-izhikevich.lo `test -f 'izhikevich.cpp' || echo '$(srcdir)/'`izhikevich.cpp
-
-libmodelsmodule_la-modelsmodule.lo: modelsmodule.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -MT libmodelsmodule_la-modelsmodule.lo -MD -MP -MF $(DEPDIR)/libmodelsmodule_la-modelsmodule.Tpo -c -o libmodelsmodule_la-modelsmodule.lo `test -f 'modelsmodule.cpp' || echo '$(srcdir)/'`modelsmodule.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libmodelsmodule_la-modelsmodule.Tpo $(DEPDIR)/libmodelsmodule_la-modelsmodule.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='modelsmodule.cpp' object='libmodelsmodule_la-modelsmodule.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-modelsmodule.lo `test -f 'modelsmodule.cpp' || echo '$(srcdir)/'`modelsmodule.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmodelsmodule_la_CXXFLAGS) $(CXXFLAGS) -c -o libmodelsmodule_la-volume_transmitter.lo `test -f 'volume_transmitter.cpp' || echo '$(srcdir)/'`volume_transmitter.cpp
 
 mostlyclean-libtool:
 	-rm -f *.lo

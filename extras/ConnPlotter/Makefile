@@ -55,8 +55,13 @@ host_triplet = i686-pc-linux-gnu
 subdir = extras/ConnPlotter
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -109,20 +114,21 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(datadir)"
-DATA = $(data_DATA)
+am__installdirs = "$(DESTDIR)$(examplesdir)" \
+	"$(DESTDIR)$(tutorialdir)"
+DATA = $(examples_DATA) $(tutorial_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run aclocal-1.12
+ACLOCAL = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run aclocal-1.12
 AMTAR = $${TAR-tar}
-AM_CFLAGS =   -W -Wall -pedantic -Wno-long-long  -O2  -fopenmp
+AM_CFLAGS =   -W -Wall -pedantic -Wno-long-long  -O2 -g -O2 -fopenmp
 AM_CXXFLAGS =   -W -Wall -pedantic -Wno-long-long  -O2  -fopenmp
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
 ARFLAGS = 
 AS = 
-AUTOCONF = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run automake-1.12
+AUTOCONF = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run automake-1.12
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -166,19 +172,19 @@ HAVE_M_PI =
 HAVE_OSTREAM = 
 HAVE_PTHREAD = 
 HAVE_PTHREAD_IGNORED = 
-HAVE_PYTHON = yes
+HAVE_PYTHON = 
 HAVE_READLINE = 
 HAVE_SIGUSR_IGNORED = 
 HAVE_SSTREAM = 
 HAVE_STL_VECTOR_CAPACITY_BASE_UNITY = 
 HAVE_STL_VECTOR_CAPACITY_DOUBLING = 
 HAVE_VAMPIR = 
-HELPDIRS = /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/libnestutil:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/librandom:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/lib:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/lib/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/nestkernel:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/nest
+HELPDIRS = /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/libnestutil:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/librandom:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/lib:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/lib/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/nestkernel:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/nest
 HOST = fc-18-i386-1.qa.nest-initiative.org
 INCLTDL = -I${top_srcdir}/libltdl
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_HELP_LOG = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/install-help.log
+INSTALL_HELP_LOG = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/install-help.log
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
@@ -190,11 +196,14 @@ KERNEL =
 LD = /usr/bin/ld
 LDFLAGS = 
 LIBADD_DL = 
-LIBLTDL = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/libltdl/libltdlc.la
+LIBLTDL = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/libltdl/libltdlc.la
+LIBNEUROSIM_INCLUDE = 
+LIBNEUROSIM_LIBS = 
+LIBNEUROSIM_PY_LIBS = 
 LIBOBJS = 
 LIBS = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
-LINKED_MODULES =  /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/models/libmodelsmodule.la /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/precise/libprecisemodule.la /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/topology/libtopologymodule.la /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/conngen/libconngenmodule.la
+LINKED_MODULES =  /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/models/libmodelsmodule.la /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/precise/libprecisemodule.la /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/topology/libtopologymodule.la
 LINKED_USER_MODULES = 
 LIPO = 
 LN_S = ln -s
@@ -202,7 +211,7 @@ LTDLDEPS = ${top_build_prefix}libltdl/libltdlc.la
 LTDLINCL = -I${top_srcdir}/libltdl
 LTLIBOBJS = 
 MAKE = /usr/bin/gmake
-MAKEINFO = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run makeinfo
 MAKE_FLAGS = 
 MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
@@ -220,48 +229,51 @@ OTOOL64 =
 PACKAGE = nest
 PACKAGE_BUGREPORT = nest_user@nest-initiative.org
 PACKAGE_NAME = nest
-PACKAGE_STRING = nest 2.2.2
+PACKAGE_STRING = nest 2.3.10739
 PACKAGE_TARNAME = nest
 PACKAGE_URL = 
-PACKAGE_VERSION = 2.2.2
+PACKAGE_VERSION = 2.3.10739
 PATH_SEPARATOR = :
-PKGBUILDDIR = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD
+PKGBUILDDIR = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD
 PKGDATADIR = ${datarootdir}/nest
 PKGDATADIR_AS_CONFIGURED = /home/zaytsev/opt/nest/share/nest
 PKGDOCDIR = ${datarootdir}/doc/nest
 PKGDOCDIR_AS_CONFIGURED = /home/zaytsev/opt/nest/share/doc/nest
-PKGSRCDIR = /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE
-PYNEST_CXXFLAGS = -fpermissive
-PYNEST_PREFIX = /home/zaytsev/opt/nest
+PKGSRCDIR = /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE
+PYNEST_CPPFLAGS = -I/usr/include/python2.7
+PYNEST_CXXFLAGS = -fno-strict-aliasing
 PYNEST_SUBDIR = pynest
-PYTHON_EXEC = /usr/bin/python
+PYTHON = /usr/bin/python
+PYTHON_EXEC_PREFIX = ${exec_prefix}
+PYTHON_PLATFORM = linux2
+PYTHON_PREFIX = ${prefix}
 PYTHON_VERSION = 2.7
 RANLIB = ranlib
 SED = /usr/bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 SLI_CXXBACKEND = 
-SLI_DIST_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology conngen  nest pynest
+SLI_DIST_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology  nest conngen pynest
 SLI_EXITCODE_ABORT = 134
 SLI_EXITCODE_SEGFAULT = 139
 SLI_LIBS =   -lcurses -lreadline
 SLI_MAJOR = 2
-SLI_MINOR = 2
-SLI_PATCHLEVEL = 2
+SLI_MINOR = 3
+SLI_PATCHLEVEL = 10739
 SLI_PREFIX = /home/zaytsev/opt/nest
-SLI_PRGNAME = nest-2.2.2
-SLI_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology conngen   models precise topology conngen nest
+SLI_PRGNAME = nest-2.3.10739
+SLI_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology   models precise topology nest
 SLI_THREAD_DEFS = 
-SLI_VERSION = 2.2.2
+SLI_VERSION = 2.3.10739
 STRIP = strip
 TESTSUITE_BASEDIR = /home/zaytsev/opt/nest/share/doc/nest
 VAMPIR_CFLAGS = 
 VAMPIR_LIBS = 
-VERSION = 2.2.2
-abs_builddir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/extras/ConnPlotter
-abs_srcdir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/../__NEST_SOURCE/extras/ConnPlotter
-abs_top_builddir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD
-abs_top_srcdir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/../__NEST_SOURCE
+VERSION = 2.3.10739
+abs_builddir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/extras/ConnPlotter
+abs_srcdir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/../__NEST_SOURCE/extras/ConnPlotter
+abs_top_builddir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD
+abs_top_srcdir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/../__NEST_SOURCE
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -278,7 +290,7 @@ build_cpu = i686
 build_os = linux-gnu
 build_vendor = pc
 builddir = .
-datadir = ${datarootdir}/doc/nest/examples/ConnPlotter
+datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
@@ -291,7 +303,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/install-sh
+install_sh = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -300,9 +312,13 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
+pkgpyexecdir = ${pyexecdir}/nest
+pkgpythondir = ${pythondir}/nest
 prefix = /home/zaytsev/opt/nest
 program_transform_name = s,x,x,
 psdir = ${docdir}
+pyexecdir = ${exec_prefix}/lib/python2.7/site-packages
+pythondir = ${prefix}/lib/python2.7/site-packages
 rp = 
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
@@ -313,19 +329,21 @@ target_alias =
 top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../../../__NEST_SOURCE
-defs =  $defs
-MAKEFLAGS = 
 EXTRA_DIST = setup.py \
 	doc examples \
 	colormaps.py \
 	ConnPlotter.py \
 	__init__.py \
-	LICENSE.ConnPlotter \
 	MANIFEST \
 	tcd_nest.py
 
-data_DATA = \
+examplesdir = ${datarootdir}/doc/nest/examples/ConnPlotter
+examples_DATA = \
 	examples/connplotter_tutorial.py
+
+tutorialdir = ${datarootdir}/doc/nest/ConnPlotter
+tutorial_DATA = \
+	doc/connplotter_tutorial.pdf
 
 all: all-am
 
@@ -366,27 +384,48 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-dataDATA: $(data_DATA)
+install-examplesDATA: $(examples_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(data_DATA)'; test -n "$(datadir)" || list=; \
+	@list='$(examples_DATA)'; test -n "$(examplesdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(datadir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(datadir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(examplesdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(examplesdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(datadir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(datadir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(examplesdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(examplesdir)" || exit $$?; \
 	done
 
-uninstall-dataDATA:
+uninstall-examplesDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(data_DATA)'; test -n "$(datadir)" || list=; \
+	@list='$(examples_DATA)'; test -n "$(examplesdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(datadir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(examplesdir)'; $(am__uninstall_files_from_dir)
+install-tutorialDATA: $(tutorial_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(tutorial_DATA)'; test -n "$(tutorialdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(tutorialdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(tutorialdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(tutorialdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(tutorialdir)" || exit $$?; \
+	done
+
+uninstall-tutorialDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(tutorial_DATA)'; test -n "$(tutorialdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(tutorialdir)'; $(am__uninstall_files_from_dir)
 tags: TAGS
 TAGS:
 
@@ -430,7 +469,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(datadir)"; do \
+	for dir in "$(DESTDIR)$(examplesdir)" "$(DESTDIR)$(tutorialdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -463,7 +502,10 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean-am: clean-generic clean-libtool mostlyclean-am
+#install-exec-hook:
+clean: clean-am
+
+clean-am: clean-generic clean-libtool clean-local mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
@@ -481,9 +523,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dataDATA
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+install-data-am: install-examplesDATA install-tutorialDATA
+
 install-dvi: install-dvi-am
 
 install-dvi-am:
@@ -527,45 +568,30 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-dataDATA
+uninstall-am: uninstall-examplesDATA uninstall-tutorialDATA
 
-.MAKE: install-am install-data-am install-exec-am install-strip
+.MAKE: install-am install-exec-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
-	distclean distclean-generic distclean-libtool distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-data-hook \
-	install-dataDATA install-dvi install-dvi-am install-exec \
+	clean-local distclean distclean-generic distclean-libtool \
+	distdir dvi dvi-am html html-am info info-am install \
+	install-am install-data install-data-am install-dvi \
+	install-dvi-am install-examplesDATA install-exec \
 	install-exec-am install-exec-hook install-html install-html-am \
 	install-info install-info-am install-man install-pdf \
 	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am \
-	uninstall-dataDATA
+	install-tutorialDATA installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	uninstall uninstall-am uninstall-examplesDATA \
+	uninstall-tutorialDATA
 
-
-# 'all' does sometimes miss changes, therefore we 'clean' first
-all:	clean
-	cd /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/$(subdir); /usr/bin/python setup.py build
 
 install-exec-hook:
-	cd /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/$(subdir); /usr/bin/python setup.py install --prefix=$(DESTDIR)/home/zaytsev/opt/nest
-	if test `echo 2.7 | cut -d. -f2` -ge 6; then \
-	  mkdir -p $(DESTDIR)/home/zaytsev/opt/nest/lib/python2.7/dist-packages; \
-	  cd $(DESTDIR)/home/zaytsev/opt/nest/lib/python2.7/dist-packages; \
-	     ln -f -s ../site-packages/ConnPlotter; \
-	  cd $(DESTDIR)/home/zaytsev/opt/nest/lib/python2.7/dist-packages; \
-	     ln -f -s ../site-packages/ConnPlotter*.egg-info; \
-	fi
+	cd $(srcdir); $(PYTHON) setup.py build --build-base=$(abs_builddir)/build install --prefix=$(DESTDIR)$(prefix) --install-lib=$(DESTDIR)$(pythondir) --install-scripts=$(DESTDIR)$(bindir) --install-data=$(DESTDIR)$(pkgdatadir)
 
-install-data-hook: install-exec
-	${INSTALL} -m 644 /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/$(subdir)/LICENSE.ConnPlotter $(DESTDIR)${datarootdir}/doc/nest/
-	${INSTALL} -m 755 -d $(DESTDIR)${datarootdir}/doc/nest/ConnPlotter
-	${INSTALL} -m 644 /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/$(subdir)/doc/connplotter_tutorial.pdf $(DESTDIR)${datarootdir}/doc/nest/ConnPlotter
-
-clean:
-	rm -rf build
+clean-local:
+	-rm -rf $(abs_builddir)/build
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

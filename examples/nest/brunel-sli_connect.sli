@@ -201,7 +201,7 @@ ComputePSPnorm /J_max_unit Set
 ResetKernel      % clear all existing network elements
 M_WARNING setverbosity
 % set resolution and total/local number of threads
-[0]
+0
  <<
    /resolution  dt
    /local_num_threads local_num_threads
@@ -226,7 +226,7 @@ M_WARNING setverbosity
         >> SetDefaults
 
 
-       (SLI only network building)
+       (SLI only network building) =
 
 
       % Setting neuron default parameters

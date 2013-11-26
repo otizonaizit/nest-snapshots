@@ -52,8 +52,13 @@ host_triplet = i686-pc-linux-gnu
 subdir = examples
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -119,17 +124,17 @@ am__relativize = \
     dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
   done; \
   reldir="$$dir2"
-ACLOCAL = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run aclocal-1.12
+ACLOCAL = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run aclocal-1.12
 AMTAR = $${TAR-tar}
-AM_CFLAGS =   -W -Wall -pedantic -Wno-long-long  -O2  -fopenmp
+AM_CFLAGS =   -W -Wall -pedantic -Wno-long-long  -O2 -g -O2 -fopenmp
 AM_CXXFLAGS =   -W -Wall -pedantic -Wno-long-long  -O2  -fopenmp
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
 ARFLAGS = 
 AS = 
-AUTOCONF = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run automake-1.12
+AUTOCONF = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run automake-1.12
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -173,19 +178,19 @@ HAVE_M_PI =
 HAVE_OSTREAM = 
 HAVE_PTHREAD = 
 HAVE_PTHREAD_IGNORED = 
-HAVE_PYTHON = yes
+HAVE_PYTHON = 
 HAVE_READLINE = 
 HAVE_SIGUSR_IGNORED = 
 HAVE_SSTREAM = 
 HAVE_STL_VECTOR_CAPACITY_BASE_UNITY = 
 HAVE_STL_VECTOR_CAPACITY_DOUBLING = 
 HAVE_VAMPIR = 
-HELPDIRS = /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/libnestutil:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/librandom:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/lib:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/lib/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/nestkernel:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/conngen/sli:/home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/nest
+HELPDIRS = /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/libnestutil:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/librandom:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/lib:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/lib/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/nestkernel:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/models/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/precise:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/topology/sli:/home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/nest
 HOST = fc-18-i386-1.qa.nest-initiative.org
 INCLTDL = -I${top_srcdir}/libltdl
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_HELP_LOG = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/install-help.log
+INSTALL_HELP_LOG = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/install-help.log
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
@@ -197,11 +202,14 @@ KERNEL =
 LD = /usr/bin/ld
 LDFLAGS = 
 LIBADD_DL = 
-LIBLTDL = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/libltdl/libltdlc.la
+LIBLTDL = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/libltdl/libltdlc.la
+LIBNEUROSIM_INCLUDE = 
+LIBNEUROSIM_LIBS = 
+LIBNEUROSIM_PY_LIBS = 
 LIBOBJS = 
 LIBS = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
-LINKED_MODULES =  /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/models/libmodelsmodule.la /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/precise/libprecisemodule.la /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/topology/libtopologymodule.la /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/conngen/libconngenmodule.la
+LINKED_MODULES =  /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/models/libmodelsmodule.la /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/precise/libprecisemodule.la /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/topology/libtopologymodule.la
 LINKED_USER_MODULES = 
 LIPO = 
 LN_S = ln -s
@@ -209,7 +217,7 @@ LTDLDEPS = ${top_build_prefix}libltdl/libltdlc.la
 LTDLINCL = -I${top_srcdir}/libltdl
 LTLIBOBJS = 
 MAKE = /usr/bin/gmake
-MAKEINFO = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/missing --run makeinfo
 MAKE_FLAGS = 
 MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
@@ -227,48 +235,51 @@ OTOOL64 =
 PACKAGE = nest
 PACKAGE_BUGREPORT = nest_user@nest-initiative.org
 PACKAGE_NAME = nest
-PACKAGE_STRING = nest 2.2.2
+PACKAGE_STRING = nest 2.3.10739
 PACKAGE_TARNAME = nest
 PACKAGE_URL = 
-PACKAGE_VERSION = 2.2.2
+PACKAGE_VERSION = 2.3.10739
 PATH_SEPARATOR = :
-PKGBUILDDIR = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD
+PKGBUILDDIR = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD
 PKGDATADIR = ${datarootdir}/nest
 PKGDATADIR_AS_CONFIGURED = /home/zaytsev/opt/nest/share/nest
 PKGDOCDIR = ${datarootdir}/doc/nest
 PKGDOCDIR_AS_CONFIGURED = /home/zaytsev/opt/nest/share/doc/nest
-PKGSRCDIR = /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE
-PYNEST_CXXFLAGS = -fpermissive
-PYNEST_PREFIX = /home/zaytsev/opt/nest
+PKGSRCDIR = /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE
+PYNEST_CPPFLAGS = -I/usr/include/python2.7
+PYNEST_CXXFLAGS = -fno-strict-aliasing
 PYNEST_SUBDIR = pynest
-PYTHON_EXEC = /usr/bin/python
+PYTHON = /usr/bin/python
+PYTHON_EXEC_PREFIX = ${exec_prefix}
+PYTHON_PLATFORM = linux2
+PYTHON_PREFIX = ${prefix}
 PYTHON_VERSION = 2.7
 RANLIB = ranlib
 SED = /usr/bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 SLI_CXXBACKEND = 
-SLI_DIST_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology conngen  nest pynest
+SLI_DIST_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology  nest conngen pynest
 SLI_EXITCODE_ABORT = 134
 SLI_EXITCODE_SEGFAULT = 139
 SLI_LIBS =   -lcurses -lreadline
 SLI_MAJOR = 2
-SLI_MINOR = 2
-SLI_PATCHLEVEL = 2
+SLI_MINOR = 3
+SLI_PATCHLEVEL = 10739
 SLI_PREFIX = /home/zaytsev/opt/nest
-SLI_PRGNAME = nest-2.2.2
-SLI_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology conngen   models precise topology conngen nest
+SLI_PRGNAME = nest-2.3.10739
+SLI_SUBDIRS = libnestutil sli librandom lib nestkernel models precise topology   models precise topology nest
 SLI_THREAD_DEFS = 
-SLI_VERSION = 2.2.2
+SLI_VERSION = 2.3.10739
 STRIP = strip
 TESTSUITE_BASEDIR = /home/zaytsev/opt/nest/share/doc/nest
 VAMPIR_CFLAGS = 
 VAMPIR_LIBS = 
-VERSION = 2.2.2
-abs_builddir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/examples
-abs_srcdir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/../__NEST_SOURCE/examples
-abs_top_builddir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD
-abs_top_srcdir = /home/zaytsev/src/2.2.2/releasetools/__NEST_BUILD/../__NEST_SOURCE
+VERSION = 2.3.10739
+abs_builddir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/examples
+abs_srcdir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/../__NEST_SOURCE/examples
+abs_top_builddir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD
+abs_top_srcdir = /home/zaytsev/src/10kproject/releasetools/__NEST_BUILD/../__NEST_SOURCE
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -298,7 +309,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/install-sh
+install_sh = ${SHELL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -307,9 +318,13 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
+pkgpyexecdir = ${pyexecdir}/nest
+pkgpythondir = ${pythondir}/nest
 prefix = /home/zaytsev/opt/nest
 program_transform_name = s,x,x,
 psdir = ${docdir}
+pyexecdir = ${exec_prefix}/lib/python2.7/site-packages
+pythondir = ${prefix}/lib/python2.7/site-packages
 rp = 
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
@@ -666,7 +681,7 @@ uninstall-am:
 
 
 install-data-hook:
-	${INSTALL} /home/zaytsev/src/2.2.2/releasetools/__NEST_SOURCE/examples/run_examples.sh $(DESTDIR)${datarootdir}/doc/nest
+	${INSTALL} /home/zaytsev/src/10kproject/releasetools/__NEST_SOURCE/examples/run_examples.sh $(DESTDIR)${datarootdir}/doc/nest
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

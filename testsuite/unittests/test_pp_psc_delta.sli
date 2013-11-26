@@ -77,7 +77,7 @@ SeeAlso: pp_psc_delta
 */
 
 
-/unittest (6688) require
+(unittest) run
 /unittest using
 
 

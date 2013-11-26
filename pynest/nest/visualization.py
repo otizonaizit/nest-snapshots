@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # visualization.py
 #
@@ -18,6 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
+
 """
 Functions to visualize a network built in NEST.
 """
@@ -28,9 +29,11 @@ import nest
 def plot_network(nodes, filename, ext_conns = False):
     """
     Plot the given nodes and the connections that originate from
-    them. Note that connections to targets not in nodea are not drawn
+    them. Note that connections to targets not in nodes are not drawn
     if ext_conns is False. If it is True, they are drawn to a node
-    named 'ext'.
+    named 'ext'. The given filename can end either in .pdf or .png to
+    determine the type of the output. This function depends on the
+    availability of the pydot module.
     """
 
     adjlist = [[j, nest.GetStatus(nest.FindConnections([j]), 'target')] for j in nodes]
@@ -51,4 +54,11 @@ def plot_network(nodes, filename, ext_conns = False):
         for t in cl[1]:
             gr.add_edge(pydot.Edge(str(cl[0]), str(t)))
     
-    gr.write_pdf(filename)
+    filetype = filename.rsplit(".", 1)[1]
+
+    if filetype == "pdf":
+        gr.write_pdf(filename)
+    elif filetype == "png":
+        gr.write_png(filename)
+    else:
+        raise nest.NestError("Filename must end in '.png' or '.pdf'.")

@@ -85,11 +85,41 @@ namespace nest
      */
     void clear_pending_spikes();
 
-    /** Simulate for the given time */
+    /** 
+     * Simulate for the given time .
+     * This function performs the following steps
+     * 1. set the new simulation time
+     * 2. call prepare_simulation()
+     * 3. call resume()
+     * 4. call finalize_simulation() 
+     */
     void simulate(Time const&);
 
     /** Resume simulation after an interrupt. */
     void resume();
+
+    /** 
+     * All steps that must be done before a simulation.
+     */
+    void prepare_simulation();
+
+    /**
+     * Force reconfiguration of the simulation.
+     * This function must be called whenever the network has changed after a simulation.
+     * Eligible changes are:
+     * - adding new nodes
+     * - adding connections
+     * - changing the number of threads
+     * - freezing or unfreezing of nodes.
+     * After a call to this function, the next simulate()/resume() call will call prepare_simulation.
+     */
+    void force_preparation();
+
+    /** 
+     * Cleanup after the simulation.
+     */
+
+    void finalize_simulation();
 
     void terminate();
 
@@ -319,7 +349,7 @@ namespace nest
     void prepare_nodes();
 
     /**
-     * Calibrate, initialized buffers, register in list of nodes to update/finalize.
+     * Initialized buffers, register in list of nodes to update/finalize.
      * @see prepare_nodes()
      */
     void prepare_node_(Node *);
@@ -376,6 +406,7 @@ namespace nest
     
     bool update_ref_;       //!< reference for node update state.
     bool terminate_;        //!< Terminate on signal or error
+    bool is_prepared_;      //!< true if prepare_simulation was executed
     bool simulated_;        //!< indicates whether the network has already been simulated for some time
     bool off_grid_spiking_; //!< indicates whether spikes are not constrained to the grid 
     bool print_time_;       //!< Indicates whether time should be printed during simulations (or not)
@@ -740,6 +771,12 @@ namespace nest
     terminate_mutex_.lock();
     terminate_=true;
     terminate_mutex_.unlock();
+  }
+
+  inline 
+  void Scheduler::force_preparation()
+  {
+    is_prepared_=false;
   }
 }
 

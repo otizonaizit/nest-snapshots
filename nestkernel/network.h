@@ -323,12 +323,16 @@ SeeAlso: Simulate, Node
     void count_connections();
 
     void divergent_connect(index s, const TokenArray r, const TokenArray weights, const TokenArray delays, index syn);
+
+    void divergent_connect(index s, index r_from, index r_to, const TokenArray weights, const TokenArray delays, index syn);
+
     /**
      * Connect one source node with many targets.
      * The dictionary d contains arrays for all the connections of type syn.
      */
 
     void divergent_connect(index s,  DictionaryDatum d, index syn);
+    
     void random_divergent_connect(index s, const TokenArray r, index n, const TokenArray w, const TokenArray d, bool, bool, index syn);
     
     void convergent_connect(const TokenArray s, index r, const TokenArray weights, const TokenArray delays, index syn);
@@ -342,6 +346,13 @@ SeeAlso: Simulate, Node
      * Parallelize over target list. 
      */
     void random_convergent_connect(TokenArray s, TokenArray t, TokenArray n, TokenArray w, TokenArray d, bool, bool, index syn);
+
+    /**
+     * Use openmp threaded parallelization to speed up connection.
+     * Parallelize over target list. Supply sources and targets as ranges.
+     */
+    void random_convergent_connect(index source_from, index source_to, index target_from, index target_to, TokenArray ns, TokenArray weights, TokenArray delays, bool allow_multapses, bool allow_autapses, index syn);
+
  
     DictionaryDatum get_connector_defaults(index sc);
     void set_connector_defaults(index sc, DictionaryDatum& d);
@@ -371,6 +382,16 @@ SeeAlso: Simulate, Node
      * Resume the simulation after it was terminated.
      */
     void resume();
+
+    /** 
+     * Force re-preparation of the simulation.
+     * This function must be called to re-create the simulation buffers when
+     * - new neurons have been created
+     * - new connections have been created
+     * - the number of threads changes
+     * - the temporal resolution changes.
+     */
+    void force_preparation();
 
     /** 
      * Terminate the simulation after the time-slice is finished.
@@ -719,6 +740,8 @@ SeeAlso: Simulate, Node
      */
     void update_music_event_handlers_(Time const &, const long_t, const long_t);
 #endif
+
+    void create_thread_local_ids();
     
   private:
     void connect(Node& s, Node& r, index sgid, thread t, index syn);
@@ -732,7 +755,7 @@ SeeAlso: Simulate, Node
      */
     void init_();
     void destruct_nodes_();
-    void clear_models_();
+    void clear_models_(bool called_from_destructor=false);
         
     /**
      * Helper function to set properties on single node.
@@ -830,24 +853,28 @@ SeeAlso: Simulate, Node
   inline
   void Network::connect(Node& s, Node& r, index sgid, thread t, index syn)
   {
+    force_preparation();
     connection_manager_.connect(s, r, sgid, t, syn);
   }
 
   inline
   void Network::connect(Node& s, Node& r, index sgid, thread t, double_t w, double_t d, index syn)
   {
+    force_preparation();
     connection_manager_.connect(s, r, sgid, t, w, d, syn);
   }
 
   inline
   void Network::connect(Node& s, Node& r, index sgid, thread t, DictionaryDatum& p, index syn)
   {
+    force_preparation();
     connection_manager_.connect(s, r, sgid, t, p, syn);
   }
 
   inline
   void Network::connect(ArrayDatum &connectome)
   {
+    force_preparation();
     connection_manager_.connect(connectome);
   }
 
@@ -1057,8 +1084,6 @@ SeeAlso: Simulate, Node
     thread t = source.get_thread();
     index gid = source.get_gid();
 
-    //std::cout << "Network::send 1 " << gid << " " << e.get_sender().get_gid() << std::endl;
-
     assert(!source.has_proxies());
     connection_manager_.send(t, gid, e);
   }
@@ -1236,6 +1261,11 @@ SeeAlso: Simulate, Node
       }
   };
 
+  inline 
+    void Network::force_preparation()
+  {
+    scheduler_.force_preparation();
+  }
 } // namespace
 
 #endif

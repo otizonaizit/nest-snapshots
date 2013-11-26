@@ -21,9 +21,9 @@
  */
 
 /* BeginDocumentation
-Name: test_tsodyks_shortterm - sli script for testing Tsodyks short term plastic synapses.
+Name: tsodyks_shortterm_bursts - sli script for testing Tsodyks short term plastic synapses.
 
-Synopsis: (test_tsodyks_shortterm) run
+Synopsis: (tsodyks_shortterm_bursts) run
 
 
 Description:

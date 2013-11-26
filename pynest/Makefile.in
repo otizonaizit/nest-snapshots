@@ -15,17 +15,7 @@
 @SET_MAKE@
 
 # Makefile file for PyNEST
-#
-# author: Moritz Helias, november 2005
-# moritz@bccn.uni-freiburg.de
-# ported for prerelease 1.9.0, Moritz Helias, june 2006
-#
-# Extended and partly rewritten at the CodeJam 2007
-# Jochen Martin Eppler, Marc-Oliver Gewaltig, Moritz Helias
-#
-# Rewritten to make use of Python's distutils package, 01/31/08
-# Sven Schrader, Jochen Martin Eppler
-#
+
 
 VPATH = @srcdir@
 am__make_dryrun = \
@@ -65,35 +55,22 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = pynest
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/do_tests.py.in $(srcdir)/setup.py.in
+	$(srcdir)/do_tests.py.in $(srcdir)/setup.py.in \
+	$(top_srcdir)/depcomp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/libnestutil/config.h
 CONFIG_CLEAN_FILES = setup.py do_tests.py
 CONFIG_CLEAN_VPATH_FILES =
-AM_V_P = $(am__v_P_@AM_V@)
-am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
-am__v_P_0 = false
-am__v_P_1 = :
-AM_V_GEN = $(am__v_GEN_@AM_V@)
-am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
-am__v_GEN_0 = @echo "  GEN     " $@;
-am__v_GEN_1 = 
-AM_V_at = $(am__v_at_@AM_V@)
-am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
-am__v_at_0 = @
-am__v_at_1 = 
-SOURCES =
-DIST_SOURCES =
-am__can_run_installinfo = \
-  case $$AM_UPDATE_INFO_DIR in \
-    n|no|NO) false;; \
-    *) (install-info --version) >/dev/null 2>&1;; \
-  esac
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -121,8 +98,83 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(datadir)" "$(DESTDIR)$(lenoveredir)"
-DATA = $(data_DATA) $(lenovere_DATA)
+am__installdirs = "$(DESTDIR)$(pkgpyexecdir)" "$(DESTDIR)$(datadir)" \
+	"$(DESTDIR)$(hilltononidir)" "$(DESTDIR)$(lenoveredir)" \
+	"$(DESTDIR)$(pkgdocdir)"
+LTLIBRARIES = $(pkgpyexec_LTLIBRARIES)
+am_pynestkernel_la_OBJECTS = pynestkernel_la-pynestkernel.lo \
+	pynestkernel_la-neststartup.lo
+pynestkernel_la_OBJECTS = $(am_pynestkernel_la_OBJECTS)
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
+pynestkernel_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
+	$(pynestkernel_la_CXXFLAGS) $(CXXFLAGS) \
+	$(pynestkernel_la_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_P = $(am__v_P_@AM_V@)
+am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+am__v_P_0 = false
+am__v_P_1 = :
+AM_V_GEN = $(am__v_GEN_@AM_V@)
+am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
+am__v_GEN_0 = @echo "  GEN     " $@;
+am__v_GEN_1 = 
+AM_V_at = $(am__v_at_@AM_V@)
+am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
+am__v_at_0 = @
+am__v_at_1 = 
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/libnestutil
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+am__depfiles_maybe = depfiles
+am__mv = mv -f
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
+AM_V_CXX = $(am__v_CXX_@AM_V@)
+am__v_CXX_ = $(am__v_CXX_@AM_DEFAULT_V@)
+am__v_CXX_0 = @echo "  CXX     " $@;
+am__v_CXX_1 = 
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
+am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
+am__v_CXXLD_0 = @echo "  CXXLD   " $@;
+am__v_CXXLD_1 = 
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
+am__v_CC_0 = @echo "  CC      " $@;
+am__v_CC_1 = 
+CCLD = $(CC)
+LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+am__v_CCLD_0 = @echo "  CCLD    " $@;
+am__v_CCLD_1 = 
+SOURCES = $(pynestkernel_la_SOURCES)
+DIST_SOURCES = $(pynestkernel_la_SOURCES)
+am__can_run_installinfo = \
+  case $$AM_UPDATE_INFO_DIR in \
+    n|no|NO) false;; \
+    *) (install-info --version) >/dev/null 2>&1;; \
+  esac
+DATA = $(data_DATA) $(hilltononi_DATA) $(lenovere_DATA) $(pkgdoc_DATA)
+ETAGS = etags
+CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -203,6 +255,9 @@ LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBADD_DL = @LIBADD_DL@
 LIBLTDL = @LIBLTDL@
+LIBNEUROSIM_INCLUDE = @LIBNEUROSIM_INCLUDE@
+LIBNEUROSIM_LIBS = @LIBNEUROSIM_LIBS@
+LIBNEUROSIM_PY_LIBS = @LIBNEUROSIM_PY_LIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -243,10 +298,13 @@ PKGDATADIR_AS_CONFIGURED = @PKGDATADIR_AS_CONFIGURED@
 PKGDOCDIR = @PKGDOCDIR@
 PKGDOCDIR_AS_CONFIGURED = @PKGDOCDIR_AS_CONFIGURED@
 PKGSRCDIR = @PKGSRCDIR@
+PYNEST_CPPFLAGS = @PYNEST_CPPFLAGS@
 PYNEST_CXXFLAGS = @PYNEST_CXXFLAGS@
-PYNEST_PREFIX = @PYNEST_PREFIX@
 PYNEST_SUBDIR = @PYNEST_SUBDIR@
-PYTHON_EXEC = @PYTHON_EXEC@
+PYTHON = @PYTHON@
+PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+PYTHON_PLATFORM = @PYTHON_PLATFORM@
+PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -312,9 +370,13 @@ mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
 pdfdir = @pdfdir@
+pkgpyexecdir = @pkgpyexecdir@
+pkgpythondir = @pkgpythondir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+pyexecdir = @pyexecdir@
+pythondir = @pythondir@
 rp = @rp@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
@@ -325,19 +387,70 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-defs = @SLI_THREAD_DEFS@ $defs
-MAKEFLAGS = @MAKE_FLAGS@
 EXTRA_DIST = setup.py.in do_tests.py.in \
 	nest examples \
 	README.PyNEST \
-	pynestkernel.cpp \
-	checkpython.py \
-	pydatum.h \
-	pydatum.cpp \
-	datumtopythonconverter.h \
-	datumtopythonconverter.cpp \
-	pynestpycsa.h \
-	pynestpycsa.cpp
+	pynestkernel.pyx \
+	pynestkernel.pxd
+
+BUILT_SOURCES = pynestkernel.cpp
+@LINK_OPENMP_TRUE@THREADING_FLAGS = -XCClinker $(OPENMP_CXXFLAGS)
+
+# Threading libraries should always be linked last (or, at least, after
+# the standard C++ library), so that the resulting shared object doesn't
+# segfault when dlopen'ed from inside Python
+#
+# Additionally, libtools up to 2.4.2 filter out OpenMP flags, so passing
+# them directly to the complier driver improves compatibility with older
+# versions
+@LINK_PTHREAD_TRUE@THREADING_FLAGS = -XCClinker -lpthread
+pkgpyexec_LTLIBRARIES = pynestkernel.la
+pynestkernel_la_SOURCES = pynestkernel.cpp ../nest/neststartup.cpp ../nest/neststartup.h
+pynestkernel_la_LDFLAGS = -shared -module -avoid-version -export-dynamic $(THREADING_FLAGS)
+pynestkernel_la_CPPFLAGS = \
+	-D_IS_PYNEST \
+	-I@PKGSRCDIR@/libnestutil \
+	-I@PKGSRCDIR@/librandom \
+	-I@PKGSRCDIR@/sli \
+	-I@PKGSRCDIR@/nestkernel \
+	-I@PKGBUILDDIR@/libnestutil \
+	-I@PKGSRCDIR@/nest \
+	-I@PKGBUILDDIR@/nest \
+	-I@PKGSRCDIR@/topology \
+	-I@PKGSRCDIR@/conngen \
+	@GSL_CFLAGS@ \
+	@MPI_INCLUDE@ \
+	@MUSIC_INCLUDE@ \
+	@LIBNEUROSIM_INCLUDE@ \
+	$(PYNEST_CPPFLAGS)
+
+pynestkernel_la_CXXFLAGS = $(PYNEST_CXXFLAGS)
+pynestkernel_la_LIBADD = \
+	@LINKED_USER_MODULES@ \
+	@LINKED_MODULES@ \
+	$(top_builddir)/nestkernel/libnest.la \
+	$(top_builddir)/librandom/librandom.la \
+	$(top_builddir)/libnestutil/libnestutil.la \
+	$(top_builddir)/sli/libsli.la \
+	@SLI_LIBS@ \
+	@GSL_LIBS@ \
+	@MPI_LIBS@ \
+	@MUSIC_LIBS@ \
+	@LIBNEUROSIM_LIBS@ @LIBNEUROSIM_PY_LIBS@
+
+
+# See comments in ../nest/Makefile.am that explain it:
+pynestkernel_la_DEPENDENCIES = \
+	@LINKED_USER_MODULES@ \
+	@LINKED_MODULES@ \
+	$(top_builddir)/nestkernel/libnest.la \
+	$(top_builddir)/librandom/librandom.la \
+	$(top_builddir)/libnestutil/libnestutil.la \
+	$(top_builddir)/sli/libsli.la
+
+pkgdocdir = @PKGDOCDIR@
+pkgdoc_DATA = \
+	README.PyNEST
 
 data_DATA = \
 	examples/balancedneuron.py \
@@ -369,9 +482,16 @@ lenovere_DATA = \
 	examples/LeNovere_2012/brunel2000_rand.py \
 	examples/LeNovere_2012/one_neuron_with_sine_wave.py
 
-all: all-am
+hilltononidir = @PKGDOCDIR@/examples/pynest/HillTononi
+hilltononi_DATA = \
+	examples/HillTononi/ht_current.py \
+	examples/HillTononi/ht_poisson.py
+
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -406,6 +526,86 @@ setup.py: $(top_builddir)/config.status $(srcdir)/setup.py.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 do_tests.py: $(top_builddir)/config.status $(srcdir)/do_tests.py.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+install-pkgpyexecLTLIBRARIES: $(pkgpyexec_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	@list='$(pkgpyexec_LTLIBRARIES)'; test -n "$(pkgpyexecdir)" || list=; \
+	list2=; for p in $$list; do \
+	  if test -f $$p; then \
+	    list2="$$list2 $$p"; \
+	  else :; fi; \
+	done; \
+	test -z "$$list2" || { \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgpyexecdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(pkgpyexecdir)" || exit 1; \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(pkgpyexecdir)'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(pkgpyexecdir)"; \
+	}
+
+uninstall-pkgpyexecLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgpyexec_LTLIBRARIES)'; test -n "$(pkgpyexecdir)" || list=; \
+	for p in $$list; do \
+	  $(am__strip_dir) \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(pkgpyexecdir)/$$f'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(pkgpyexecdir)/$$f"; \
+	done
+
+clean-pkgpyexecLTLIBRARIES:
+	-test -z "$(pkgpyexec_LTLIBRARIES)" || rm -f $(pkgpyexec_LTLIBRARIES)
+	@list='$(pkgpyexec_LTLIBRARIES)'; \
+	locs=`for p in $$list; do echo $$p; done | \
+	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
+	      sort -u`; \
+	test -z "$$locs" || { \
+	  echo rm -f $${locs}; \
+	  rm -f $${locs}; \
+	}
+pynestkernel.la: $(pynestkernel_la_OBJECTS) $(pynestkernel_la_DEPENDENCIES) $(EXTRA_pynestkernel_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(pynestkernel_la_LINK) -rpath $(pkgpyexecdir) $(pynestkernel_la_OBJECTS) $(pynestkernel_la_LIBADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT)
+
+distclean-compile:
+	-rm -f *.tab.c
+
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pynestkernel_la-neststartup.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pynestkernel_la-pynestkernel.Plo@am__quote@
+
+.cpp.o:
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ $<
+
+.cpp.obj:
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cpp.lo:
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
+
+pynestkernel_la-pynestkernel.lo: pynestkernel.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(pynestkernel_la_CPPFLAGS) $(CPPFLAGS) $(pynestkernel_la_CXXFLAGS) $(CXXFLAGS) -MT pynestkernel_la-pynestkernel.lo -MD -MP -MF $(DEPDIR)/pynestkernel_la-pynestkernel.Tpo -c -o pynestkernel_la-pynestkernel.lo `test -f 'pynestkernel.cpp' || echo '$(srcdir)/'`pynestkernel.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pynestkernel_la-pynestkernel.Tpo $(DEPDIR)/pynestkernel_la-pynestkernel.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pynestkernel.cpp' object='pynestkernel_la-pynestkernel.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(pynestkernel_la_CPPFLAGS) $(CPPFLAGS) $(pynestkernel_la_CXXFLAGS) $(CXXFLAGS) -c -o pynestkernel_la-pynestkernel.lo `test -f 'pynestkernel.cpp' || echo '$(srcdir)/'`pynestkernel.cpp
+
+pynestkernel_la-neststartup.lo: ../nest/neststartup.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(pynestkernel_la_CPPFLAGS) $(CPPFLAGS) $(pynestkernel_la_CXXFLAGS) $(CXXFLAGS) -MT pynestkernel_la-neststartup.lo -MD -MP -MF $(DEPDIR)/pynestkernel_la-neststartup.Tpo -c -o pynestkernel_la-neststartup.lo `test -f '../nest/neststartup.cpp' || echo '$(srcdir)/'`../nest/neststartup.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pynestkernel_la-neststartup.Tpo $(DEPDIR)/pynestkernel_la-neststartup.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../nest/neststartup.cpp' object='pynestkernel_la-neststartup.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(pynestkernel_la_CPPFLAGS) $(CPPFLAGS) $(pynestkernel_la_CXXFLAGS) $(CXXFLAGS) -c -o pynestkernel_la-neststartup.lo `test -f '../nest/neststartup.cpp' || echo '$(srcdir)/'`../nest/neststartup.cpp
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -433,6 +633,27 @@ uninstall-dataDATA:
 	@list='$(data_DATA)'; test -n "$(datadir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(datadir)'; $(am__uninstall_files_from_dir)
+install-hilltononiDATA: $(hilltononi_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(hilltononi_DATA)'; test -n "$(hilltononidir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(hilltononidir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(hilltononidir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(hilltononidir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(hilltononidir)" || exit $$?; \
+	done
+
+uninstall-hilltononiDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(hilltononi_DATA)'; test -n "$(hilltononidir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(hilltononidir)'; $(am__uninstall_files_from_dir)
 install-lenovereDATA: $(lenovere_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(lenovere_DATA)'; test -n "$(lenoveredir)" || list=; \
@@ -454,14 +675,93 @@ uninstall-lenovereDATA:
 	@list='$(lenovere_DATA)'; test -n "$(lenoveredir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(lenoveredir)'; $(am__uninstall_files_from_dir)
+install-pkgdocDATA: $(pkgdoc_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(pkgdoc_DATA)'; test -n "$(pkgdocdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgdocdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(pkgdocdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgdocdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgdocdir)" || exit $$?; \
+	done
+
+uninstall-pkgdocDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgdoc_DATA)'; test -n "$(pkgdocdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(pkgdocdir)'; $(am__uninstall_files_from_dir)
+
+ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
+	mkid -fID $$unique
 tags: TAGS
-TAGS:
 
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
+	set x; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
+	shift; \
+	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
+	  test -n "$$unique" || unique=$$empty_fix; \
+	  if test $$# -gt 0; then \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      "$$@" $$unique; \
+	  else \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      $$unique; \
+	  fi; \
+	fi
 ctags: CTAGS
-CTAGS:
+CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
+	test -z "$(CTAGS_ARGS)$$unique" \
+	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
+	     $$unique
 
-cscope cscopelist:
+GTAGS:
+	here=`$(am__cd) $(top_builddir) && pwd` \
+	  && $(am__cd) $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) "$$here"
 
+cscopelist:  $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS) $(LISP)'; \
+	case "$(srcdir)" in \
+	  [\\/]* | ?:[\\/]*) sdir="$(srcdir)" ;; \
+	  *) sdir=$(subdir)/$(srcdir) ;; \
+	esac; \
+	for i in $$list; do \
+	  if test -f "$$i"; then \
+	    echo "$(subdir)/$$i"; \
+	  else \
+	    echo "$$sdir/$$i"; \
+	  fi; \
+	done >> $(top_builddir)/cscope.files
+
+distclean-tags:
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -494,13 +794,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
-all-am: Makefile $(DATA)
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
+all-am: Makefile $(LTLIBRARIES) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(datadir)" "$(DESTDIR)$(lenoveredir)"; do \
+	for dir in "$(DESTDIR)$(pkgpyexecdir)" "$(DESTDIR)$(datadir)" "$(DESTDIR)$(hilltononidir)" "$(DESTDIR)$(lenoveredir)" "$(DESTDIR)$(pkgdocdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -530,11 +832,17 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean-am: clean-generic clean-libtool mostlyclean-am
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+clean: clean-am
+
+clean-am: clean-generic clean-libtool clean-local \
+	clean-pkgpyexecLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-tags
 
 dvi: dvi-am
 
@@ -548,14 +856,14 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dataDATA install-lenovereDATA
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+install-data-am: install-dataDATA install-hilltononiDATA \
+	install-lenovereDATA install-pkgdocDATA
+
 install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am:
+install-exec-am: install-pkgpyexecLTLIBRARIES
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-am
@@ -579,12 +887,14 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -594,48 +904,44 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-dataDATA uninstall-lenovereDATA
+uninstall-am: uninstall-dataDATA uninstall-hilltononiDATA \
+	uninstall-lenovereDATA uninstall-pkgdocDATA \
+	uninstall-pkgpyexecLTLIBRARIES
 
-.MAKE: install-am install-data-am install-exec-am install-strip
+.MAKE: all check install install-am install-exec-am install-strip
 
-.PHONY: all all-am check check-am clean clean-generic clean-libtool \
-	distclean distclean-generic distclean-libtool distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-data-hook \
-	install-dataDATA install-dvi install-dvi-am install-exec \
-	install-exec-am install-exec-hook install-html install-html-am \
+.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
+	clean-libtool clean-local clean-pkgpyexecLTLIBRARIES \
+	cscopelist ctags distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dataDATA install-dvi install-dvi-am \
+	install-exec install-exec-am install-exec-hook \
+	install-hilltononiDATA install-html install-html-am \
 	install-info install-info-am install-lenovereDATA install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
+	install-pdf install-pdf-am install-pkgdocDATA \
+	install-pkgpyexecLTLIBRARIES install-ps install-ps-am \
 	install-strip installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	uninstall uninstall-am uninstall-dataDATA \
-	uninstall-lenovereDATA
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-dataDATA uninstall-hilltononiDATA \
+	uninstall-lenovereDATA uninstall-pkgdocDATA \
+	uninstall-pkgpyexecLTLIBRARIES
 
 
-# 'all' does sometimes miss changes, therefore we 'clean' first
-all:	clean
-	@PYTHON_EXEC@ setup.py build
+pynestkernel.cpp: pynestkernel.pyx pynestkernel.pxd
+	cd $(top_srcdir)/pynest; $(PYTHON) -c \
+	"from Cython.Build import cythonize; \
+	cythonize('pynestkernel.pyx', verbose=1)"
 
 install-exec-hook:
-	@PYTHON_EXEC@ setup.py install --prefix=$(DESTDIR)@PYNEST_PREFIX@
-	if test `echo @PYTHON_VERSION@ | cut -d. -f2` -ge 6; then \
-	  mkdir -p $(DESTDIR)@PYNEST_PREFIX@/lib/python@PYTHON_VERSION@/dist-packages; \
-	  cd $(DESTDIR)@PYNEST_PREFIX@/lib/python@PYTHON_VERSION@/dist-packages; \
-	     ln -f -s ../site-packages/nest; \
-	  cd $(DESTDIR)@PYNEST_PREFIX@/lib/python@PYTHON_VERSION@/dist-packages; \
-	     ln -f -s ../site-packages/PyNEST*.egg-info; \
-	fi
-
-install-data-hook: install-exec
-	@INSTALL_PROGRAM@ -m 644 @PKGSRCDIR@/pynest/README.PyNEST $(DESTDIR)@PKGDOCDIR@/
+	$(PYTHON) setup.py build --build-base=$(abs_builddir)/build install --prefix=$(DESTDIR)$(prefix) --install-lib=$(DESTDIR)$(pyexecdir) --install-scripts=$(DESTDIR)$(bindir) --install-data=$(DESTDIR)$(pkgdatadir)
 	mkdir -p $(DESTDIR)@PKGDATADIR@/extras
 	@INSTALL_PROGRAM@ do_tests.py $(DESTDIR)@PKGDATADIR@/extras/
-	for dir in @SLI_SUBDIRS@; do \
-	  $(MAKE) -k -C @PKGBUILDDIR@/$$dir install-pynest-component 2> /dev/null || true ; done
 
-clean:
-	rm -rf build
+clean-local:
+	-rm -rf $(abs_builddir)/build
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

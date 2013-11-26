@@ -57,12 +57,17 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = topology
-DIST_COMMON = $(dist_examples_DATA) $(srcdir)/Makefile.am \
+DIST_COMMON = $(am__dist_examples_DATA_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/setup.py.in \
 	$(top_srcdir)/depcomp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/libltdl/m4/libtool.m4 \
+	$(top_srcdir)/libltdl/m4/ltdl.m4 \
+	$(top_srcdir)/libltdl/m4/ltoptions.m4 \
+	$(top_srcdir)/libltdl/m4/ltsugar.m4 \
+	$(top_srcdir)/libltdl/m4/ltversion.m4 \
+	$(top_srcdir)/libltdl/m4/lt~obsolete.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -146,6 +151,13 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+am__dist_examples_DATA_DIST = examples/README examples/conncomp.py \
+	examples/conncon_sources.py examples/conncon_targets.py \
+	examples/connex.py examples/connex_ew.py examples/ctx_2n.py \
+	examples/gaussex.py examples/grid_iaf.py \
+	examples/grid_iaf_irr.py examples/grid_iaf_oc.py \
+	examples/hill_tononi_Vp.py examples/test_3d.py \
+	examples/test_3d_exp.py examples/test_3d_gauss.py
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -257,6 +269,9 @@ LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBADD_DL = @LIBADD_DL@
 LIBLTDL = @LIBLTDL@
+LIBNEUROSIM_INCLUDE = @LIBNEUROSIM_INCLUDE@
+LIBNEUROSIM_LIBS = @LIBNEUROSIM_LIBS@
+LIBNEUROSIM_PY_LIBS = @LIBNEUROSIM_PY_LIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -297,10 +312,13 @@ PKGDATADIR_AS_CONFIGURED = @PKGDATADIR_AS_CONFIGURED@
 PKGDOCDIR = @PKGDOCDIR@
 PKGDOCDIR_AS_CONFIGURED = @PKGDOCDIR_AS_CONFIGURED@
 PKGSRCDIR = @PKGSRCDIR@
+PYNEST_CPPFLAGS = @PYNEST_CPPFLAGS@
 PYNEST_CXXFLAGS = @PYNEST_CXXFLAGS@
-PYNEST_PREFIX = @PYNEST_PREFIX@
 PYNEST_SUBDIR = @PYNEST_SUBDIR@
-PYTHON_EXEC = @PYTHON_EXEC@
+PYTHON = @PYTHON@
+PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+PYTHON_PLATFORM = @PYTHON_PLATFORM@
+PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -366,9 +384,13 @@ mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
 pdfdir = @pdfdir@
+pkgpyexecdir = @pkgpyexecdir@
+pkgpythondir = @pkgpythondir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+pyexecdir = @pyexecdir@
+pythondir = @pythondir@
 rp = @rp@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
@@ -384,7 +406,7 @@ top_srcdir = @top_srcdir@
 defs = @SLI_THREAD_DEFS@ $defs
 MAKEFLAGS = @MAKE_FLAGS@
 # END  : do not change these lines ---------------------------------------
-EXTRA_DIST = testsuite sli doc pynest
+EXTRA_DIST = testsuite sli doc pynest examples
 noinst_LTLIBRARIES = libtopologymodule.la
 
 # Add one line for each h-cpp-file pair containing code for your
@@ -419,23 +441,23 @@ libtopologymodule_la_SOURCES = \
 nobase_pkgdata_DATA = \
 	sli/topology-interface.sli
 
-examplesdir = @PKGDOCDIR@/examples/topology
-dist_examples_DATA = \
-	examples/README \
-	examples/conncomp.py \
-	examples/conncon_sources.py \
-	examples/conncon_targets.py \
-	examples/connex.py \
-	examples/connex_ew.py \
-	examples/ctx_2n.py \
-	examples/gaussex.py \
-	examples/grid_iaf.py \
-	examples/grid_iaf_irr.py \
-	examples/grid_iaf_oc.py \
-	examples/hill_tononi_Vp.py \
-	examples/test_3d.py \
-	examples/test_3d_exp.py \
-	examples/test_3d_gauss.py
+@HAVE_PYTHON_TRUE@examplesdir = @PKGDOCDIR@/examples/topology
+@HAVE_PYTHON_TRUE@dist_examples_DATA = \
+@HAVE_PYTHON_TRUE@	examples/README \
+@HAVE_PYTHON_TRUE@	examples/conncomp.py \
+@HAVE_PYTHON_TRUE@	examples/conncon_sources.py \
+@HAVE_PYTHON_TRUE@	examples/conncon_targets.py \
+@HAVE_PYTHON_TRUE@	examples/connex.py \
+@HAVE_PYTHON_TRUE@	examples/connex_ew.py \
+@HAVE_PYTHON_TRUE@	examples/ctx_2n.py \
+@HAVE_PYTHON_TRUE@	examples/gaussex.py \
+@HAVE_PYTHON_TRUE@	examples/grid_iaf.py \
+@HAVE_PYTHON_TRUE@	examples/grid_iaf_irr.py \
+@HAVE_PYTHON_TRUE@	examples/grid_iaf_oc.py \
+@HAVE_PYTHON_TRUE@	examples/hill_tononi_Vp.py \
+@HAVE_PYTHON_TRUE@	examples/test_3d.py \
+@HAVE_PYTHON_TRUE@	examples/test_3d_exp.py \
+@HAVE_PYTHON_TRUE@	examples/test_3d_gauss.py
 
 libtopologymodule_la_CXXFLAGS = @AM_CXXFLAGS@
 AM_CPPFLAGS = -I$(top_srcdir)/libnestutil\
@@ -763,10 +785,11 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@HAVE_PYTHON_FALSE@install-exec-hook:
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
-	mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local \
+	clean-noinstLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -794,7 +817,8 @@ install-dvi: install-dvi-am
 install-dvi-am:
 
 install-exec-am:
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-am
 
 install-html-am:
@@ -835,24 +859,27 @@ ps-am:
 
 uninstall-am: uninstall-dist_examplesDATA uninstall-nobase_pkgdataDATA
 
-.MAKE: install-am install-data-am install-strip
+.MAKE: install-am install-data-am install-exec-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-noinstLTLIBRARIES cscopelist ctags \
-	distclean distclean-compile distclean-generic \
+	clean-libtool clean-local clean-noinstLTLIBRARIES cscopelist \
+	ctags distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-data-hook install-dist_examplesDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-man install-nobase_pkgdataDATA install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-dist_examplesDATA \
-	uninstall-nobase_pkgdataDATA
+	install-exec-hook install-html install-html-am install-info \
+	install-info-am install-man install-nobase_pkgdataDATA \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-dist_examplesDATA uninstall-nobase_pkgdataDATA
 
+
+@HAVE_PYTHON_TRUE@install-exec-hook:
+@HAVE_PYTHON_TRUE@	$(PYTHON) setup.py build --build-base=$(abs_builddir)/build install --prefix=$(DESTDIR)$(prefix) --install-lib=$(DESTDIR)$(pyexecdir) --install-scripts=$(DESTDIR)$(bindir) --install-data=$(DESTDIR)$(pkgdatadir)
 
 install-data-hook:
 	mkdir -p $(DESTDIR)@PKGDOCDIR@/topology
@@ -860,8 +887,8 @@ install-data-hook:
 	cp -r @PKGSRCDIR@/$(subdir)/testsuite $(DESTDIR)@PKGDOCDIR@/topology
 	rm -rf `find $(DESTDIR)@PKGDOCDIR@/topology -name .svn`
 
-install-pynest-component:
-	@PYTHON_EXEC@ setup.py install --prefix=$(DESTDIR)@PYNEST_PREFIX@
+clean-local:
+	-rm -rf $(abs_builddir)/build
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

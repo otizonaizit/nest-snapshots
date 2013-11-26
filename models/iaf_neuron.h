@@ -128,8 +128,6 @@ SeeAlso: iaf_psc_alpha, testsuite::test_iaf
     
   public:
     
-    typedef Node base;
-    
     iaf_neuron();
     iaf_neuron(const iaf_neuron&);
 

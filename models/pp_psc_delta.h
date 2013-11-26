@@ -132,8 +132,6 @@ namespace nest{
 
   public:
 
-    typedef Node base;
-
     pp_psc_delta();
     pp_psc_delta(const pp_psc_delta&);
 

@@ -43,6 +43,12 @@
 #include "communicator_impl.h"
 #include "genericmodel.h"
 
+// for RandomPopulationConnectD
+#include "gsl_binomial_randomdev.h"
+#include "gslrandomgen.h"
+#include "normal_randomdev.h"
+#include "fdstream.h"
+
 #if defined IS_BLUEGENE_P || defined IS_BLUEGENE_Q
 extern "C"
 {
@@ -101,8 +107,7 @@ namespace nest
 
   const std::string NestModule::commandstring(void) const
   {
-    return std::string("/nest-init /C++ ($Revision: 10474 $) provide-component "
-                       "/nest-init /SLI (1.21) require-component");
+    return std::string("(nest-init) run");
   }
 
 
@@ -493,9 +498,8 @@ namespace nest
     i->EStack.pop();
   }
 
-  // params: params
-
-  // params: params
+  // Connect for params dictionary
+  // See lib/sli/nest-init.sli for details
   void NestModule::GetConnections_DFunction::execute(SLIInterpreter *i) const
   {
     i->assert_stack_load(1);
@@ -505,8 +509,17 @@ namespace nest
     dict->clear_access_flags();
 
     ArrayDatum array = get_network().get_connections(dict);
+
     std::string missed;
-     
+    if ( !dict->all_accessed(missed) )
+    {
+      if ( get_network().dict_miss_is_error() )
+        throw UnaccessedDictionaryEntry(missed);
+      else
+        get_network().message(SLIInterpreter::M_WARNING, "GetConnections", 
+                              ("Unread dictionary entries: " + missed).c_str());
+    }
+    
     i->OStack.pop();
     i->OStack.push(array);
     i->EStack.pop();
@@ -832,7 +845,7 @@ namespace nest
     i->EStack.pop();
   }
 
-  // Connect for gid gid
+  // Connect for gid gid synapsetype
   // See lib/sli/nest-init.sli for details
   void NestModule::Connect_i_i_lFunction::execute(SLIInterpreter *i) const
   {
@@ -853,6 +866,7 @@ namespace nest
     i->EStack.pop();
   }
 
+  // Connect for gid gid syn_id
   void NestModule::Connect_i_i_iFunction::execute(SLIInterpreter *i) const
   {
       long &source = static_cast<IntegerDatum *>(i->OStack.pick(2).datum())->get();
@@ -865,7 +879,7 @@ namespace nest
       i->EStack.pop();
   }
 
-  // Connect for gid gid weight delay
+  // Connect for gid gid weight delay synapsetype
   // See lib/sli/nest-init.sli for details
   void NestModule::Connect_i_i_d_d_lFunction::execute(SLIInterpreter *i) const
   {
@@ -888,8 +902,7 @@ namespace nest
     i->EStack.pop();
   }
 
- // Connect for gid gid weight delay syn_id
-  // See lib/sli/nest-init.sli for details
+  // Connect for gid gid weight delay syn_id
   void NestModule::Connect_i_i_d_d_iFunction::execute(SLIInterpreter *i) const
   {
     i->assert_stack_load(5);
@@ -906,7 +919,7 @@ namespace nest
     i->EStack.pop();
   }
 
-  // Connect for gid gid dict
+  // Connect for gid gid dict synapsetype
   // See lib/sli/nest-init.sli for details
   void NestModule::Connect_i_i_D_lFunction::execute(SLIInterpreter *i) const
   {
@@ -943,7 +956,7 @@ namespace nest
   }
 
 
-   /* BeginDocumentation
+  /* BeginDocumentation
      Name: DataConnect_i_D_s - Connect many neurons from data.
 
      Synopsis: 
@@ -969,7 +982,9 @@ namespace nest
      DataConnect will iterate all vectors and create the connections according to the parameters given.
      SeeAlso: DataConnect_a, DataConnect
      Author: Marc-Oliver Gewaltig
-   */
+     FirstVersion: August 2011
+     SeeAlso: Connect, DivergentConnect
+  */
   void NestModule::DataConnect_i_D_sFunction::execute(SLIInterpreter *i) const
   {
     i->assert_stack_load(3);
@@ -977,6 +992,7 @@ namespace nest
     index source = getValue<long>(i->OStack.pick(2));
     DictionaryDatum params = getValue<DictionaryDatum>(i->OStack.pick(1));
     const Name synmodel_name = getValue<std::string>(i->OStack.pick(0));
+
     const Token synmodel = get_network().get_synapsedict().lookup(synmodel_name);
     if ( synmodel.empty() )
       throw UnknownSynapseType(synmodel_name.toString());
@@ -1087,6 +1103,30 @@ namespace nest
     get_network().divergent_connect(source_adr, target_adr, weights, delays, synmodel_id);
 
     i->OStack.pop(5);
+    i->EStack.pop();
+  }
+
+  void NestModule::DivergentConnect_i_i_i_a_a_lFunction::execute(SLIInterpreter *i) const
+  {
+    i->assert_stack_load(6);
+
+    long source_adr = getValue<long>(i->OStack.pick(5));
+
+    long target_from = getValue<long>(i->OStack.pick(4));
+    long target_to = getValue<long>(i->OStack.pick(3));
+
+    TokenArray weights = getValue<TokenArray>(i->OStack.pick(2));
+    TokenArray delays = getValue<TokenArray>(i->OStack.pick(1));
+
+    const Name synmodel_name = getValue<std::string>(i->OStack.pick(0));
+    const Token synmodel = get_network().get_synapsedict().lookup(synmodel_name);
+    if ( synmodel.empty() )
+      throw UnknownSynapseType(synmodel_name.toString());
+    const index synmodel_id = static_cast<index>(synmodel);
+
+    get_network().divergent_connect(source_adr, target_from, target_to, weights, delays, synmodel_id);
+
+    i->OStack.pop(6);
     i->EStack.pop();
   }
 
@@ -1219,6 +1259,44 @@ namespace nest
     get_network().random_convergent_connect(source_adr, target_adr, n, weights, delays, allow_multapses, allow_autapses, synmodel_id);
 
     i->OStack.pop(8);
+    i->EStack.pop();     
+  }
+
+  // Documentation can be found in lib/sli/nest-init.sli near definition
+  // of the trie for RandomConvergentConnect.
+  void NestModule::RConvergentConnect_i_i_i_i_ia_daa_daa_b_b_lFunction::execute(SLIInterpreter *i) const
+  {
+    i->assert_stack_load(10);
+
+    // source range
+    long source_from = getValue<long>(i->OStack.pick(9));
+    long source_to = getValue<long>(i->OStack.pick(8));
+
+    // target range
+    long target_from = getValue<long>(i->OStack.pick(7));
+    long target_to = getValue<long>(i->OStack.pick(6));
+
+    // array of number of incoming connections
+    TokenArray n = getValue<TokenArray>(i->OStack.pick(5));
+
+    // array of array of weights
+    TokenArray weights = getValue<TokenArray>(i->OStack.pick(4));
+
+    // array of array of delays
+    TokenArray delays = getValue<TokenArray>(i->OStack.pick(3));      
+
+    bool allow_multapses = getValue<bool>(i->OStack.pick(2));
+    bool allow_autapses = getValue<bool>(i->OStack.pick(1));
+
+    const Name synmodel_name = getValue<std::string>(i->OStack.pick(0));
+    const Token synmodel = get_network().get_synapsedict().lookup(synmodel_name);
+    if ( synmodel.empty() )
+      throw UnknownSynapseType(synmodel_name.toString());
+    const index synmodel_id = static_cast<index>(synmodel);
+
+    get_network().random_convergent_connect(source_from, source_to, target_from, target_to, n, weights, delays, allow_multapses, allow_autapses, synmodel_id);
+
+    i->OStack.pop(10);
     i->EStack.pop();     
   }
 
@@ -1508,6 +1586,32 @@ namespace nest
     i->OStack.push(time);
     i->EStack.pop(); 
   } 
+  /* BeginDocumentation
+     Name: TimeCommunicationv - returns average time taken for MPI_Allgatherv over n calls with m bytes
+     Synopsis: 
+     n m TimeCommunication -> time
+     Availability: NEST 2.0
+     Author: 
+     FirstVersion: August 2012
+     Description:
+     The function allows a user to test how much time a call the Allgatherv costs
+     Does not work for offgrid!!!
+  */
+  void NestModule::TimeCommunicationv_i_iFunction::execute(SLIInterpreter *i) const 
+  { 
+    i->assert_stack_load(2); 
+    long samples = getValue<long>(i->OStack.pick(1)); 
+    long num_bytes = getValue<long>(i->OStack.pick(0)); 
+    
+
+    double_t time = 0.0;
+    
+    time = Communicator::time_communicatev(num_bytes,samples);
+
+    i->OStack.pop(2); 
+    i->OStack.push(time);
+    i->EStack.pop(); 
+  } 
 
   /* BeginDocumentation
      Name: ProcessorName - Returns a unique specifier for the actual node.
@@ -1707,6 +1811,244 @@ namespace nest
   }
 #endif
 
+#ifdef HAVE_GSL
+  /* Severly simplified version:
+
+     - Output to file removed. Use GetConnections!
+     - The following parameters are fixed and thus removed:
+       - static_type == true
+       - distribute_delays == true
+       - distribute_weights == true
+       - exact_multinomial == true
+  */
+  void NestModule::RPopulationConnect_ia_ia_i_d_lFunction::execute(SLIInterpreter *i) const
+  {
+    i->assert_stack_load(5);
+
+    TokenArray source_adr = getValue<TokenArray>(i->OStack.pick(4));
+    TokenArray target_adr = getValue<TokenArray>(i->OStack.pick(3));
+    const ulong_t N = (ulong_t) getValue<long_t>(i->OStack.pick(2));
+    DictionaryDatum param_dict = getValue<DictionaryDatum>(i->OStack.pick(1));
+
+		param_dict->clear_access_flags();
+		
+    const Name synmodel_name = getValue<std::string>(i->OStack.pick(0));
+    const Token synmodel = get_network().get_synapsedict().lookup(synmodel_name);
+    if ( synmodel.empty() )
+      throw UnknownSynapseType(synmodel_name.toString());
+    const index synmodel_id = static_cast<index>(synmodel);
+
+    const int_t M = Communicator::get_num_virtual_processes();
+    const int_t proc = Communicator::get_rank();
+
+    const long_t size_sources = source_adr.size();
+    const long_t size_targets = target_adr.size();
+    const long_t last_gid_sources = source_adr[size_sources-1];
+    const long_t last_gid_targets = target_adr[size_targets-1];
+    const long_t first_gid_sources = last_gid_sources - size_sources + 1;
+    const long_t first_gid_targets = last_gid_targets - size_targets + 1;
+
+    const uint_t offset_targets = first_gid_targets % M;
+
+
+    const double_t res = Time::get_resolution().get_ms();
+
+    // extraction of parameters from param_dict
+    // 1. check for setting of all required parameters
+    // 2. declaration and default initialization
+    // 3. extraction
+
+    // 1. check for required dictionary elements
+    try
+    {
+      getValue<double_t>(param_dict, "weight_m");
+      if ( getValue<double_t>(param_dict, "delay_m") < res )
+      {
+        i->message(SLIInterpreter::M_ERROR, "RandomPopulationConnectD", 
+		   "delay_m specified to be smaller than resolution.");
+        return;
+      }
+      getValue<double_t>(param_dict, "weight_s");
+      getValue<double_t>(param_dict, "delay_s");
+    }
+    catch (DictError &e)
+    {
+      i->message(SLIInterpreter::M_ERROR, "RandomPopulationConnectD", 
+		 "One or more necessary parameters are not specified in param_dict. "
+		 "See documentation for list of necessary parameters.");
+      i->raiseerror(e.what());
+      return;
+    }
+
+    // 2. declarations and default value initialization
+    double_t weight_m = 0.0;
+    double_t weight_s = 0.0;
+    double_t delay_m = res;
+    double_t delay_s = 0.0;
+
+    // 3. extraction of parameters from dictionary param_dict
+    if ( param_dict->known("weight_m") )
+    {
+      weight_m = getValue<double_t>(param_dict, "weight_m");
+      weight_s = param_dict->known("weight_s") ? getValue<double_t>(param_dict, "weight_s") : 0.0;
+    }
+
+    if ( param_dict->known("delay_m") )
+    {
+      delay_m = getValue<double_t>(param_dict, "delay_m");
+      delay_s = param_dict->known("delay_s") ? getValue<double_t>(param_dict, "delay_s") : 0.0;
+    }
+
+    // drawing connection ids
+
+    // unnormalized distributions of nodes on processes will be used
+    // as probability distributions for drawing partitions of
+    // connections for virtual processes from multinomial
+    // distribution
+    std::vector<ulong_t> target_distribution(M, size_targets/M);
+    // a generalization to create target_distribution would be a
+    // function called locate_neurons that might be expanded to usage
+    // of arrays as populations for now, we create the
+    // target_distribution here
+
+    // correction for nodes not uniformly distributed
+    // due to size_population%num_processes!=0
+    int_t k = 0;
+    while (k < size_targets % M)
+    {
+      target_distribution[(k + offset_targets) % M]++;
+      ++k;
+    }
+
+    // first_gid_targets_distribution contains at position vp the
+    // first (target) gid of all (target) gids belonging to that
+    // virtual process. This will be used to map later random numbers
+    // to local target gids.
+    std::vector<ulong_t> first_gid_targets_distribution(M, 0);
+    for( k = 0; k < M; ++k )
+    {
+      // fill with correct values
+      first_gid_targets_distribution[ ( first_gid_targets + k ) % M ] = first_gid_targets + k;
+    }
+
+    // We use the multinomial distribution to determine the number of
+    // connections that will be made on one virtual process, i.e. we
+    // partition the set of edges into n_vps subsets. The number of
+    // edges on one virtual process is binomially distributed with
+    // the boundary condition that the sum of all edges over virtual
+    // processes is the total number of processes.
+    // To obtain the target_partitioning we adapt the gsl
+    // implementation of the multinomial distribution.
+
+    // K from gsl is equivalent to M = n_vps
+    // N is already taken from stack
+    // p[] is target_distribution
+    std::vector<ulong_t> target_partitioning; // corresponds to n[]
+
+    // calculate exact multinomial distribution
+    // get global rng that is tested for synchronization for all threads
+    librandom::RngPtr grng = get_network().get_grng();
+    
+    // begin code adapted from gsl 1.8 //
+    double_t sum_dist = 0.0; // corresponds to sum_p
+    //norm is equivalent to size_targets
+    uint_t sum_partitions = 0; // corresponds to sum_n
+    
+	  for ( k = 0; k < M; k++ )
+		{
+		  if (target_distribution[k] > 0)
+		  {
+			  // substituting gsl_ran call
+			  librandom::GSL_BinomialRandomDev bino(grng, ((double_t) target_distribution[k] ) 
+													/ (size_targets - sum_dist), N - sum_partitions);
+			  target_partitioning.push_back(bino.uldev());
+		  }
+		  else
+		  {
+			  target_partitioning.push_back(0);
+		  }
+		  
+		  sum_dist += (double_t) target_distribution[k];
+		  sum_partitions += (uint_t) target_partitioning[k];
+    }
+	  // end code adapted from gsl 1.8
+  
+    // rng for local vp random numbers
+    librandom::RngPtr rng;
+
+    // loop over local threads on one machine
+    int_t p;
+    for (p = 0; p < M / Communicator::get_num_processes(); p++)
+    {
+      // current vp corresponding to proc
+      const int_t j = p * Communicator::get_num_processes() + proc;
+
+      if(get_network().is_local_vp(j))
+      {
+        rng = get_network().get_rng(get_network().vp_to_thread(j));
+        // normal deviate for parameter grabbing
+        librandom::NormalRandomDev norm(rng);
+
+        while( target_partitioning[j] > 0 )
+        {
+          // draw random numbers for source node from all source neurons
+          const long_t s_index  = rng->ulrand(size_sources);
+          // draw random numbers for target node from
+          // target_distribution on this virtual process
+          const long_t t_index  = rng->ulrand(target_distribution[j]);
+
+          // map random number of source node to gid corresponding to
+          // first_gid_sources
+          const long_t source_gid = first_gid_sources + s_index;
+          // map random number of target node to gid using the
+          // first_gid_targets_distribution corresponding to the
+          // modulo distribution of the nodes on virtual processes
+          const long_t target_gid = first_gid_targets_distribution[j] + t_index * (long_t) M;
+
+          // local part of connection settings:
+          // - draw random number for every non-constant parameter
+          // - make all parameters available for connect via substituting
+          //   SetSynapseDefaults call
+
+          // define parameters specified in param_dict for this connection
+          // define connection parameter dict cpdict
+					double weight;
+          DictionaryDatum cpdd(new Dictionary());
+					do {
+						weight = norm()*weight_s + weight_m;
+					} while ((( weight_m >= 0.0 ) && ( weight < 0.0 )) || (( weight_m < 0.0 ) && ( weight > 0.0 )));
+					def<double_t>(cpdd, "weight", weight);
+
+					double delay;
+				  do {
+					  delay = round((norm()*delay_s + delay_m)/res)*res;
+          } while (delay < 0.0);
+          delay = (delay == 0.0) ? res : delay;
+				  def<double_t>(cpdd, "delay", delay);
+
+					// connect source and target with dictionary
+					get_network().connect(source_gid, target_gid, cpdd, synmodel_id);
+
+          target_partitioning[j]--;
+        }
+      }
+    }
+		
+		std::string missed;
+		if ( !param_dict->all_accessed(missed) )
+		{
+			if ( get_network().dict_miss_is_error() )
+				throw UnaccessedDictionaryEntry(missed);
+			else
+				get_network().message(SLIInterpreter::M_WARNING, "RandomPopulationConnect", 
+															("Unread dictionary entries: " + missed).c_str());
+		}		
+		
+    i->OStack.pop(5);
+    i->EStack.pop();
+  }
+#endif
+  
   void NestModule::init(SLIInterpreter *i)
   {
     ConnectionType.settypename("connectiontype");
@@ -1757,11 +2099,18 @@ namespace nest
     i->createcommand("DataConnect_a", &dataconnect_afunction);
 
     i->createcommand("DivergentConnect_i_ia_a_a_l", &divergentconnect_i_ia_a_a_lfunction);
+    i->createcommand("DivergentConnect_i_i_i_a_a_l", &divergentconnect_i_i_i_a_a_lfunction);
+
     i->createcommand("RandomDivergentConnect_i_i_ia_da_da_b_b_l", &rdivergentconnect_i_i_ia_da_da_b_b_lfunction);
     
     i->createcommand("ConvergentConnect_ia_i_a_a_l", &convergentconnect_ia_i_a_a_lfunction);
     i->createcommand("RandomConvergentConnect_ia_i_i_da_da_b_b_l", &rconvergentconnect_ia_i_i_da_da_b_b_lfunction);
     i->createcommand("RandomConvergentConnect_ia_ia_ia_daa_daa_b_b_l", &rconvergentconnect_ia_ia_ia_daa_daa_b_b_lfunction);
+    i->createcommand("RandomConvergentConnect_i_i_i_i_ia_daa_daa_b_b_l", &rconvergentconnect_i_i_i_i_ia_daa_daa_b_b_lfunction);
+
+#ifdef HAVE_GSL
+    i->createcommand("RandomPopulationConnect_ia_ia_i_d_l", &rpopulationconnect_ia_ia_i_d_lfunction);
+#endif
    
     i->createcommand("ResetNetwork",&resetnetworkfunction);
     i->createcommand("ResetKernel",&resetkernelfunction);
@@ -1779,6 +2128,7 @@ namespace nest
     i->createcommand("SetFakeNumProcesses", &setfakenumprocesses_ifunction);
     i->createcommand("SyncProcesses", &syncprocessesfunction);
     i->createcommand("TimeCommunication_i_i_b", &timecommunication_i_i_bfunction); 
+    i->createcommand("TimeCommunicationv_i_i", &timecommunicationv_i_ifunction); 
     i->createcommand("ProcessorName", &processornamefunction);
 #ifdef HAVE_MPI
     i->createcommand("MPI_Abort", &mpiabort_ifunction);
@@ -1796,7 +2146,6 @@ namespace nest
     Token statusd = i->baselookup(Name("statusdict"));
     DictionaryDatum dd=getValue<DictionaryDatum>(statusd);
     dd->insert(Name("kernelname"), new StringDatum("NEST"));
-    dd->insert(Name("kernelrevision"), new StringDatum("$Revision: 10474 $"));
     dd->insert(Name("is_mpi"), new BoolDatum(Communicator::get_initialized()));
   }
 

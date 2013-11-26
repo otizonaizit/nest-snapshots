@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # test_all.py
 #
@@ -20,23 +20,26 @@
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
+import nest
 
-from nest.tests import test_errors
-from nest.tests import test_stack
-from nest.tests import test_create
-from nest.tests import test_status
-from nest.tests import test_connectapi
-from nest.tests import test_findconnections
-from nest.tests import test_dataconnect
-from nest.tests import test_connectoptions
-from nest.tests import test_events
-from nest.tests import test_networks
-from nest.tests import test_threads
-from nest.tests import test_csa
+from . import compatibility
+
+from . import test_errors
+from . import test_stack
+from . import test_create
+from . import test_status
+from . import test_connectapi
+from . import test_findconnections
+from . import test_getconnections
+from . import test_dataconnect
+from . import test_connectoptions
+from . import test_events
+from . import test_networks
+from . import test_threads
+from . import test_csa
+
 
 def suite():
-
-    import nest.tests
 
     suite = unittest.TestSuite()
 
@@ -46,6 +49,7 @@ def suite():
     suite.addTest(test_status.suite())
     suite.addTest(test_connectapi.suite())
     suite.addTest(test_findconnections.suite())    
+    suite.addTest(test_getconnections.suite())
     suite.addTest(test_dataconnect.suite())
     suite.addTest(test_connectoptions.suite())    
     suite.addTest(test_events.suite())
@@ -58,5 +62,10 @@ def suite():
 
 if __name__ == "__main__":
 
+    debug = nest.get_debug()
+    nest.set_debug(True)
+
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite())
+
+    nest.set_debug(debug)

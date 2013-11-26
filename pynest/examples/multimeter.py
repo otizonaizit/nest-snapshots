@@ -33,7 +33,7 @@ import pylab as pl
 nest.ResetKernel()
 
 # display recordables for illustration
-print 'iaf_cond_alpha recordables: ', nest.GetDefaults('iaf_cond_alpha')['recordables']
+print('iaf_cond_alpha recordables: {0}'.format(nest.GetDefaults('iaf_cond_alpha')['recordables']))
 
 # create neuron and multimeter
 n = nest.Create('iaf_cond_alpha', 

@@ -45,6 +45,9 @@
 /* Havel libltdl, can load dynamic modules */
 #undef HAVE_LIBLTDL
 
+/* libneurosim support enabled? */
+#undef HAVE_LIBNEUROSIM
+
 /* define if we have usable long long type. */
 #undef HAVE_LONG_LONG
 

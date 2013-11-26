@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # test_connectapi.py
 #
@@ -18,6 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
+
 """
 UnitTests for the PyNEST connect API.
 """
@@ -26,26 +27,29 @@ import unittest
 import nest
 import sys
 
+
 class Bench(object):
+    def __init__(self, globals_dict, locals_dict):
+        self.globals_dict = globals_dict
+        self.locals_dict = locals_dict
 
-    def __init__(self,g,l):
-        self.g = g
-        self.l = l
-
-    def __call__(self,cmd,repeat=5):
+    def __call__(self, cmd, repeat=5):
         from time import time
+
         t = 0
         for i in range(repeat):
             t1 = time()
-            exec cmd in self.g, self.l
+            exec (cmd, self.globals_dict, self.locals_dict)
             t2 = time()
-            t += t2-t1
+            t += t2 - t1
 
-        print 'Executed "%s".  Elapsed = %f s' % (cmd,t/repeat)
-        
+        print('Executed "%s".  Elapsed = %f s' % (cmd, t / repeat))
 
+
+@nest.check_stack
 class ConnectAPITestCase(unittest.TestCase):
     """Tests of the Connect API"""
+
 
     def test_ConnectPrePost(self):
         """Connect pre to post"""
@@ -70,7 +74,7 @@ class ConnectAPITestCase(unittest.TestCase):
         nest.Connect(pre, post, {"weight" : 2.0})
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
-        self.assertEqual(weights, [2.0, 2.0])
+        self.assertEqual(weights, (2.0, 2.0))
 
         # Connect([pre], [post], [params])
         nest.ResetKernel()        
@@ -79,7 +83,7 @@ class ConnectAPITestCase(unittest.TestCase):
         nest.Connect(pre, post, [{"weight" : 2.0}])
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
-        self.assertEqual(weights, [2.0, 2.0])
+        self.assertEqual(weights, (2.0, 2.0))
 
         # Connect([pre], [post], [params, params])
         nest.ResetKernel()        
@@ -88,7 +92,7 @@ class ConnectAPITestCase(unittest.TestCase):
         nest.Connect(pre, post, [{"weight" : 2.0}, {"weight" : 3.0}])
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
-        self.assertEqual(weights, [2.0, 3.0])
+        self.assertEqual(weights, (2.0, 3.0))
 
 
     def test_ConnectPrePostWD(self):
@@ -101,29 +105,29 @@ class ConnectAPITestCase(unittest.TestCase):
         nest.Connect(pre, post, 2.0, 2.0)
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
-        self.assertEqual(weights, [2.0, 2.0])
+        self.assertEqual(weights, (2.0, 2.0))
 
         # Connect([pre], [post], [w], [d])
         nest.ResetKernel()
         pre = nest.Create("iaf_neuron", 2)
         post = nest.Create("iaf_neuron", 2)
-        nest.Connect(pre, post, [2.0], [2.0])
+        nest.Connect(pre, post, (2.0, ), (2.0, ))
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
         delays = nest.GetStatus(connections, "delay")
-        self.assertEqual(weights, [2.0, 2.0])
-        self.assertEqual(delays, [2.0, 2.0])
+        self.assertEqual(weights, (2.0, 2.0))
+        self.assertEqual(delays, (2.0, 2.0))
 
         # Connect([pre], [post], [w, w], [d, d])
         nest.ResetKernel()
         pre = nest.Create("iaf_neuron", 2)
         post = nest.Create("iaf_neuron", 2)
-        nest.Connect(pre, post, [2.0, 3.0], [2.0, 3.0])
+        nest.Connect(pre, post, (2.0, 3.0), (2.0, 3.0))
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
         delays = nest.GetStatus(connections, "delay")
-        self.assertEqual(weights, [2.0, 3.0])
-        self.assertEqual(delays, [2.0, 3.0])
+        self.assertEqual(weights, (2.0, 3.0))
+        self.assertEqual(delays, (2.0, 3.0))
 
         
     def test_ConvergentConnect(self):
@@ -133,7 +137,7 @@ class ConnectAPITestCase(unittest.TestCase):
         pre  = nest.Create("iaf_neuron", 3) 
         post = nest.Create("iaf_neuron", 1)
         nest.ConvergentConnect(pre, post)
-        expected_targets = [post[0] for x in range(len(pre))]
+        expected_targets = tuple(post[0] for _ in range(len(pre)))
         connections = nest.FindConnections(pre)
         targets = nest.GetStatus(connections, "target")
         self.assertEqual(expected_targets, targets)
@@ -145,12 +149,12 @@ class ConnectAPITestCase(unittest.TestCase):
         nest.ResetKernel()
         pre  = nest.Create("iaf_neuron", 3) 
         post = nest.Create("iaf_neuron", 1)
-        nest.ConvergentConnect(pre, post, weight=[2.0,2.0,2.0], delay=[1.0,2.0,3.0])
+        nest.ConvergentConnect(pre, post, weight=(2.0,2.0,2.0), delay=(1.0,2.0,3.0))
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
         delays = nest.GetStatus(connections, "delay")
-        self.assertEqual(weights, [2.0,2.0,2.0])
-        self.assertEqual(delays , [1.0,2.0,3.0])
+        self.assertEqual(weights, (2.0,2.0,2.0))
+        self.assertEqual(delays , (1.0,2.0,3.0))
 
         
     def test_DivergentConnect(self):
@@ -171,52 +175,30 @@ class ConnectAPITestCase(unittest.TestCase):
         nest.ResetKernel()
         pre  = nest.Create("iaf_neuron", 1) 
         post = nest.Create("iaf_neuron", 3)
-        nest.DivergentConnect(pre, post, weight=[2.0,2.0,2.0], delay=[1.0,2.0,3.0])
+        nest.DivergentConnect(pre, post, weight=(2.0,2.0,2.0), delay=(1.0,2.0,3.0))
         connections = nest.FindConnections(pre)
         weights = nest.GetStatus(connections, "weight")
         delays = nest.GetStatus(connections, "delay")
-        self.assertEqual(weights, [2.0,2.0,2.0])
-        self.assertEqual(delays , [1.0,2.0,3.0])
+        self.assertEqual(weights, (2.0,2.0,2.0))
+        self.assertEqual(delays , (1.0,2.0,3.0))
 
-
-    def test_WrongConnection(self):
+    def test_IllegalConnection(self):
         """Wrong Connections"""
 
         nest.ResetKernel()
-        n  = nest.Create('iaf_neuron')
+        n = nest.Create('iaf_neuron')
         vm = nest.Create('voltmeter')
-        sd = nest.Create('spike_detector')
 
-        try:
-            nest.Connect(n,vm)
-            self.fail() # should not be reached
-        except nest.NESTError:
-            info = sys.exc_info()[1]
-            if not "IllegalConnection" in info.__str__():
-                self.fail()              
-        # another error has been thrown, this is wrong
-        except: 
-          self.fail()  
-            
+        self.assertRaisesRegex(nest.NESTError, "IllegalConnection", nest.Connect, n, vm)
 
-    def test_UnexcpectedEvent(self):
+    def test_UnexpectedEvent(self):
         """Unexpected Event"""
 
         nest.ResetKernel()
-        n  = nest.Create('iaf_neuron')
-        vm = nest.Create('voltmeter')
+        n = nest.Create('iaf_neuron')
         sd = nest.Create('spike_detector')
 
-        try:
-            nest.Connect(sd,n)
-            self.fail() # should not be reached
-        except nest.NESTError:
-            info = sys.exc_info()[1]
-            if not "UnexpectedEvent" in info.__str__():
-                self.fail()              
-        # another error has been thrown, this is wrong
-        except: 
-          self.fail()
+        self.assertRaisesRegex(nest.NESTError, "UnexpectedEvent", nest.Connect, sd, n)
 
 
 def suite():

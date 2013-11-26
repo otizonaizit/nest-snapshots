@@ -1,5 +1,3 @@
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
 /*
  *  exceptions.h
  *
@@ -21,6 +19,9 @@
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
 
 #include "sliexceptions.h"
 #include "nest_time.h"
@@ -188,25 +189,6 @@ namespace nest {
 
     std::string message();
   };
-
-   /**
-     * Exception to be thrown if an incorrectly formed address is detected.
-     * @ingroup KernelExceptions
-     */
-
-    class MalformedAddress: public KernelException
-    {
-      std::string msg_;
-    public:
-      MalformedAddress(const std::string& msg)
-        : KernelException("MalformedAddress"),
-        msg_(msg)
-        {}
-
-      ~MalformedAddress() throw () {}
-
-      std::string message();
-    };
 
   /**
    * Exception to be thrown if the specified

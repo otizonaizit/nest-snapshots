@@ -1095,12 +1095,22 @@ Synopsis: (string1) a b getinterval -> (string2)
 Description:
 getinterval returns a new container with b elements 
 starting at element a
+Note that getinterval can only handle indices from 0 to N-1 
+where N is the length of the original array
+
+If other values are given (i.e. indices which do not exist in the array), the function throws a RangeCheckError
+
+If negative values are given, getinterval throws a PostiveIntegerExpectedError
+
+If b = 0, getinterval returns an empty array
+
 Examples: (spiketrainsimulation) 5 5 getinterval -> train
 (spiketrainsimulation) 0 5 getinterval -> spike
 [23 24 25 26 27 30] 0 2 getinterval -> [23 24]
 [23 24 25 26 27 30] 2 3 getinterval -> [25 26 27]
+[23 24 25 26 27 30] 0 6 getinterval -> [Error]: RangeCheck
 Author: docu edited by Sirko Straube
-SeeAlso: get, put, putinterval
+SeeAlso: get, put, putinterval, Take
 */
 
 void Getinterval_sFunction::execute(SLIInterpreter *i) const
@@ -1113,19 +1123,19 @@ void Getinterval_sFunction::execute(SLIInterpreter *i) const
   IntegerDatum *cd = dynamic_cast<IntegerDatum *>(i->OStack.pick(0).datum());
   assert(sd != NULL && id !=NULL && cd !=NULL);
 
-  if((id->get()>=0) && ( (size_t)id->get() < sd->size()))
-  {    
-    if (cd->get()>=0)
-    {
+  if (cd->get()>=0)
+  { 
+    if(id->get() >= 0 && static_cast<size_t>(id->get()) < sd->size() && static_cast<size_t>(id->get() + cd->get()) <= sd->size())
+    {    
       i->EStack.pop();
       sd->assign(*sd, id->get(),cd->get());
       i->OStack.pop(2);
     }
-    else
-      i->raiseerror(i->PositiveIntegerExpectedError);
+    else 
+      i->raiseerror(i->RangeCheckError);
   }
-  else 
-    i->raiseerror(i->RangeCheckError);
+  else
+    i->raiseerror(i->PositiveIntegerExpectedError);
 }
 
 
@@ -1139,30 +1149,27 @@ void Getinterval_aFunction::execute(SLIInterpreter *i) const
   IntegerDatum *cd = dynamic_cast<IntegerDatum *>(i->OStack.pick(0).datum());
   assert(sd != NULL && id !=NULL && cd !=NULL);
 
-  if (cd->get()>0)
+  if (cd->get()>=0)
   { 
-   long index = (id->get()>=0)? id->get(): (sd->size()+id->get());
-   if(index >= 0 && (size_t)index < sd->size())
+   
+   if(id->get() >= 0 && static_cast<size_t>(id->get()) < sd->size() && static_cast<size_t>(id->get() + cd->get()) <= sd->size())
    {
     i->EStack.pop();
-    sd->reduce(index,cd->get());
+    sd->reduce(id->get(),cd->get());
     i->OStack.pop(2);
    }
    else 
      i->raiseerror(i->RangeCheckError);
   }
   else
-  {
-   i->EStack.pop();
-   sd->clear();
-   i->OStack.pop(2);
-  }
+    i->raiseerror(i->PositiveIntegerExpectedError);
+  
+  
 }
 
 
 void Cvx_aFunction::execute(SLIInterpreter *i) const
 {
-  Name caller(i->getcurrentname());
   i->EStack.pop();
 
   assert(i->OStack.load()>0);

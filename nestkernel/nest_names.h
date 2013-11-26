@@ -1,5 +1,3 @@
-#ifndef NEST_NAMES_H
-#define NEST_NAMES_H
 /*
  *  nest_names.h
  *
@@ -22,6 +20,9 @@
  *
  */
 
+#ifndef NEST_NAMES_H
+#define NEST_NAMES_H
+
 #include "name.h"
 
 namespace nest
@@ -37,45 +38,47 @@ namespace nest
   namespace names
   {
     // Neuron parameters
-    extern const Name V_m;        //!< Membrane potential
-    extern const Name V_min;      //!< Absolute lower value for the membrane potential
-    extern const Name E_L;        //!< Resting potential
-    extern const Name I_e;        //!< Input current
-    extern const Name I_L;        //!< Leak current
-    extern const Name V_th;       //!< Threshold
-    extern const Name V_reset;    //!< Reset potential
-    extern const Name c_m;        //!< Capacity or specific capacitance
-    extern const Name C_m;        //!< Membrane capacitance
-    extern const Name tau_m;      //!< Membrane time constant
-    extern const Name tau_syn;    //!< Synapse time constant
-    extern const Name tau_syn_ex; //!< Excitatory synaptic time constant
-    extern const Name tau_syn_in; //!< Inhibitory synaptic time constant
-    extern const Name t_ref;      //!< Refractory period
-    extern const Name t_ref_abs;  //!< Absolute refractory period
-    extern const Name t_ref_tot;  //!< Total refractory period
-    extern const Name t_ref_remaining; //!< Time remaining till end of refractory state
-    extern const Name t_spike;    //!< Time of last spike
-    extern const Name t_origin;   //!< Origin of a time-slice
-    extern const Name t_lag;      //!< Lag within a time slice
-    extern const Name E_ex;       //!< Excitatory reversal potential
-    extern const Name E_in;       //!< Inhibitory reversal potential
-    extern const Name g;          //!< Conductance
-    extern const Name g_L;        //!< Leak conductance
-    extern const Name g_ex;       //!< Excitatory conductance
-    extern const Name dg_ex;      //!< Derivative of the excitatory conductance
-    extern const Name g_in;       //!< inhibitory conductance
-    extern const Name dg_in;      //!< Derivative of the inhibitory conductance
-    extern const Name g_Na;       //!< Sodium conductance
-    extern const Name E_ex;       //!< Excitatory reversal potential
-    extern const Name E_in;       //!< Inhibitory reversal potential
-    extern const Name I_ex;       //!< Excitatory synaptic input current
-    extern const Name I_in;       //!< Inhibitory synaptic input current
-    extern const Name E_Na;       //!< Sodium reversal potential
-    extern const Name g_K;        //!< Potassium conductance
-    extern const Name E_K;        //!< Potassium reversal potential
-    extern const Name in_spikes;  //!< Number of arriving inhibitory spikes
-    extern const Name ex_spikes;  //!< Number of arriving excitatory spikes
-    extern const Name error;      //!< Indicates an error in a neuron
+    extern const Name V_m;                 //!< Membrane potential
+    extern const Name V_min;               //!< Absolute lower value for the membrane potential
+    extern const Name E_L;                 //!< Resting potential
+    extern const Name I_e;                 //!< Input current
+    extern const Name I_L;                 //!< Leak current
+    extern const Name V_th;                //!< Threshold
+    extern const Name V_reset;             //!< Reset potential
+    extern const Name c_m;                 //!< Capacity or specific capacitance
+    extern const Name C_m;                 //!< Membrane capacitance
+    extern const Name tau_m;               //!< Membrane time constant
+    extern const Name tau_syn;             //!< Synapse time constant
+    extern const Name tau_syn_ex;          //!< Excitatory synaptic time constant
+    extern const Name tau_syn_in;          //!< Inhibitory synaptic time constant
+    extern const Name t_ref;               //!< Refractory period
+    extern const Name t_ref_abs;           //!< Absolute refractory period
+    extern const Name t_ref_tot;           //!< Total refractory period
+    extern const Name t_ref_remaining;     //!< Time remaining till end of refractory state
+    extern const Name t_spike;             //!< Time of last spike
+    extern const Name t_origin;            //!< Origin of a time-slice
+    extern const Name t_lag;               //!< Lag within a time slice
+    extern const Name E_ex;                //!< Excitatory reversal potential
+    extern const Name E_in;                //!< Inhibitory reversal potential
+    extern const Name g;                   //!< Conductance
+    extern const Name g_L;                 //!< Leak conductance
+    extern const Name g_ex;                //!< Excitatory conductance
+    extern const Name dg_ex;               //!< Derivative of the excitatory conductance
+    extern const Name g_in;                //!< inhibitory conductance
+    extern const Name dg_in;               //!< Derivative of the inhibitory conductance
+    extern const Name g_Na;                //!< Sodium conductance
+    extern const Name E_ex;                //!< Excitatory reversal potential
+    extern const Name E_in;                //!< Inhibitory reversal potential
+    extern const Name I_ex;                //!< Excitatory synaptic input current
+    extern const Name I_in;                //!< Inhibitory synaptic input current
+    extern const Name E_Na;                //!< Sodium reversal potential
+    extern const Name g_K;                 //!< Potassium conductance
+    extern const Name E_K;                 //!< Potassium reversal potential
+    extern const Name in_spikes;           //!< Number of arriving inhibitory spikes
+    extern const Name ex_spikes;           //!< Number of arriving excitatory spikes
+    extern const Name weighted_spikes_in;  //!< Weighted incoming inhibitory spikes
+    extern const Name weighted_spikes_ex;  //!< Weighted incoming excitatory spikes
+    extern const Name error;               //!< Indicates an error in a neuron
 
     // Related to ArchivingNode
     extern const Name tau_minus;  
@@ -106,13 +109,15 @@ namespace nest
     extern const Name V_th_alpha_1;
     extern const Name V_th_alpha_2;
 
-    // Specific to Brette & Gerstner 2005
+    // Specific to Brette & Gerstner 2005 (aeif_cond-*)
     extern const Name V_peak;        //!<  Spike detection threshold (Brette & Gerstner 2005)
     extern const Name a;
     extern const Name b;
     extern const Name w;
     extern const Name Delta_T;
     extern const Name tau_w;
+    extern const Name HMIN;   //!< Smallest integration step for adaptive stepsize
+    extern const Name MAXERR; //!< Largest permissible error for adaptive stepsize
 
     // Specific to Izhikevich 2003
     extern const Name c;
@@ -178,13 +183,21 @@ namespace nest
     extern const Name mother_rng;
     extern const Name p_copy;
 
-    // Specific to correlation_detector
+    // Specific to correlation_and correlomatrix detector
     extern const Name delta_tau;
     extern const Name tau_max;
-    extern const Name histogram;
-    extern const Name count_histogram;
     extern const Name Tstart;
     extern const Name Tstop;
+
+    // Specific to correlation_detector
+    extern const Name histogram;
+    extern const Name histogram_correction;
+    extern const Name count_histogram;
+
+    // Specific to correlomatrix_detector
+    extern const Name N_channels;
+    extern const Name covariance;
+    extern const Name count_covariance;
 
     // Specific to current homeostasis
     extern const Name I_total;            //<- Total current
@@ -319,6 +332,9 @@ namespace nest
     extern const Name n_proc; // Number of component processes of generator
     extern const Name dead_time;
     extern const Name gamma_shape;
+
+    // Specific to iaf_psc_exp_multisynapse and iaf_psc_alpha_multisynapse
+    extern const Name has_connections;
 
     // Miscellaneous parameters
     extern const Name label;

@@ -53,7 +53,7 @@ class Brunel2000:
         self.data_path=self.name+"/"
         if not os.path.exists(self.data_path):
             os.makedirs(self.data_path)
-        print "Writing data to: "+self.data_path
+        print("Writing data to: {0}".format(self.data_path))
         nest.ResetKernel()
         nest.SetKernelStatus({"data_path": self.data_path})
 
@@ -130,9 +130,9 @@ class Brunel2000:
         nest.Simulate(simtime)
         events = nest.GetStatus(self.spikes,"n_events")
         self.rate_ex= events[0]/simtime*1000.0/self.N_rec
-        print "Excitatory rate   : %.2f Hz" % self.rate_ex
+        print("Excitatory rate   : %.2f Hz" % self.rate_ex)
         self.rate_in= events[1]/simtime*1000.0/self.N_rec
-        print "Inhibitory rate   : %.2f Hz" % self.rate_in
+        print("Inhibitory rate   : %.2f Hz" % self.rate_in)
         nest.raster_plot.from_device(self.spikes_E, hist=True)
         #pylab.show()
 

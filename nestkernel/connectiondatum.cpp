@@ -21,9 +21,6 @@
  */
 
 #include "connectiondatum.h"
-#include "datumconverter.h"
-
-#include "aggregatedatum_impl.h"
 
 // explicit instantiation
 template class AggregateDatum<nest::ConnectionID, &nest::NestModule::ConnectionType>;

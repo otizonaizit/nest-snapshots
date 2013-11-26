@@ -18,8 +18,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
+ */
+
+/*
  *  Multimeter support by Yury V. Zaytsev.
- *
  */
 
 /* pp_psc_delta is a stochastically spiking neuron where the potential jumps on each spike arrival. */

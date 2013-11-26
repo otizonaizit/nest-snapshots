@@ -35,8 +35,8 @@ N_E = 8000
 N_I = 2000
 N_neurons = N_E+N_I
 
-C_E    = N_E/10 # number of excitatory synapses per neuron
-C_I    = N_I/10 # number of inhibitory synapses per neuron  
+C_E    = int(N_E/10) # number of excitatory synapses per neuron
+C_I    = int(N_I/10) # number of inhibitory synapses per neuron
 
 J_E  = 0.1
 J_I  = -g*J_E
@@ -176,7 +176,7 @@ if nest.NumProcesses() == 1:
   pylab.draw()
 
 else:
-  print "Multiple MPI processes, skipping graphical output"
+  print("Multiple MPI processes, skipping graphical output")
 
 nest.Simulate(simtime)
 
@@ -186,11 +186,11 @@ events = nest.GetStatus(spikes,"n_events")
 # neurons are on the local MPI process
 N_rec_local_E = sum(nest.GetStatus(nodes_E[:N_rec], 'local'))
 rate_ex= events[0]/simtime*1000.0/N_rec_local_E
-print "Excitatory rate   : %.2f Hz" % rate_ex
+print("Excitatory rate   : %.2f Hz" % rate_ex)
 
 N_rec_local_I = sum(nest.GetStatus(nodes_I[:N_rec], 'local'))
 rate_in= events[1]/simtime*1000.0/N_rec_local_I
-print "Inhibitory rate   : %.2f Hz" % rate_in
+print("Inhibitory rate   : %.2f Hz" % rate_in)
 
 if nest.NumProcesses() == 1:
   nest.raster_plot.from_device(spikes_E, hist=True)
@@ -207,4 +207,4 @@ if nest.NumProcesses() == 1:
   #pylab.show()
 
 else:
-  print "Multiple MPI processes, skipping graphical output"
+  print("Multiple MPI processes, skipping graphical output")

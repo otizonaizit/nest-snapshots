@@ -22,22 +22,12 @@
 
 #ifndef NESTMODULE_H
 #define NESTMODULE_H
-/* 
-    This file is part of NEST
 
-    nestmodule.h -- Header to the nestmodule
-    (see cpp file for details)
-
-    Author: Marc-Oliver Gewaltig (marc-oliver.gewaltig@honda-ri.de)
-
-    $Date: 2013-05-23 15:41:44 +0200 (Thu, 23 May 2013) $
-    Last change: $Author: zaytsev $
-    $Revision: 10474 $
-*/
 #include "slimodule.h"
+#include "slitype.h" 
 #include "slifunction.h"
-#include "slitype.h"
 #include "dict.h"
+
 #include "network.h"
 #include "scheduler.h"
 #include "event.h"
@@ -56,7 +46,7 @@ namespace nest
    class NestModule: public SLIModule
    {
     public:
-  
+
      static SLIType ConnectionType;
 
      NestModule();
@@ -131,6 +121,7 @@ namespace nest
       * - @c os : output stream 
       * - @c t  : any token
       * - @c C  : connectiontype
+      * - @c cg : connectiongeneratortype
       *
       * @subsection compoundtypes Codes for compund data types
       * - @c A  : array
@@ -260,9 +251,8 @@ namespace nest
        void execute(SLIInterpreter *) const;
      } copymodel_l_l_Dfunction;
 
-
      class GetConnections_DFunction: public SLIFunction
-     { 
+     {
       public:
        void execute(SLIInterpreter *) const;
      } getconnections_Dfunction;
@@ -339,6 +329,12 @@ namespace nest
        void execute(SLIInterpreter *) const;
      } divergentconnect_i_ia_a_a_lfunction;
 
+     class DivergentConnect_i_i_i_a_a_lFunction: public SLIFunction
+     {
+      public:
+       void execute(SLIInterpreter *) const;
+     } divergentconnect_i_i_i_a_a_lfunction;
+
      class RDivergentConnect_i_i_ia_da_da_b_b_lFunction: public SLIFunction
      {
       public:
@@ -362,6 +358,20 @@ namespace nest
       public:
        void execute(SLIInterpreter *) const;
      } rconvergentconnect_ia_ia_ia_daa_daa_b_b_lfunction;
+
+     class RConvergentConnect_i_i_i_i_ia_daa_daa_b_b_lFunction: public SLIFunction
+     {
+      public:
+       void execute(SLIInterpreter *) const;
+     } rconvergentconnect_i_i_i_i_ia_daa_daa_b_b_lfunction;
+
+#ifdef HAVE_GSL
+     class RPopulationConnect_ia_ia_i_d_lFunction: public SLIFunction
+     {
+      public:
+       void execute(SLIInterpreter *) const;
+     } rpopulationconnect_ia_ia_i_d_lfunction;
+#endif
 
      class ResetKernelFunction: public SLIFunction
      { 
@@ -416,6 +426,11 @@ namespace nest
      { 
        void execute(SLIInterpreter *) const; 
      } timecommunication_i_i_bfunction; 
+     
+     class TimeCommunicationv_i_iFunction : public SLIFunction 
+     { 
+       void execute(SLIInterpreter *) const; 
+     } timecommunicationv_i_ifunction; 
 
      class ProcessorNameFunction : public SLIFunction
      {
@@ -469,21 +484,21 @@ namespace nest
      static Network *net_;
    };
 
-inline
-Network &NestModule::get_network()
-{
-  assert(net_ != 0);
-  return *net_;
-}
+  inline
+  Network &NestModule::get_network()
+  {
+    assert(net_ != 0);
+    return *net_;
+  }
 
-inline
-index NestModule::get_num_threads()
-{
-  if ( net_ == 0 )
-    return 1;  // module not initialized, thus certainly single thread
-  else  
-    return net_->get_num_threads();
-}
+  inline
+  index NestModule::get_num_threads()
+  {
+    if ( net_ == 0 )
+      return 1;  // module not initialized, thus certainly single thread
+    else  
+      return net_->get_num_threads();
+  }
 
 } // namespace
 

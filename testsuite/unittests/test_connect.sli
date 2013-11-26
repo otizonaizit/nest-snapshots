@@ -36,7 +36,7 @@
    Author: Jochen Martin Eppler
  */
 
-/unittest (7488) require
+(unittest) run
 /unittest using
 
 /iaf_neuron Create /n1 Set
